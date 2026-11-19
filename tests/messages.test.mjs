@@ -117,3 +117,25 @@ test("body-axis diagnostics distinguish roll, pitch and yaw errors with equal ma
     near(r.rotationDeg, 90);
   }
 });
+test("TF capture preserves parent, child and rotation and rejects ambiguous trees", () => {
+  const t = {
+    header: { frame_id: "enu", stamp: { sec: 2, nanosec: 0 } },
+    child_frame_id: "base_link",
+    transform: {
+      translation: { x: 300 },
+      rotation: { x: 0, y: 0, z: 0, w: 1 },
+    },
+  };
+  for (const doc of [t, { transforms: [t] }]) {
+    const m = readMessage(JSON.stringify(doc), "ros");
+    assert.deepEqual(m.raw, [0, 0, 0, 1]);
+    assert.equal(m.child, "base_link");
+    assert.equal(m.world, "enu");
+    assert.equal(m.stampNs, 2000000000n);
+    assert.ok(!JSON.stringify(m.source).includes("translation"));
+  }
+  assert.throws(
+    () => readMessage(JSON.stringify({ transforms: [t, t] }), "ros"),
+    /Select one/,
+  );
+});

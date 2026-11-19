@@ -64,11 +64,23 @@ export function readMessage(text, system) {
       break;
     }
   } else {
+    if ("transforms" in value) {
+      if (!Array.isArray(value.transforms) || value.transforms.length !== 1)
+        throw Error(
+          "Select one aligned world-to-body TransformStamped from the TF message.",
+        );
+      value = value.transforms[0];
+      if (!value?.transform?.rotation)
+        throw Error("Missing transform.rotation in TF message.");
+    }
+    if (value.transform && (!value.header?.frame_id || !value.child_frame_id))
+      throw Error("TransformStamped requires parent and child frame IDs.");
     if (value.orientation_covariance?.[0] === -1)
       throw Error("The message marks its orientation as unavailable.");
     const orientation =
       value.pose?.pose?.orientation ??
       value.pose?.orientation ??
+      value.transform?.rotation ??
       value.orientation ??
       value;
     raw = ["x", "y", "z", "w"].map((k) => orientation?.[k]);
