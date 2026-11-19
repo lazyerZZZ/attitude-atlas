@@ -91,6 +91,19 @@ class SegmentTests(unittest.TestCase):
         actual = persistent_breaches(seq, 0.25)
         self.assertEqual([(e["windows"], e["outcome"]) for e in actual], [(3,"unresolved"), (2,"timely")])
 
+    def test_paired_benchmark_hashes_original_row_numbers_and_stamps(self):
+        import hashlib
+        from segment_clocks import compare_policies
+        data = events(301)
+        result = compare_policies(data)
+        h = hashlib.sha256()
+        for i in range(200,300):
+            x,y = data[i]
+            h.update(f"{i+1},{x},{y}\n".encode("ascii"))
+        self.assertEqual(result["scored_event_sha256"], h.hexdigest())
+        for report in result["policies"].values():
+            self.assertEqual(report["evaluation"]["pairs"], 100)
+
     def test_transient_burst_does_not_move_calibration(self):
         result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))
         self.assertEqual(result["decisions"], [])

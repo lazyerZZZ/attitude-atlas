@@ -1,6 +1,7 @@
 """Check a PX4/ROS sample clock mapping against an error budget using later events."""
 import argparse
 import csv
+import hashlib
 from itertools import groupby
 import json
 import math
@@ -70,7 +71,7 @@ def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed"):
         block, changes, fixed, adaptive = assess_epoch(pairs[start:stop], budget_ms, width, policy)
         epoch = serial + 1
         epochs.append({"epoch": epoch, "first_pair": start + 1, "pairs": stop - start, "reason": reason})
-        windows.extend(dict(w, epoch=epoch) for w in block)
+        windows.extend(dict(w, epoch=epoch, first_pair=start + w["first_pair"]) for w in block)
         decisions.extend(dict(d, epoch=epoch) for d in changes)
         fixed_errors.extend(fixed)
         adaptive_errors.extend(adaptive)
@@ -125,7 +126,7 @@ def assess_epoch(pairs, budget_ms, width, policy):
         events = list(group)
         consumed += len(events)
         item = {"index": index, "start_s": events[0][0] / 1e9, "end_s": events[-1][0] / 1e9,
-                "pairs": len(events)}
+                "pairs": len(events), "first_pair": consumed - len(events) + 1}
         windows.append(item)
         if len(events) < 8 or events[-1][0] - events[0][0] < width * 0.7:
             candidate = None
@@ -148,7 +149,7 @@ def assess_epoch(pairs, budget_ms, width, policy):
         if decisions:
             decisions[-1]["future_pairs"] += len(events)
             audit_switch(decisions[-1], retired, events, index, budget_ms, residual)
-        item.update(p95_ms=residual, action="within_budget")
+        item.update(p95_ms=residual, over_budget_pairs=sum(e > budget_ms for e in errors), action="within_budget")
         if residual <= trigger:
             candidate = None
             continue
@@ -183,14 +184,43 @@ def assess_epoch(pairs, budget_ms, width, policy):
     return windows, decisions, fixed_errors, adaptive_errors
 
 
+def compare_policies(pairs, budget_ms=0.25, window_s=10.0):
+    reports = {}
+    shared = None
+    for policy in ("confirmed", "headroom"):
+        report = assess(pairs, budget_ms, window_s, policy)
+        digest = hashlib.sha256()
+        scored = [w for w in report["windows"] if "p95_ms" in w]
+        for w in scored:
+            first = w["first_pair"] - 1
+            for i in range(first, first + w["pairs"]):
+                x, y = pairs[i]
+                digest.update(f"{i+1},{x},{y}\n".encode("ascii"))
+        fingerprint = digest.hexdigest()
+        if shared is not None and shared != fingerprint:
+            raise ValueError("Policies scored different events")
+        shared = fingerprint
+        reports[policy] = {"evaluation": report["evaluation"], "scored_windows": len(scored),
+                           "over_budget_pairs": sum(w["over_budget_pairs"] for w in scored),
+                           "over_budget_windows": report["over_budget_windows"],
+                           "switches": [{"epoch": d["epoch"], "at_s": d["decision_s"],
+                                         "followup": d["followup"]["outcome"]} for d in report["decisions"]],
+                           "persistent_breaches": report["persistent_breaches"]}
+    return {"budget_ms": budget_ms, "window_s": window_s, "scored_event_sha256": shared, "policies": reports}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("events")
     parser.add_argument("--budget-ms", type=float, default=0.25)
     parser.add_argument("--window-s", type=float, default=10)
     parser.add_argument("--policy", choices=["confirmed", "headroom"], default="confirmed")
+    parser.add_argument("--compare-policies", action="store_true", help="Score both policies on identical events")
     args = parser.parse_args()
-    print(json.dumps(assess(read_events(args.events), args.budget_ms, args.window_s, args.policy), indent=2))
+    pairs = read_events(args.events)
+    result = (compare_policies(pairs, args.budget_ms, args.window_s) if args.compare_policies else
+              assess(pairs, args.budget_ms, args.window_s, args.policy))
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == "__main__":
