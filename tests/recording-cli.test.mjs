@@ -34,3 +34,24 @@ test("recording CI distinguishes tolerances, missing matches, and invalid config
   assert.equal(run(["--shared-clock", "--min-coverage-pct", "-1"]).status, 2);
   assert.equal(run([]).status, 2);
 });
+test("a conflicting case export leaves existing reports intact and rolls back new rows", async (t) => {
+  const { mkdtemp, writeFile, readFile, readdir, rm } = await import(
+    "node:fs/promises"
+  );
+  const { tmpdir } = await import("node:os");
+  const { join } = await import("node:path");
+  const dir = await mkdtemp(join(tmpdir(), "atlas-export-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const existing = join(dir, "case.json");
+  await writeFile(existing, "prior report");
+  const r = run([
+    "--shared-clock",
+    "--rows-out",
+    join(dir, "rows.csv"),
+    "--case-out",
+    existing,
+  ]);
+  assert.equal(r.status, 2);
+  assert.equal(await readFile(existing, "utf8"), "prior report");
+  assert.deepEqual(await readdir(dir), ["case.json"]);
+});

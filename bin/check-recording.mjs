@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { readFile, writeFile } from "node:fs/promises";
+import { saveReports } from "./save-reports.mjs";
+import { readFile } from "node:fs/promises";
 import { readPx4Input } from "./px4-input.mjs";
 import { parseArgs } from "node:util";
 import {
@@ -86,16 +87,15 @@ async function main() {
       2,
     ),
   );
+  const reports = [];
   if (values["rows-out"])
-    await writeFile(values["rows-out"], comparisonCsv(result, px4.rows, ros), {
-      flag: "wx",
-    });
+    reports.push([values["rows-out"], comparisonCsv(result, px4.rows, ros)]);
   if (values["case-out"] && result.worst)
-    await writeFile(
+    reports.push([
       values["case-out"],
       JSON.stringify(sampleCase(result.worst, px4.rows, ros), null, 2) + "\n",
-      { flag: "wx" },
-    );
+    ]);
+  await saveReports(reports);
   if (failures.length) process.exitCode = 1;
 }
 main().catch((e) => {
