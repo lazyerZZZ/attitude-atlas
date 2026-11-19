@@ -1,3 +1,4 @@
+import { comparisonCase } from "./cases.mjs";
 import { parseTrack } from "./frames.mjs";
 import { readMessage, compareAttitudes } from "./messages.mjs";
 
@@ -80,4 +81,26 @@ export function matchRecording(px4, ros, maxSkewMs) {
     rows.push(row);
   }
   return { rows, matched, unmatched: rows.length - matched, worst };
+}
+
+export function recordingSummary(result, px4, ros) {
+  const matched = result.rows.filter((row) => row.rotationDeg !== null);
+  const angles = matched.map((row) => row.rotationDeg).sort((a, b) => a - b);
+  const p95 = angles.length
+    ? angles[Math.ceil(0.95 * angles.length) - 1]
+    : null;
+  return {
+    px4Samples: px4.length,
+    rosSamples: ros.length,
+    matched: matched.length,
+    unmatched: result.unmatched,
+    coverage: matched.length / ros.length,
+    distinctPx4: new Set(matched.map((r) => r.pi)).size,
+    p95Deg: p95,
+    maxDeg: result.worst?.rotationDeg ?? null,
+  };
+}
+export function sampleCase(row, px4, ros) {
+  if (!row || row.rotationDeg === null) throw Error("Select a matched sample.");
+  return comparisonCase(px4[row.pi], ros[row.ri], true);
 }

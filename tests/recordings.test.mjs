@@ -49,3 +49,34 @@ test("capture parser rejects clock resets, missing timestamps and frame changes"
   );
   assert.throws(() => matchRecording([], [], NaN), /skew/);
 });
+test("demo exposes one large error although its 95th percentile is near zero", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { recordingSummary, sampleCase } = await import(
+    "../site/recordings.mjs"
+  );
+  const { openCase } = await import("../site/cases.mjs");
+  const p = readPx4Recording(
+    readFileSync(
+      new URL("../site/samples/roll-spike.csv", import.meta.url),
+      "utf8",
+    ),
+  );
+  const r = readRosRecording(
+    readFileSync(
+      new URL("../site/samples/roll-spike.yaml", import.meta.url),
+      "utf8",
+    ),
+  );
+  const matches = matchRecording(p.rows, r, 5),
+    s = recordingSummary(matches, p.rows, r);
+  assert.equal(s.matched, 21);
+  assert.equal(s.unmatched, 1);
+  assert.equal(s.distinctPx4, 21);
+  assert.ok(s.p95Deg < 1e-9);
+  assert.ok(Math.abs(s.maxDeg - 90) < 1e-9);
+  assert.equal(matches.worst.ri, 12);
+  assert.equal(
+    openCase(sampleCase(matches.worst, p.rows, r)).ros.stampNs,
+    1241500000n,
+  );
+});
