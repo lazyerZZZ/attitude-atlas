@@ -166,6 +166,16 @@ async function main() {
       await img.decode();
       return img.naturalWidth === 1120;
     }));
+    await page.getByRole("link", {name:/Replay automatic calibration/}).click();
+    await page.getByText("Initial fit stayed within budget", {exact:true}).waitFor();
+    await page.locator("#flight").selectOption("ground_effect");
+    await page.getByText("Recalibration confirmed", {exact:true}).waitFor();
+    await page.locator("#budget").selectOption("0.5");
+    await page.locator("#flight").selectOption("halo_135413_D0015");
+    await page.getByText("Too little time to validate a fit", {exact:true}).waitFor();
+    assert.ok(await page.locator("#trace").isHidden());
+    await page.setViewportSize({ width: 360, height: 760 });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     assert.deepEqual(errors, []);
     console.log("Browser checks passed for all three workbenches.");
   } finally {

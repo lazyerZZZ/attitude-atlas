@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>When does clock calibration expire? · Attitude Atlas</title>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="segments.css">
+  <script type="module" src="segments.mjs"></script>
+</head>
+<body><header><div class="bar"><a class="brand" href="./">Attitude Atlas</a><nav><a href="logs.html">Recording check</a></nav></div></header>
+<main class="replay">
+<h1>When does clock calibration expire?</h1>
+<p>Replay nine paired flight recordings. Watch the error of the initial clock fit and see when a more recent fit earns its place.</p>
+<div class="choices"><label>Flight recording<select id="flight" disabled></select></label>
+<label>P95 error budget<select id="budget" disabled><option>0.1</option><option selected>0.25</option><option>0.5</option><option value="1.0">1.0</option></select> ms</label></div>
+<p id="source-line"></p>
+<section aria-labelledby="outcome"><h2 id="outcome" role="status">Loading recorded windows…</h2>
+<p id="explanation"></p>
+<figure hidden id="trace"><figcaption>Held-forward P95 error (ms)</figcaption>
+<canvas id="chart" role="img" aria-label="Window errors for the initial fit, the adaptive fit and the selected budget. Exact values appear in the window table."></canvas>
+<div class="key"><span>Initial fit</span><span>Adaptive fit</span><span>Budget</span></div></figure>
+<details id="details" hidden><summary>Inspect each 10-second window</summary><table>
+<thead><tr><th>End (s)</th><th>Initial (ms)</th><th>Adaptive (ms)</th><th>Decision</th></tr></thead><tbody id="rows"></tbody></table></details></section>
+<h2>How a switch is confirmed</h2>
+<p>The first two eligible windows train a straight line between the clocks. An over-budget window trains a candidate. The next window must also exceed the old budget, and the candidate must meet the budget and at least halve the old error. Only later events receive the new correction. A window needs eight events spanning at least seven seconds.</p>
+<p>Rates describe the recorded PX4-to-ROS timestamp path. The two hardware corpora differ in recording duration and bridge setup. A short recording can measure an offset change while supplying too few later events to validate recalibration.</p>
+<p><a href="https://github.com/lazyerZZZ/attitude-atlas/tree/main/examples/clock-study">Reproduce these flights or test your logs</a> · <a href="clock-study.html">Original drift study</a></p>
+</main></body></html>
