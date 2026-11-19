@@ -22,6 +22,8 @@ python bin/pair_clocks.py flight.ulg capture.db3 --segment-budget-ms 0.25 --wind
 
 报告会列出何时能确认切换、旧模型与候选模型各自的残差，以及可复用的纳秒级标定参数。另 6 组 HALO 记录的匹配跨度只有 7.15–19.35 秒，默认窗口下均返回证据不足。两批数据的时间桥接路径与记录时长不同，测得的 ppm 仅描述对应记录中的等效速率差。
 
+**提前重标定的效果取决于记录。** 可选的 `headroom` 策略把地效记录同一批 2,795 个后续事件的 P95 从 0.299 降到 0.185 ms，预算仍为 0.25 ms。对两条 VOXL 2 长同步交换序列，约 603 秒的一条改善，约 328 秒的一条退步。两条序列分别有 79.05 秒和 98.40 秒可由独立 ULog 的相同姿态事件核对。使用 `--segment-budget-ms 0.25 --segment-policy both` 可以在自己的配对日志上比较两种规则。[查看留出测试和误报、漏报](https://lazyerzzz.github.io/attitude-atlas/transfer.html) · [复算步骤](examples/clock-study/TRANSFER.md)
+
 ## 从一段日志定位到一帧
 
 内置合成示例有 22 条 ROS 样本。在 5 ms 时间窗内有 21 条匹配，最后一条超出时间窗。第 95 百分位显示为 0.00°，第 13 条却出现了 90° 滚转误差。点击最高点即可检查两架飞机的姿态，也可以复制带复现链接的 Markdown 报告。

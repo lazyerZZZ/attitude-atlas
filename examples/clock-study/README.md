@@ -30,6 +30,8 @@ This verifies the four SHA-256 digests, recomputes [the published metrics](resul
 
 ## Cross-hardware replay and automatic segmentation
 
+The [transfer study](TRANSFER.md) evaluates longer VOXL 2 captures, operational false alarms, labeled detection misses and the optional headroom policy.
+
 The [HALO archive](https://github.com/zafarb-21/HALO_ARCHIVAL_TOOL/tree/61a28f574a86f73c6cd8032350098132e63599c0/archives) supplies seven verified pairs from the October 2 three- and four-aircraft recording sessions. Three aircraft IDs report `MODALAI_VOXL2`, `SYS_HITL=0` and airborne matched events. Each selected SQLite bag contributes one overlapping ULog. Copies and alternate truncations of a flight can tie in the candidate search. The [manifest](halo-sources.json) identifies the exact files used.
 
 Use both checkouts, or run the GitHub Actions replay above. It checks 18 file digests, 9 paired reports and all 72 off-diagonal combinations. Every off-diagonal combination returned zero unique events. [Published results](hardware-results.json) · [Explore the windows](https://lazyerzzz.github.io/attitude-atlas/segments.html).

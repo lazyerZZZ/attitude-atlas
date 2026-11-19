@@ -20,6 +20,8 @@ Across two hardware captures, the ROS payload clock gained **3.014 ms in 77 s** 
 python bin/pair_clocks.py flight.ulg capture.db3 --segment-budget-ms 0.25 --window-s 10
 ```
 
+**Earlier recalibration is now testable.** On the ground-effect recording, the optional headroom policy reduced P95 from 0.299 to 0.185 ms on the same 2,795 later events. Across five- and ten-minute VOXL 2 synchronization traces it regressed on one and improved on the other. Compare the policies on your own pair with `--segment-budget-ms 0.25 --segment-policy both`. [Held-out measurements](https://lazyerzzz.github.io/attitude-atlas/transfer.html) · [Reproduction and alarm definitions](examples/clock-study/TRANSFER.md).
+
 ## Compare two recordings
 
 1. Export a PX4 attitude CSV with `ulog2csv -m vehicle_attitude flight.ulg`. During recording or bag playback, capture one ROS topic with `ros2 topic echo /odom --full-length > ros.yaml`; stop with Ctrl+C. A stamped orientation and consistent frame IDs are required. Inputs should already represent FRD in NED and FLU in geographic ENU.
