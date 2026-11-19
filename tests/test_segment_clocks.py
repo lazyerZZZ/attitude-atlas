@@ -82,6 +82,15 @@ class SegmentTests(unittest.TestCase):
         d, = assess(events(600, lambda t: 150000 if t >= 20 else 0), policy="headroom")["decisions"]
         self.assertEqual(d["followup"]["outcome"], "old_fit_within_budget")
 
+    def test_unresolved_streaks_are_counted_once_and_separated_at_gaps(self):
+        from segment_clocks import persistent_breaches
+        sample = lambda i, act: {"epoch": 1, "index": i, "start_s": i*10, "end_s": (i+1)*10,
+                                 "p95_ms": 1, "action": act}
+        seq = [sample(i, "over_budget") for i in (0,1,2,4)]
+        seq.extend([sample(5, "recalibrate"), sample(6, "over_budget")])
+        actual = persistent_breaches(seq, 0.25)
+        self.assertEqual([(e["windows"], e["outcome"]) for e in actual], [(3,"unresolved"), (2,"timely")])
+
     def test_transient_burst_does_not_move_calibration(self):
         result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))
         self.assertEqual(result["decisions"], [])

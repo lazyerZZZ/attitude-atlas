@@ -30,6 +30,27 @@ def errors_ms(model, events):
     return [abs(y - (origin + slope * x)) / 1e6 for x, y in events]
 
 
+def persistent_breaches(windows, budget):
+    """Group consecutive over-budget windows in one epoch, stopping at each switch."""
+    episodes = []
+    run = []
+    for window in [*windows, None]:
+        eligible = window is not None and window.get("p95_ms", 0) > budget
+        adjacent = run and eligible and run[-1]["epoch"] == window["epoch"] and run[-1]["index"] + 1 == window["index"]
+        if run and (not adjacent or run[-1]["action"] == "recalibrate"):
+            if len(run) >= 2:
+                final = run[-1]
+                confirmed = final["action"] == "recalibrate"
+                episodes.append({"epoch": final["epoch"], "start_s": run[0]["start_s"],
+                                 "last_s": final["end_s"], "windows": len(run),
+                                 "outcome": ("timely" if len(run) == 2 else "late") if confirmed else
+                                            ("awaiting_closure" if final["action"] == "await_next_window" else "unresolved")})
+            run = []
+        if eligible:
+            run.append(window)
+    return episodes
+
+
 def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed"):
     if policy not in ("confirmed", "headroom"):
         raise ValueError("Unknown clock policy")
@@ -65,7 +86,7 @@ def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed"):
         verdict = "budget_exceeded_unconfirmed"
     else:
         verdict = "within_budget_on_scored_windows"
-    return {"policy": policy, "verdict": verdict, "epochs": epochs, "evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s,
+    return {"policy": policy, "persistent_breaches": persistent_breaches(windows, budget_ms), "verdict": verdict, "epochs": epochs, "evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s,
             "windows": windows, "decisions": decisions, "scored_windows": len(scored),
             "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
 
