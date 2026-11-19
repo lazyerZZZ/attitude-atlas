@@ -176,6 +176,11 @@ async function main() {
     assert.ok(await page.locator("#trace").isHidden());
     await page.setViewportSize({ width: 360, height: 760 });
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await page.getByRole("link", {name:/Compare both policies on unseen/}).click();
+    await page.getByRole("heading", {name:"Calibration on unseen recordings"}).waitFor();
+    assert.equal(await page.locator("table").count(), 3);
+    assert.match(await page.locator("main").innerText(), /0\.185 ms/);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     assert.deepEqual(errors, []);
     console.log("Browser checks passed for all three workbenches.");
   } finally {

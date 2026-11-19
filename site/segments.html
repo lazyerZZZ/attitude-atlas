@@ -20,6 +20,7 @@
 <div class="key"><span>Initial fit</span><span>Adaptive fit</span><span>Budget</span></div></figure>
 <details id="details" hidden><summary>Inspect each 10-second window</summary><table>
 <thead><tr><th>End (s)</th><th>Initial (ms)</th><th>Adaptive (ms)</th><th>Decision</th></tr></thead><tbody id="rows"></tbody></table></details></section>
+<p><a href="transfer.html">Compare both policies on unseen flight recordings.</a></p>
 <h2>How a switch is confirmed</h2>
 <p>The first two eligible windows train a straight line between the clocks. An over-budget window trains a candidate. The next window must also exceed the old budget, and the candidate must meet the budget and at least halve the old error. The first event in the next window confirms the switch. A window needs eight events spanning at least seven seconds.</p>
 <p>Rates describe the recorded PX4-to-ROS timestamp path. The two hardware corpora differ in recording duration and bridge setup. A short recording can measure an offset change while supplying too few later events to validate recalibration.</p>

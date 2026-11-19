@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calibration on unseen recordings · Attitude Atlas</title>
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="segments.css">
+<style>.table-scroll {overflow-x:auto} .table-scroll th:first-child {text-align:left}
+.table-scroll th:last-child,.table-scroll td:last-child {text-align:right} .table-scroll th {vertical-align:bottom}
+.replay details {margin:1.4rem 0} .replay details summary {cursor:pointer}</style>
+</head><body><header><div class="bar"><a class="brand" href="./">Attitude Atlas</a>
+<nav><a href="segments.html">Window replay</a></nav></div></header><main class="replay">
+<h1>Calibration on unseen recordings</h1>
+<p>Should the clock checker act before the error budget is spent? Both policies score the same events.
+Confirmed starts testing a replacement at 0.25 ms. Headroom starts at 0.125 ms. Both wait for evidence in a later window.</p>
+<h2>Ground-effect target</h2>
+<p>On the original development recording, P95 fell from <strong>0.299 to
+0.185 ms</strong> over 2,795 scored
+events. The number outside the 0.25 ms budget fell from 338 to 0.</p>
+<h2>Held-out VOXL 2 flights</h2>
+<p>Six additional ULog and ROS 2 bag pairs shared 9,038 unique attitudes.
+D0012 had 114 seconds between the first and last shared event, with enough interruptions that no later window could be scored.</p>
+<div class='table-scroll'><table><thead><tr><th>Recording</th><th>Span (s)</th><th>Scored events</th><th>Confirmed P95 (ms)</th><th>Headroom P95 (ms)</th></tr></thead><tbody><tr><th scope='row'>sep_D0012</th><td>114.00</td><td>0</td><td>—</td><td>—</td></tr><tr><th scope='row'>sep_D0013</th><td>93.65</td><td>1,376</td><td>0.322</td><td>0.237</td></tr><tr><th scope='row'>sep_D0014</th><td>87.61</td><td>1,343</td><td>0.524</td><td>0.359</td></tr><tr><th scope='row'>sep_D0015</th><td>50.90</td><td>596</td><td>0.251</td><td>0.251</td></tr><tr><th scope='row'>115317_D0015</th><td>98.40</td><td>1,565</td><td>0.293</td><td>0.160</td></tr><tr><th scope='row'>122204_D0015</th><td>79.05</td><td>1,179</td><td>0.005</td><td>0.005</td></tr></tbody></table></div>
+<h2>Five- and ten-minute clock exchanges</h2>
+<p>The two longest ROS 2 bags continued recording synchronization messages outside the ULog overlap.
+For each message, we reconstruct local return time from the reported remote time, observed offset and half the round-trip time.
+During native coverage, 984 and 790 exchanges respectively
+could be checked against neighboring native events. Both bracket checks had a P95 absolute difference of 0.0035 ms. The rest of each trace has only exchange evidence.</p>
+<div class='table-scroll'><table><thead><tr><th>Recording</th><th>Span (s)</th><th>Scored events</th><th>Confirmed P95 (ms)</th><th>Headroom P95 (ms)</th></tr></thead><tbody><tr><th scope='row'>115317_D0015</th><td>328.45</td><td>3,084</td><td>0.632</td><td>1.129</td></tr><tr><th scope='row'>122204_D0015</th><td>602.80</td><td>5,675</td><td>0.260</td><td>0.156</td></tr></tbody></table></div>
+<details><summary>Which early switches helped?</summary>
+<p>On the five-minute trace, three of five early switches prevented a budget breach on at least one of the next two eligible windows.
+For the other two switches the previous fit stayed within budget throughout that follow-up.
+On the ten-minute trace, one of four switches prevented a breach and the other three had a previous fit still within budget.
+These counts use the retired fit on the same future observations.</p></details>
+<h2>False alarms and missed changes</h2>
+<p>Known-label controls keep the recorded sampling schedule and replace ROS time with a specified clock signal.
+At two onset times we tested stable clocks, short pulses, sustained steps and changes in rate. Detection had a 40-second deadline.
+Each policy had 28 trials with insufficient coverage.</p>
+<div class="table-scroll"><table><thead><tr><th>Policy</th><th>False alarms / negatives</th><th>Misses / positives</th></tr></thead>
+<tbody><tr><th>Confirmed</th><td>4 / 24</td><td>8 / 32</td></tr>
+<tr><th>Headroom</th><td>4 / 24</td><td>0 / 32</td></tr></tbody></table></div>
+<p>Two-window pulses caused the false alarms. The confirmed policy missed slow +8 ppm changes by the deadline.
+The original recordings have no independent labels for physical clock changes.</p>
+<h2>Third-board timing resolution</h2>
+<p>A separate PX4_FMU_V6C ULog contains 818 onboard DDS exchanges across 815.7 s;
+the land detector reported airborne at 43 exchanges. Half the RTT exceeded the budget at every exchange.
+Neither policy confirmed a replacement on this series. This session has no verified companion bag.</p>
+<p><a href="https://github.com/lazyerZZZ/attitude-atlas/blob/main/examples/clock-study/TRANSFER.md">Reproduction guide and source files</a></p>
+</main></body></html>
