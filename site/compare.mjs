@@ -158,18 +158,43 @@ $("shared").onchange = () => {
 function snapshot() {
   return comparisonCase(current.px4, current.ros, $("shared").checked);
 }
-$("copy-pair").onclick = async () => {
-  if (!current) return;
+function pairUrl() {
   const url = new URL(location.href);
   url.hash = new URLSearchParams({
     pair: JSON.stringify(snapshot()),
   }).toString();
+  return url.href;
+}
+async function copyResult(text, confirmation) {
   try {
-    await navigator.clipboard.writeText(url.href);
-    $("feedback").textContent = "Comparison link copied.";
+    await navigator.clipboard.writeText(text);
+    $("feedback").textContent = confirmation;
   } catch {
-    window.prompt("Select and copy the comparison link", url.href);
+    window.prompt("Select and copy the result", text);
   }
+}
+$("copy-pair").onclick = () =>
+  current && copyResult(pairUrl(), "Comparison link copied.");
+$("copy-issue").onclick = () => {
+  if (!current) return;
+  const r = current.result;
+  const report = [
+    "### PX4 / ROS attitude comparison",
+    "",
+    "| Measurement | Result |",
+    "|---|---|",
+    "| Full rotation error | " + degrees(r.rotationDeg) + " |",
+    "| Nose direction error | " + degrees(r.forwardDeg) + " |",
+    "| ROS minus PX4 time | " +
+      (r.timeOffsetMs === null ? "Unavailable" : r.timeOffsetMs + " ms") +
+      " |",
+    "",
+    "Expected ROS xyzw: \`" + formatQ(r.expected) + "\`",
+    "Observed ROS xyzw: \`" + formatQ(r.observed) + "\`",
+    "",
+    "[Reopen this comparison](<" + pairUrl() + ">)",
+  ].join("\n");
+  copyResult(report, "Markdown report copied.");
 };
 $("export-pair").onclick = () => {
   if (!current) return;

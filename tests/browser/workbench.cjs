@@ -36,6 +36,11 @@ async function main() {
     await page.goto(url);
     await page.locator("#result").waitFor();
     assert.equal(await page.locator("#offset").innerText(), "20 ms");
+    await page.locator("#copy-issue").click();
+    await page.getByText("Markdown report copied.", { exact: true }).waitFor();
+    const issue = await page.evaluate(() => navigator.clipboard.readText());
+    assert.match(issue, /20 ms/);
+    assert.match(issue, /Reopen this comparison/);
     const download = page.waitForEvent("download");
     await page.locator("#export-pair").click();
     const data = JSON.parse(
