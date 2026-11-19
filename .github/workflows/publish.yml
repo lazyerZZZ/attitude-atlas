@@ -10,8 +10,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: 22
       - run: node --test tests/*.test.mjs
@@ -30,10 +30,19 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/configure-pages@v6.0.0
+      - uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: site
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5.0.1
+      - name: Verify public site assets
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          for asset in index.html app.mjs frames.mjs scene.mjs style.css sample.csv; do
+            curl --fail --silent --show-error --location --retry 5 --retry-all-errors \
+              "${SITE_URL%/}/$asset?revision=$GITHUB_SHA" -o "$RUNNER_TEMP/live-asset"
+            cmp "site/$asset" "$RUNNER_TEMP/live-asset"
+          done
