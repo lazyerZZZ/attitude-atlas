@@ -30,7 +30,9 @@ def errors_ms(model, events):
     return [abs(y - (origin + slope * x)) / 1e6 for x, y in events]
 
 
-def assess(pairs, budget_ms=0.25, window_s=10.0):
+def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed"):
+    if policy not in ("confirmed", "headroom"):
+        raise ValueError("Unknown clock policy")
     if not all(math.isfinite(x) and x > 0 for x in (budget_ms, window_s)) or round(window_s * 1e9) < 1:
         raise ValueError("Use a finite positive budget and window")
     width = round(window_s * 1e9)
@@ -44,7 +46,7 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
     fixed_errors, adaptive_errors = [], []
     for serial, (start, reason) in enumerate(boundaries):
         stop = boundaries[serial + 1][0] if serial + 1 < len(boundaries) else len(pairs)
-        block, changes, fixed, adaptive = assess_epoch(pairs[start:stop], budget_ms, width)
+        block, changes, fixed, adaptive = assess_epoch(pairs[start:stop], budget_ms, width, policy)
         epoch = serial + 1
         epochs.append({"epoch": epoch, "first_pair": start + 1, "pairs": stop - start, "reason": reason})
         windows.extend(dict(w, epoch=epoch) for w in block)
@@ -63,12 +65,13 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
         verdict = "budget_exceeded_unconfirmed"
     else:
         verdict = "within_budget_on_scored_windows"
-    return {"verdict": verdict, "epochs": epochs, "evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s,
+    return {"policy": policy, "verdict": verdict, "epochs": epochs, "evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s,
             "windows": windows, "decisions": decisions, "scored_windows": len(scored),
             "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
 
 
-def assess_epoch(pairs, budget_ms, width):
+def assess_epoch(pairs, budget_ms, width, policy):
+    trigger = budget_ms / 2 if policy == "headroom" else budget_ms
     windows = []
     history = []
     model = None
@@ -105,15 +108,15 @@ def assess_epoch(pairs, budget_ms, width):
         if decisions:
             decisions[-1]["future_pairs"] += len(events)
         item.update(p95_ms=residual, action="within_budget")
-        if residual <= budget_ms:
+        if residual <= trigger:
             candidate = None
             continue
-        item["action"] = "over_budget"
+        item["action"] = "over_budget" if residual > budget_ms else "headroom_used"
         if candidate and candidate[0] == index - 1:
             _, previous, trial = candidate
             trial_error = percentile95(errors_ms(trial, events))
             item["candidate_p95_ms"] = trial_error
-            if trial_error <= budget_ms and trial_error <= residual / 2:
+            if trial_error <= trigger and trial_error <= residual / 2:
                 if consumed == len(pairs):
                     item["action"] = "await_next_window"
                     continue
@@ -143,8 +146,9 @@ def main():
     parser.add_argument("events")
     parser.add_argument("--budget-ms", type=float, default=0.25)
     parser.add_argument("--window-s", type=float, default=10)
+    parser.add_argument("--policy", choices=["confirmed", "headroom"], default="confirmed")
     args = parser.parse_args()
-    print(json.dumps(assess(read_events(args.events), args.budget_ms, args.window_s), indent=2))
+    print(json.dumps(assess(read_events(args.events), args.budget_ms, args.window_s, args.policy), indent=2))
 
 
 if __name__ == "__main__":

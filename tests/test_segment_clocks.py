@@ -63,6 +63,16 @@ class SegmentTests(unittest.TestCase):
             self.assertEqual(result["windows"][-1]["action"], "await_next_window")
         self.assertEqual(assess(events(401, shifted))["decisions"][0]["decision_s"], 40)
 
+    def test_headroom_policy_leaves_the_scoring_budget_unchanged(self):
+        data = events(700, lambda t: 150000 if t >= 20 else 0)
+        late = assess(data)
+        early = assess(data, policy="headroom")
+        self.assertEqual(late["decisions"], [])
+        self.assertEqual(len(early["decisions"]), 1)
+        self.assertEqual(early["over_budget_windows"], 0)
+        self.assertEqual(early["evaluation"]["pairs"], late["evaluation"]["pairs"])
+        self.assertEqual(early["windows"][2]["action"], "headroom_used")
+
     def test_transient_burst_does_not_move_calibration(self):
         result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))
         self.assertEqual(result["decisions"], [])
