@@ -55,6 +55,16 @@ export function clockOffset(px4Us, rosNs) {
     );
   return BigInt(rosNs.trim()) - BigInt(px4Us.trim()) * 1000n;
 }
+export function clockCalibration(pxUs, rosNs, endPxUs, endRosNs) {
+  const startOffset = clockOffset(pxUs, rosNs);
+  if (endPxUs === undefined && endRosNs === undefined) return startOffset;
+  clockOffset(endPxUs, endRosNs);
+  const px = BigInt(pxUs) * 1000n, ros = BigInt(rosNs);
+  const dx = BigInt(endPxUs) * 1000n - px, dy = BigInt(endRosNs) - ros;
+  if (dx <= 0n || dy <= 0n) throw Error("The second point must be later on both clocks.");
+  return { px, ros, dx, dy, ratePpm: Number(dy - dx) / Number(dx) * 1e6 };
+}
+
 export function matchRecording(px4, ros, maxSkewMs, offsetNs = null) {
   if (
     !Number.isFinite(maxSkewMs) ||
@@ -68,7 +78,17 @@ export function matchRecording(px4, ros, maxSkewMs, offsetNs = null) {
     matched = 0,
     worst = null;
   for (const [ri, message] of ros.entries()) {
-    const target = message.stampNs - (offsetNs ?? 0n);
+    const affine = typeof offsetNs === "object" && offsetNs !== null;
+    let target, outsideCalibration = false;
+    if (affine) {
+      const { px, ros: start, dx, dy } = offsetNs;
+      const elapsed = message.stampNs - start;
+      outsideCalibration = elapsed < 0n || elapsed > dy;
+      const numerator = elapsed * dx;
+      target = px + (numerator + (numerator < 0n ? -dy : dy) / 2n) / dy;
+    } else {
+      target = message.stampNs - (offsetNs ?? 0n);
+    }
     while (
       cursor + 1 < px4.length &&
       px4[cursor].stampNs + px4[cursor + 1].stampNs < 2n * target
@@ -77,12 +97,13 @@ export function matchRecording(px4, ros, maxSkewMs, offsetNs = null) {
     const skew = target - px4[cursor].stampNs;
     const row = {
       ri,
+      outsideCalibration,
       alignedByAnchor: offsetNs !== null,
       pi: cursor,
       skewMs: Number(skew) / 1e6,
       rotationDeg: null,
     };
-    if (skew <= limit && skew >= -limit) {
+    if (!outsideCalibration && skew <= limit && skew >= -limit) {
       row.rotationDeg = compareAttitudes(px4[cursor], message).rotationDeg;
       if (!worst || row.rotationDeg > worst.rotationDeg) worst = row;
       matched++;

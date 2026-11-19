@@ -7,19 +7,21 @@ import {
   readPx4Recording,
   readRosRecording,
   matchRecording,
-  clockOffset,
+  clockCalibration,
   recordingSummary,
   comparisonCsv,
   sampleCase,
 } from "../site/recordings.mjs";
 const usage =
-  "Usage: node bin/check-recording.mjs PX4.csv|flight.ulg ROS.yaml (--shared-clock | --px4-anchor-us US --ros-anchor-ns NS) [--max-skew-ms 20] [--case-out NEW.json] [--rows-out NEW.csv] [--max-error-deg N] [--min-coverage-pct N]";
+  "Usage: node bin/check-recording.mjs PX4.csv|flight.ulg ROS.yaml (--shared-clock | --px4-anchor-us US --ros-anchor-ns NS [--px4-end-us US --ros-end-ns NS]) [--max-skew-ms 20] [--case-out NEW.json] [--rows-out NEW.csv] [--max-error-deg N] [--min-coverage-pct N]";
 async function main() {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
     options: {
       "px4-anchor-us": { type: "string" },
       "ros-anchor-ns": { type: "string" },
+      "px4-end-us": { type: "string" },
+      "ros-end-ns": { type: "string" },
       "shared-clock": { type: "boolean" },
       "max-skew-ms": { type: "string", default: "20" },
       "max-error-deg": { type: "string" },
@@ -34,12 +36,13 @@ async function main() {
     return;
   }
   const anchored =
+    values["px4-end-us"] !== undefined || values["ros-end-ns"] !== undefined ||
     values["px4-anchor-us"] !== undefined ||
     values["ros-anchor-ns"] !== undefined;
   if (positionals.length !== 2 || anchored === Boolean(values["shared-clock"]))
     throw Error(usage);
   const offset = anchored
-    ? clockOffset(values["px4-anchor-us"], values["ros-anchor-ns"])
+    ? clockCalibration(values["px4-anchor-us"], values["ros-anchor-ns"], values["px4-end-us"], values["ros-end-ns"])
     : null;
   const csv = await readPx4Input(positionals[0]),
     yaml = await readFile(positionals[1], "utf8");
@@ -77,7 +80,9 @@ async function main() {
         minCoveragePct,
         failures,
 
-        rosMinusPx4ClockOffsetNs: offset?.toString() ?? null,
+        rosMinusPx4ClockOffsetNs: typeof offset === "bigint" ? offset.toString() : null,
+        calibratedRatePpm: offset?.ratePpm ?? null,
+        outsideCalibration: result.rows.filter(row => row.outsideCalibration).length,
         px4TimeField: px4.field,
         maxSkewMs,
 

@@ -99,3 +99,17 @@ test("one synchronization point aligns boot and epoch time without losing nanose
   assert.throws(() => clockOffset("1.5", "10"));
   assert.throws(() => clockOffset("1", undefined));
 });
+
+test("two measured points correct rate and bound the calibration interval", async () => {
+  const { clockCalibration } = await import("../site/recordings.mjs");
+  const c = clockCalibration("1000000", "1700000000000000000", "2000000", "1700000001000040000");
+  assert.equal(c.ratePpm, 40);
+  const p = readPx4Recording(px).rows, row = readRosRecording(doc(0))[0];
+  const r = [-1n, 0n, 500020000n, 1000040000n, 1000040001n].map(dt => ({...row, stampNs: c.ros + dt}));
+  const ps = [0n, 500000000n, 1000000000n].map(dt => ({...p[0], stampNs: c.px + dt}));
+  const result = matchRecording(ps, r, 0.001, c);
+  assert.equal(result.matched, 3);
+  assert.deepEqual(result.rows.map(row => row.outsideCalibration), [true, false, false, false, true]);
+  assert.equal(result.rows[2].skewMs, 0);
+  assert.throws(() => clockCalibration("1", "2", "1", "3"));
+});
