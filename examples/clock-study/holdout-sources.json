@@ -1,0 +1,81 @@
+{
+  "halo": {
+    "repository": "zafarb-21/HALO_ARCHIVAL_TOOL",
+    "revision": "61a28f574a86f73c6cd8032350098132e63599c0",
+    "captures": {
+      "sep_D0012": {
+        "ulg": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0012/px4_logs/log101.ulg",
+          "sha256": "9cabdf6cc5e9ec1e766d42f55db823c3ab8f8c76ec834089ddcb52f26671aa0c"
+        },
+        "db3": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0012/ros_bags/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0012_ground_rosbag/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0012_ground_rosbag_0.db3",
+          "sha256": "d46dc02a80e95438fe1ab1c7d81726d865eb8694b0d7faf54e699eed190ba2c0"
+        }
+      },
+      "sep_D0013": {
+        "ulg": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0013/px4_logs/log100.ulg",
+          "sha256": "2c4ec30090d5425fbfebe90f7facdfe0a9225fd7a68a8308473f5df221c6ea1b"
+        },
+        "db3": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0013/ros_bags/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0013_ground_rosbag/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0013_ground_rosbag_0.db3",
+          "sha256": "c19b8cfcb4ff4ef4a9a37b229117ad3fc87831e94651e0771aab27f6b338306a"
+        }
+      },
+      "sep_D0014": {
+        "ulg": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0014/px4_logs/log100.ulg",
+          "sha256": "e207bfbc091788bd904950e99dc9c9a87671a2bbb4ad1ec94683fb4219b24f6b"
+        },
+        "db3": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0014/ros_bags/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0014_ground_rosbag/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0014_ground_rosbag_0.db3",
+          "sha256": "54ec7a1fe7dee756aca13a413e616e63ed0a18e604bc90a0b83ca1babc66c7a0"
+        }
+      },
+      "sep_D0015": {
+        "ulg": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0015/px4_logs/log100.ulg",
+          "sha256": "b04d803cd4b5ff5610d28ac9c550615ae3bd67d9b360ed43a798bd4c4e5df835"
+        },
+        "db3": {
+          "path": "archives/20260924_170120_UTC_five_drone_30s_rosbag_px4/drones/D0015/ros_bags/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0015_ground_rosbag/20260924_170120_UTC_five_drone_30s_rosbag_px4__D0015_ground_rosbag_0.db3",
+          "sha256": "463afd2b05c3a108a7ea8e32e0f2ae807598dd6aca086cfe63305b1bf597af15"
+        }
+      },
+      "115317_D0015": {
+        "ulg": {
+          "path": "archives/20261002_115317_UTC_d0015_test_D0015/drone_data/px4_logs/log101.ulg",
+          "sha256": "f741fecba1a9ddbf1fa9cd34b8f2918c21ef14adc8ac1f2435949decde450d07"
+        },
+        "db3": {
+          "path": "archives/20261002_115317_UTC_d0015_test_D0015/drone_data/ros_bags/20261002_115317_UTC_d0015_test_D0015_ground_rosbag/20261002_115317_UTC_d0015_test_D0015_ground_rosbag_0.db3",
+          "sha256": "79827c6c234714b29794e9cc67cd24983679ab921cd30e7657a6712667fbf85e"
+        }
+      },
+      "122204_D0015": {
+        "ulg": {
+          "path": "archives/20261002_122204_UTC_d0015_test_D0015/drone_data/px4_logs/log102.ulg",
+          "sha256": "48b4a614729d807519bcba9cbf5fb7d58da0d0224ac4b3d3d8d021df1141a1ad"
+        },
+        "db3": {
+          "path": "archives/20261002_122204_UTC_d0015_test_D0015/drone_data/ros_bags/20261002_122204_UTC_d0015_test_D0015_ground_rosbag/20261002_122204_UTC_d0015_test_D0015_ground_rosbag_0.db3",
+          "sha256": "fab6ed6b4ceab5247a323bbeaaa98a841f2ea7771b4e89c25f6bb3083d1ba4b7",
+          "lfs": true
+        }
+      }
+    }
+  },
+  "dds": {
+    "repository": "Dorten8/MasterThesisDrone",
+    "revision": "4f3adf0db3348d9fae4617e29941ea8635895d27",
+    "captures": {
+      "v6c_session": {
+        "ulg": {
+          "path": "dev_logs/flights/px4_sd_logs/2026-05-14/20_49_26.ulg",
+          "sha256": "b6409d04b3e0aa2e4a0b62aa53b6f688da15ddceb55ae2b3c8ce4cd3f31e4eb9"
+        }
+      }
+    }
+  }
+}
