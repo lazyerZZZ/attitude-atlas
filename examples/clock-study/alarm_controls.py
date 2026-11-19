@@ -15,13 +15,14 @@ def challenge(pairs, budget_ms=0.25, window_s=10):
     trials = []
     for onset in (3 * window_s, 3.5 * window_s):
         deadline = onset + 4 * window_s
-        for kind in ("stable", "one_window_pulse", "two_window_pulse", "positive_step", "negative_step", "rate_change"):
+        for kind in ("stable", "one_window_pulse", "two_window_pulse", "positive_step", "negative_step", "rate_change", "slow_rate_change"):
             def change(t):
                 after = t / 1e9 - onset
                 if after < 0 or kind == "stable":
                     return 0
-                if kind == "rate_change":
-                    return round(after * 40000)
+                if kind in ("rate_change", "slow_rate_change"):
+                    ppm = 40 if kind == "rate_change" else 8
+                    return round(after * ppm * 1000)
                 if kind.endswith("pulse"):
                     length = window_s if kind == "one_window_pulse" else 2 * window_s
                     return 600000 if after < length else 0
@@ -34,7 +35,7 @@ def challenge(pairs, budget_ms=0.25, window_s=10):
                 required = set(range(2, int(deadline // window_s) + 1))
                 complete = (len(result["epochs"]) == 1 and elapsed[-1] >= deadline * 1e9
                             and required.issubset(monitored))
-                positive = kind in ("positive_step", "negative_step", "rate_change")
+                positive = kind in ("positive_step", "negative_step", "rate_change", "slow_rate_change")
                 alerts = [d["decision_s"] for d in result["decisions"] if d["decision_s"] <= deadline]
                 detected = any(t >= onset for t in alerts)
                 outcome = "censored"
