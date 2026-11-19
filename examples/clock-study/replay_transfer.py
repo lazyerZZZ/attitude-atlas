@@ -8,6 +8,7 @@ import sqlite3
 from reproduce import HERE, verified_file
 from alarm_controls import challenge
 from check_dds_clock import audit
+from exchange_replay import bag_exchange_replay
 from pair_clocks import join, matched_land_states, overlap_report, read_bag, read_flight, timing_report
 from segment_clocks import compare_policies
 
@@ -22,7 +23,8 @@ def record_case(ulog, bag, bag_path):
     pairs = [(a.px4_us * 1000, a.ros_us * 1000) for a in anchors]
     clock = timing_report(anchors)["sample_clock"]
     controls = challenge(pairs)
-    return {**platform, **counts, "bag_span_s": (hi - lo) / 1e9, "matched_span_s": clock["span_s"],
+    exchange = bag_exchange_replay(bag_path, anchors) if (hi - lo) >= 180e9 else []
+    return {**platform, **counts, "bag_exchange_replay": exchange, "bag_span_s": (hi - lo) / 1e9, "matched_span_s": clock["span_s"],
             "rate_ppm": clock["rate_ppm"], "overlap": overlap_report(anchors),
             "land_states": matched_land_states(anchors, states), "comparison": compare_policies(pairs),
             "controls": controls}

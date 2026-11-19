@@ -12,6 +12,11 @@ def byte_order(data, sizes):
     return "<" if data[1] == 1 else ">"
 
 
+def decode_timesync(data):
+    order = byte_order(data, (48,))
+    return struct.unpack_from(order + "QB7xQqqI", data, 4)
+
+
 def read_sqlite(path, topic, sync_topic, signature):
     uri = Path(path).resolve().as_uri() + "?mode=ro"
     rows, sync = [], defaultdict(list)
@@ -23,8 +28,7 @@ def read_sqlite(path, topic, sync_topic, signature):
             if name == sync_topic:
                 if schema != "px4_msgs/msg/TimesyncStatus" or fmt != "cdr":
                     raise ValueError(f"Expected CDR TimesyncStatus on {sync_topic}")
-                order = byte_order(data, (48,))
-                stamp, protocol, _, _, estimate, rtt = struct.unpack_from(order + "QB7xQqqI", data, 4)
+                stamp, protocol, _, _, estimate, rtt = decode_timesync(data)
                 sync[protocol].append((stamp, estimate, rtt))
                 continue
             if schema != "px4_msgs/msg/VehicleAttitude" or fmt != "cdr":
