@@ -187,6 +187,7 @@ function installTrack(frames, name, isSample) {
   stop();
   track = frames;
   sample = isSample;
+  position = 0;
   $("track-name").textContent = name;
   $("timeline").max = track.at(-1).t;
   $("play").disabled = $("timeline").disabled = false;
@@ -194,18 +195,26 @@ function installTrack(frames, name, isSample) {
   setPlayLabel();
   if (mode === "track") seek(0);
 }
-async function loadSample() {
-  const id = ++loadId;
+function startLoading() {
+  stop();
   $("play").disabled = $("timeline").disabled = true;
+  $("error").textContent = "";
+  return ++loadId;
+}
+function loadFailed(id,message) {
+  if(id !== loadId)return;
+  $("play").disabled = $("timeline").disabled = !track.length;
+  $("error").textContent=message+(track.length ? " Current track: "+$("track-name").textContent+"." : "");
+}
+async function loadSample() {
+  const id = startLoading();
   try {
     const response = await fetch("sample.csv");
     if (!response.ok) throw Error("Sample could not be loaded.");
     const frames = parseTrack(await response.text());
     if (id === loadId) installTrack(frames, "PX4 sample log", true);
   } catch {
-    if (id === loadId && mode === "track")
-      $("error").textContent =
-        "Sample unavailable. Open a vehicle_attitude CSV to replay it.";
+    loadFailed(id, "Sample unavailable. Open a vehicle_attitude CSV to replay it.");
   }
 }
 $("play").onclick = () => {
@@ -228,18 +237,19 @@ $("timeline").oninput = () => {
   stop();
   seek(Number($("timeline").value));
 };
+$("use-sample").onclick = loadSample;
 $("open-file").onclick = () => $("file").click();
 $("file").onchange = async () => {
   const file = $("file").files[0];
   if (!file) return;
-  const id = ++loadId;
+  const id = startLoading();
   try {
     if (file.size > 16 * 1024 * 1024)
       throw Error("Choose a CSV smaller than 16 MiB.");
     const frames = parseTrack(await file.text());
     if (id === loadId) installTrack(frames, file.name, false);
   } catch (e) {
-    if (id === loadId) $("error").textContent = e.message;
+    loadFailed(id,e.message);
   }
   $("file").value = "";
 };
