@@ -6,16 +6,19 @@ import {
   readPx4Recording,
   readRosRecording,
   matchRecording,
+  clockOffset,
   recordingSummary,
   comparisonCsv,
   sampleCase,
 } from "../site/recordings.mjs";
 const usage =
-  "Usage: node bin/check-recording.mjs PX4.csv|flight.ulg ROS.yaml --shared-clock [--max-skew-ms 20] [--case-out NEW.json] [--rows-out NEW.csv] [--max-error-deg N] [--min-coverage-pct N]";
+  "Usage: node bin/check-recording.mjs PX4.csv|flight.ulg ROS.yaml (--shared-clock | --px4-anchor-us US --ros-anchor-ns NS) [--max-skew-ms 20] [--case-out NEW.json] [--rows-out NEW.csv] [--max-error-deg N] [--min-coverage-pct N]";
 async function main() {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
     options: {
+      "px4-anchor-us": { type: "string" },
+      "ros-anchor-ns": { type: "string" },
       "shared-clock": { type: "boolean" },
       "max-skew-ms": { type: "string", default: "20" },
       "max-error-deg": { type: "string" },
@@ -29,7 +32,14 @@ async function main() {
     console.log(usage);
     return;
   }
-  if (positionals.length !== 2 || !values["shared-clock"]) throw Error(usage);
+  const anchored =
+    values["px4-anchor-us"] !== undefined ||
+    values["ros-anchor-ns"] !== undefined;
+  if (positionals.length !== 2 || anchored === Boolean(values["shared-clock"]))
+    throw Error(usage);
+  const offset = anchored
+    ? clockOffset(values["px4-anchor-us"], values["ros-anchor-ns"])
+    : null;
   const csv = await readPx4Input(positionals[0]),
     yaml = await readFile(positionals[1], "utf8");
   const px4 = readPx4Recording(csv),
@@ -46,7 +56,7 @@ async function main() {
   }
   const errorLimitDeg = threshold("max-error-deg", 180),
     minCoveragePct = threshold("min-coverage-pct", 100);
-  const result = matchRecording(px4.rows, ros, maxSkewMs);
+  const result = matchRecording(px4.rows, ros, maxSkewMs, offset);
   const summary = recordingSummary(result, px4.rows, ros);
   const failures = [];
   if (!result.matched) failures.push("No matched samples");
@@ -66,6 +76,7 @@ async function main() {
         minCoveragePct,
         failures,
 
+        rosMinusPx4ClockOffsetNs: offset?.toString() ?? null,
         px4TimeField: px4.field,
         maxSkewMs,
 

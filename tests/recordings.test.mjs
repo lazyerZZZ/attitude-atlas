@@ -80,3 +80,22 @@ test("demo exposes one large error although its 95th percentile is near zero", a
     1241500000n,
   );
 });
+test("one synchronization point aligns boot and epoch time without losing nanoseconds", async () => {
+  const { clockOffset, sampleCase, comparisonCsv } = await import(
+    "../site/recordings.mjs"
+  );
+  const p = readPx4Recording(px),
+    r = readRosRecording(doc(33).replace("sec: 1,", "sec: 1700000000,"));
+  const offset = clockOffset("1000000", "1700000000000000032");
+  const result = matchRecording(p.rows, r, 0.000001, offset);
+  assert.equal(result.matched, 1);
+  assert.equal(result.rows[0].skewMs, 0.000001);
+  assert.equal(sampleCase(result.worst, p.rows, r).sharedClock, false);
+  assert.match(
+    comparisonCsv(result, p.rows, r),
+    /1700000000000000033,1000000000/,
+  );
+  assert.equal(matchRecording(p.rows, r, 0, offset).matched, 0);
+  assert.throws(() => clockOffset("1.5", "10"));
+  assert.throws(() => clockOffset("1", undefined));
+});

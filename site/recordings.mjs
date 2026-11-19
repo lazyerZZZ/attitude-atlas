@@ -47,7 +47,15 @@ export function readRosRecording(yaml) {
   return messages;
 }
 
-export function matchRecording(px4, ros, maxSkewMs) {
+export function clockOffset(px4Us, rosNs) {
+  const valid = (s) => typeof s === "string" && /^\d{1,24}$/.test(s.trim());
+  if (!valid(px4Us) || !valid(rosNs))
+    throw Error(
+      "Specify both anchor timestamps as nonnegative decimal integers, PX4 in µs and ROS in ns.",
+    );
+  return BigInt(rosNs.trim()) - BigInt(px4Us.trim()) * 1000n;
+}
+export function matchRecording(px4, ros, maxSkewMs, offsetNs = null) {
   if (
     !Number.isFinite(maxSkewMs) ||
     maxSkewMs < 0 ||
@@ -60,7 +68,7 @@ export function matchRecording(px4, ros, maxSkewMs) {
     matched = 0,
     worst = null;
   for (const [ri, message] of ros.entries()) {
-    const target = message.stampNs;
+    const target = message.stampNs - (offsetNs ?? 0n);
     while (
       cursor + 1 < px4.length &&
       px4[cursor].stampNs + px4[cursor + 1].stampNs < 2n * target
@@ -69,6 +77,7 @@ export function matchRecording(px4, ros, maxSkewMs) {
     const skew = target - px4[cursor].stampNs;
     const row = {
       ri,
+      alignedByAnchor: offsetNs !== null,
       pi: cursor,
       skewMs: Number(skew) / 1e6,
       rotationDeg: null,
@@ -102,12 +111,12 @@ export function recordingSummary(result, px4, ros) {
 }
 export function sampleCase(row, px4, ros) {
   if (!row || row.rotationDeg === null) throw Error("Select a matched sample.");
-  return comparisonCase(px4[row.pi], ros[row.ri], true);
+  return comparisonCase(px4[row.pi], ros[row.ri], !row.alignedByAnchor);
 }
 
 export function comparisonCsv(result, px4, ros) {
   const header =
-    "status,ros_sample,nearest_px4_sample,ros_stamp_ns,px4_stamp_ns,ros_minus_px4_ms,rotation_error_deg";
+    "status,ros_sample,nearest_px4_sample,ros_stamp_ns,px4_stamp_ns,ros_minus_px4_ms,rotation_error_deg,matching_skew_ms";
   const rows = result.rows.map((row) =>
     [
       row.rotationDeg === null ? "unmatched" : "matched",
@@ -115,8 +124,9 @@ export function comparisonCsv(result, px4, ros) {
       row.pi + 1,
       ros[row.ri].stampNs.toString(),
       px4[row.pi].stampNs.toString(),
-      row.skewMs,
+      Number(ros[row.ri].stampNs - px4[row.pi].stampNs) / 1e6,
       row.rotationDeg ?? "",
+      row.skewMs,
     ].join(","),
   );
   return [header, ...rows].join("\n") + "\n";
