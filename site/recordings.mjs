@@ -104,3 +104,20 @@ export function sampleCase(row, px4, ros) {
   if (!row || row.rotationDeg === null) throw Error("Select a matched sample.");
   return comparisonCase(px4[row.pi], ros[row.ri], true);
 }
+
+export function comparisonCsv(result, px4, ros) {
+  const header =
+    "status,ros_sample,nearest_px4_sample,ros_stamp_ns,px4_stamp_ns,ros_minus_px4_ms,rotation_error_deg";
+  const rows = result.rows.map((row) =>
+    [
+      row.rotationDeg === null ? "unmatched" : "matched",
+      row.ri + 1,
+      row.pi + 1,
+      ros[row.ri].stampNs.toString(),
+      px4[row.pi].stampNs.toString(),
+      row.skewMs,
+      row.rotationDeg ?? "",
+    ].join(","),
+  );
+  return [header, ...rows].join("\n") + "\n";
+}

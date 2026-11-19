@@ -52,6 +52,14 @@ function run(demo) {
       clear(data.error);
       return;
     }
+    if (data.csv) {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(data.csv);
+      a.download = "attitude-recording-rows.csv";
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      return;
+    }
     if (data.index !== undefined) {
       if (data.index !== Number($("sample").value)) return;
       const r = data.row;
@@ -102,3 +110,5 @@ for (const id of ["px-file", "ros-file", "common", "skew"])
   $(id).oninput = () =>
     clear("Inputs changed. Run the comparison to update the result.");
 run(true);
+
+$("rows-out").onclick = () => worker?.postMessage({ exportCsv: true });

@@ -6,16 +6,18 @@ import {
   readRosRecording,
   matchRecording,
   recordingSummary,
+  comparisonCsv,
   sampleCase,
 } from "../site/recordings.mjs";
 const usage =
-  "Usage: node bin/check-recording.mjs PX4.csv ROS.yaml --shared-clock [--max-skew-ms 20] [--case-out NEW.json]";
+  "Usage: node bin/check-recording.mjs PX4.csv ROS.yaml --shared-clock [--max-skew-ms 20] [--case-out NEW.json] [--rows-out NEW.csv]";
 async function main() {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
     options: {
       "shared-clock": { type: "boolean" },
       "max-skew-ms": { type: "string", default: "20" },
+      "rows-out": { type: "string" },
       "case-out": { type: "string" },
       help: { type: "boolean", short: "h" },
     },
@@ -46,6 +48,10 @@ async function main() {
       2,
     ),
   );
+  if (values["rows-out"])
+    await writeFile(values["rows-out"], comparisonCsv(result, px4.rows, ros), {
+      flag: "wx",
+    });
   if (values["case-out"] && result.worst)
     await writeFile(
       values["case-out"],

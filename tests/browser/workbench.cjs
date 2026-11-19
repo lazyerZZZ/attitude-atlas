@@ -106,6 +106,11 @@ async function main() {
     await page.locator("#results").waitFor();
     assert.equal(await page.locator("#coverage").innerText(), "21 / 22");
     assert.equal(await page.locator("#max").innerText(), "90.00°");
+    const captureDownload = page.waitForEvent("download");
+    await page.locator("#rows-out").click();
+    const rows = await readFile(await (await captureDownload).path(), "utf8");
+    assert.equal(rows.trim().split("\n").length, 23);
+    assert.match(rows, /unmatched,22,41,1480000000,1400000000,80,/);
     await page.locator("#sample").focus();
     await page.keyboard.press("End");
     await page.getByText(/ROS sample 22 .*outside window/).waitFor();

@@ -3,6 +3,7 @@ import {
   readRosRecording,
   matchRecording,
   recordingSummary,
+  comparisonCsv,
   sampleCase,
 } from "./recordings.mjs";
 async function load(file, path) {
@@ -18,6 +19,15 @@ async function load(file, path) {
 let recording;
 self.onmessage = async ({ data }) => {
   try {
+    if (data.exportCsv) {
+      const { p, ros, result } = recording;
+      self.postMessage({
+        csv: new Blob([comparisonCsv(result, p.rows, ros)], {
+          type: "text/csv",
+        }),
+      });
+      return;
+    }
     if (data.inspect !== undefined) {
       const { p, ros, result } = recording,
         row = result.rows[data.inspect];
