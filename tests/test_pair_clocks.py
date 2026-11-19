@@ -55,6 +55,13 @@ class EventTests(unittest.TestCase):
                 row = next(csv.DictReader(stream))
             self.assertEqual(row, {"px4_sample_us": "3", "ros_sample_us": "4", "rosbag_receive_ns": "6001"})
 
+    def test_unobserved_gaps_do_not_count_as_supported_overlap(self):
+        from pair_clocks import overlap_report
+        rows = [Anchor(t, t, 0, 0) for t in (10, 500010, 4000000, 4500000, 5000000)]
+        report = overlap_report(rows)
+        self.assertEqual((report["runs"], report["longest_run_s"], report["supported_s"]), (2, 1, 1.5))
+        self.assertEqual(overlap_report([])["runs"], 0)
+
     def test_only_finite_nonzero_payloads(self):
         self.assertIsNone(signature([0] * 4))
         self.assertIsNone(signature([float("nan"), 0, 0, 0]))

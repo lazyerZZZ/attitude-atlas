@@ -66,6 +66,24 @@ def read_flight(path):
     return attitude_rows(ulog), platform, states
 
 
+def overlap_report(anchors, max_gap_us=1_000_000):
+    """Summarize elapsed PX4 time supported by adjacent shared observations."""
+    spans = []
+    first = previous = None
+    for a in anchors:
+        if previous is None:
+            first = a
+        elif not (0 < a.px4_us - previous.px4_us <= max_gap_us and a.ros_us > previous.ros_us):
+            spans.append(previous.px4_us - first.px4_us)
+            first = a
+        previous = a
+    if previous:
+        spans.append(previous.px4_us - first.px4_us)
+    return {"max_gap_s": max_gap_us / 1e6, "runs": len(spans),
+            "longest_run_s": max(spans, default=0) / 1e6,
+            "supported_s": sum(spans) / 1e6}
+
+
 def matched_land_states(anchors, states):
     stamps = [t for t, _ in states]
     if any(b < a for a, b in zip(stamps, stamps[1:])):
@@ -161,6 +179,7 @@ def main():
     px, platform, states = read_flight(args.ulog)
     anchors, report = join(px, ros)
     report["platform"] = platform
+    report["matched_overlap"] = overlap_report(anchors)
     report["matched_land_states"] = matched_land_states(anchors, states)
     report["timesync"] = sync_report(sync, anchors)
     if args.segment_budget_ms is not None:
