@@ -1,0 +1,27 @@
+name: Replay real clock pairs
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r examples/clock-study/requirements.txt
+      - name: Fetch four pinned input files
+        shell: python
+        run: |
+          import json, os, pathlib, subprocess
+          spec = json.loads(pathlib.Path("examples/clock-study/sources.json").read_text())
+          for files in spec["captures"].values():
+              for entry in files.values():
+                  path = entry["path"]
+                  url = f"https://raw.githubusercontent.com/{spec['repository']}/{spec['revision']}/{path}"
+                  out = pathlib.Path(os.environ["RUNNER_TEMP"]) / "study" / path
+                  out.parent.mkdir(exist_ok=True, parents=True)
+                  subprocess.run(["curl", "-fsSL", "--retry", "4", url, "-o", str(out)], check=True)
+      - run: python examples/clock-study/reproduce.py "$RUNNER_TEMP/study" --check
