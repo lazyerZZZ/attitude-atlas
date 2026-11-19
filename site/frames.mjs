@@ -127,7 +127,7 @@ export function parseTrack(csv) {
   if (frames.length < 2) throw Error("Include at least two attitude samples.");
   return frames;
 }
-export function frameAt(frames, time) {
+export function frameIndexAt(frames, time) {
   let lo = 0,
     hi = frames.length;
   while (lo + 1 < hi) {
@@ -135,7 +135,10 @@ export function frameAt(frames, time) {
     if (frames[mid].t <= time) lo = mid;
     else hi = mid;
   }
-  return frames[lo];
+  return lo;
+}
+export function frameAt(frames,time) {
+  return frames[frameIndexAt(frames,time)];
 }
 
 // A body-forward unit vector expressed in each world frame gives consumers

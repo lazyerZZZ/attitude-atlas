@@ -5,7 +5,7 @@ import {
   fromRos,
   parseQuaternion, normNote,
   parseTrack,
-  frameAt,
+  frameIndexAt,
   poseFixture,
 } from "./frames.mjs";
 import {readMessage} from "./messages.mjs";
@@ -179,7 +179,10 @@ function seek(t) {
   $("timeline").value = t;
   $("clock").value = t.toFixed(2) + " / " + track.at(-1).t.toFixed(2) + " s";
   $("preset").value = "custom";
-  const frame = frameAt(track, t);
+  const index = frameIndexAt(track,t);
+  const frame = track[index];
+  $("prev-sample").disabled=index===0; $("next-sample").disabled=index===track.length-1;
+  $("sample-age").textContent="Sample "+(index+1)+" of "+track.length+" · held for "+Number((Math.max(0,t-frame.t)*1000).toFixed(3))+" ms";
   $("track-norm").textContent = "Sample norm " + Number(frame.norm.toPrecision(7));
   render(frame.q);
 }
@@ -199,11 +202,13 @@ function startLoading() {
   stop();
   $("play").disabled = $("timeline").disabled = true;
   $("error").textContent = "";
+  $("prev-sample").disabled=$("next-sample").disabled=true;
   return ++loadId;
 }
 function loadFailed(id,message) {
   if(id !== loadId)return;
   $("play").disabled = $("timeline").disabled = !track.length;
+  if(track.length && mode==="track") seek(position);
   $("error").textContent=message+(track.length ? " Current track: "+$("track-name").textContent+"." : "");
 }
 async function loadSample() {
@@ -233,6 +238,12 @@ $("play").onclick = () => {
   animation = requestAnimationFrame(tick);
   setPlayLabel();
 };
+function stepSample(offset) {
+  stop();const index=frameIndexAt(track,position)+offset;
+  if(track[index])seek(track[index].t);
+}
+$("prev-sample").onclick=()=>stepSample(-1);
+$("next-sample").onclick=()=>stepSample(1);
 $("timeline").oninput = () => {
   stop();
   seek(Number($("timeline").value));
