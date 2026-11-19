@@ -16,6 +16,7 @@ async function main() {
     const errors = [];
     page.on("pageerror", (error) => errors.push(error.message));
     await page.goto(base);
+    await page.locator("#px4-values dd").first().waitFor();
     await page.getByRole("button", { name: "Quaternion", exact: true }).click();
     const message = "x: 0\ny: 0\nz: 0\nw: 100";
     await page.locator("#input").fill(message);
@@ -25,12 +26,15 @@ async function main() {
     assert.match(await page.locator("#input-norm").innerText(), /100.*99/);
 
     await page.getByRole("link", { name: "Bridge check" }).click();
+    await page.locator("#result").waitFor();
     assert.equal(await page.locator("#angle").innerText(), "90.00°");
     assert.equal(await page.locator("#nose").innerText(), "0.00°");
     await page.locator("#example").selectOption("time");
     await page.locator("#copy-pair").click();
+    await page.getByText("Comparison link copied.", { exact: true }).waitFor();
     const url = await page.evaluate(() => navigator.clipboard.readText());
     await page.goto(url);
+    await page.locator("#result").waitFor();
     assert.equal(await page.locator("#offset").innerText(), "20 ms");
     const download = page.waitForEvent("download");
     await page.locator("#export-pair").click();
@@ -40,13 +44,11 @@ async function main() {
     assert.equal(data.result.timeOffsetMs, 20);
     data.result.rotationDeg = 180;
     await page.locator("#example").selectOption("roll");
-    await page
-      .locator("#case-file")
-      .setInputFiles({
-        name: "pair.json",
-        mimeType: "application/json",
-        buffer: Buffer.from(JSON.stringify(data)),
-      });
+    await page.locator("#case-file").setInputFiles({
+      name: "pair.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(JSON.stringify(data)),
+    });
     await page.waitForFunction(
       () => document.querySelector("#offset").textContent === "20 ms",
     );
@@ -65,15 +67,30 @@ async function main() {
     await page.locator("#example").selectOption("roll");
     for (const width of [320, 375]) {
       await page.setViewportSize({ width, height: 812 });
-      assert.ok(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth <= innerWidth,
-        ),
-      );
+      await page.waitForFunction((w) => innerWidth === w, width);
+      const layout = await page.evaluate(async () => {
+        await new Promise((r) =>
+          requestAnimationFrame(() => requestAnimationFrame(r)),
+        );
+        return {
+          width: innerWidth,
+          scroll: document.documentElement.scrollWidth,
+          overflow: [...document.querySelectorAll("body *")]
+            .filter((el) => el.getBoundingClientRect().right > innerWidth + 1)
+            .map((el) => [
+              el.tagName,
+              el.id,
+              Math.round(el.getBoundingClientRect().right),
+            ])
+            .slice(0, 12),
+        };
+      });
+      assert.ok(layout.scroll <= layout.width, JSON.stringify(layout));
     }
     await page
       .getByRole("link", { name: "Pose explorer", exact: true })
       .click();
+    await page.locator("#px4-values dd").first().waitFor();
     await page.getByRole("button", { name: "Replay", exact: true }).click();
     await page.locator("#next-sample").click();
     assert.match(
