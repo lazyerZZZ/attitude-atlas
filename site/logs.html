@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Recording check · Attitude Atlas</title>
+    <meta
+      name="description"
+      content="Compare stamped PX4 and ROS 2 recordings locally, find transient attitude errors, and inspect matched samples."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="logs.css" />
+    <script type="module" src="logs.mjs"></script>
+  </head>
+  <body>
+    <header>
+      <div class="bar">
+        <a class="brand" href="./"
+          ><span class="mark" aria-hidden="true">◢</span> Attitude Atlas</a
+        >
+        <nav>
+          <a href="compare.html">Bridge check</a
+          ><a href="https://github.com/lazyerZZZ/attitude-atlas">GitHub ↗</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="intro">
+        <div>
+          <h1>Recording check</h1>
+          <p>
+            Find the frame where your ROS output and PX4 attitude disagree most.
+          </p>
+        </div>
+      </section>
+      <form id="capture">
+        <div class="inputs">
+          <label
+            >PX4 attitude CSV<input
+              type="file"
+              id="px-file"
+              accept=".csv" /></label
+          ><label
+            >ROS echo YAML<input
+              type="file"
+              id="ros-file"
+              accept=".yaml,.yml,.txt,.json" /></label
+          ><label
+            >Maximum skew (ms)<input
+              type="number"
+              min="0"
+              step="any"
+              value="5"
+              id="skew"
+              required
+          /></label>
+        </div>
+        <p>
+          <label
+            ><input id="common" type="checkbox" /> Both recordings use the same
+            clock and epoch</label
+          >
+        </p>
+        <button type="submit" class="primary">Compare my recordings</button>
+        <button type="button" id="demo">Run synthetic demo</button>
+        <p class="hint">
+          PX4 FRD in NED and ROS FLU in geographic ENU. Files are processed in
+          this browser. Up to 16 MiB per file.
+        </p>
+      </form>
+      <p id="status" role="status"></p>
+      <section id="results" hidden>
+        <h2 id="source"></h2>
+        <dl class="stats">
+          <div>
+            <dt>Matched ROS samples</dt>
+            <dd id="coverage"></dd>
+          </div>
+          <div>
+            <dt>95th percentile</dt>
+            <dd id="p95"></dd>
+          </div>
+          <div>
+            <dt>Maximum error</dt>
+            <dd id="max"></dd>
+          </div>
+        </dl>
+        <p id="detail"></p>
+        <p><a id="worst">Open worst pair in Bridge check →</a></p>
+      </section>
+      <details>
+        <summary>Capture formats and matching rules</summary>
+        <p>
+          Export vehicle_attitude with
+          <code>ulog2csv -m vehicle_attitude flight.ulg</code>. Capture a
+          stamped ROS orientation such as Odometry with
+          <code>ros2 topic echo /odom --full-length &gt; ros.yaml</code>. Stop
+          the capture with Ctrl+C. Use one aligned frame pair throughout.
+        </p>
+        <p>
+          Each ROS header stamp is paired with the nearest PX4 timestamp within
+          your chosen skew. Ties select the earlier PX4 sample. One PX4 sample
+          may serve multiple ROS messages. The percentile uses nearest rank over
+          matched ROS samples. With incomplete PX4 sample stamps, the whole
+          comparison uses publication time.
+        </p>
+      </details>
+      <footer>
+        <a href="./">Pose explorer</a><a href="compare.html">Check one pair</a>
+      </footer>
+    </main>
+  </body>
+</html>

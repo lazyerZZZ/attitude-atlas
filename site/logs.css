@@ -1,0 +1,62 @@
+#capture,
+#results {
+  border-block: 1px solid var(--line);
+  padding: 18px 0;
+}
+.inputs,
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.inputs label,
+.stats dt {
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+.inputs input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+  background: white;
+  min-width: 0;
+}
+#capture p,
+#results p {
+  margin: 12px 0;
+}
+#status {
+  margin: 14px 0;
+  color: var(--blue);
+  overflow-wrap: anywhere;
+}
+.stats {
+  background: #e4f0f5;
+  border-radius: 8px;
+  padding: 16px;
+}
+.stats dd {
+  margin: 4px 0 0;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--blue);
+}
+#detail,
+#source {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 650px) {
+  .inputs {
+    grid-template-columns: 1fr;
+  }
+  .stats {
+    gap: 8px;
+    padding: 10px;
+  }
+  .stats dt {
+    font-size: 0.73rem;
+  }
+}

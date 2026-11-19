@@ -102,6 +102,13 @@ async function main() {
       await page.locator("#sample-age").innerText(),
       /Sample 2 of 187/,
     );
+    await page.getByRole("link", { name: "Recordings", exact: true }).click();
+    await page.locator("#results").waitFor();
+    assert.equal(await page.locator("#coverage").innerText(), "21 / 22");
+    assert.equal(await page.locator("#max").innerText(), "90.00°");
+    await page.locator("#worst").click();
+    await page.locator("#result").waitFor();
+    assert.equal(await page.locator("#angle").innerText(), "90.00°");
     assert.deepEqual(errors, []);
     console.log("Browser checks passed for both workbenches.");
   } finally {
