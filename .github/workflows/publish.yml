@@ -15,6 +15,13 @@ jobs:
         with:
           node-version: 22
       - run: node --test tests/*.test.mjs
+      - name: Exercise the workbenches in Chrome
+        run: |
+          npm install --prefix "$RUNNER_TEMP/atlas-browser" --no-audit --no-fund playwright-core@1.62.1
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory site > "$RUNNER_TEMP/atlas-http.log" 2>&1 &
+          trap 'kill "$!" 2>/dev/null || true' EXIT
+          curl --silent --fail --retry 10 --retry-connrefused http://127.0.0.1:8000/ > /dev/null
+          NODE_PATH="$RUNNER_TEMP/atlas-browser/node_modules" CHROME_BIN="$(command -v google-chrome)" node tests/browser/workbench.cjs
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: test
@@ -41,7 +48,10 @@ jobs:
         env:
           SITE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
-          for asset in index.html app.mjs frames.mjs scene.mjs style.css sample.csv; do
+          shopt -s globstar nullglob
+          for path in site/**/*; do
+            [[ -f "$path" ]] || continue
+            asset="${path#site/}"
             curl --fail --silent --show-error --location --retry 5 --retry-all-errors \
               "${SITE_URL%/}/$asset?revision=$GITHUB_SHA" -o "$RUNNER_TEMP/live-asset"
             cmp "site/$asset" "$RUNNER_TEMP/live-asset"
