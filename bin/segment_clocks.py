@@ -39,6 +39,8 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
     windows = []
     history = []
     model = None
+    candidate = None
+    decisions = []
     relative = relative_times(pairs) if pairs else []
     for index, group in groupby(relative, key=lambda p: p[0] // width):
         events = list(group)
@@ -46,6 +48,7 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
                 "pairs": len(events)}
         windows.append(item)
         if len(events) < 8 or events[-1][0] - events[0][0] < width * 0.7:
+            candidate = None
             item["action"] = "insufficient_coverage"
             continue
         if model is None:
@@ -55,9 +58,26 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
                 model = fit(history[0] + history[1])
             continue
         residual = error_ms(model, events)
-        item.update(p95_ms=residual, action="over_budget" if residual > budget_ms else "within_budget")
+        item.update(p95_ms=residual, action="within_budget")
+        if residual <= budget_ms:
+            candidate = None
+            continue
+        item["action"] = "over_budget"
+        if candidate and candidate[0] == index - 1:
+            _, previous, trial = candidate
+            trial_error = error_ms(trial, events)
+            item["candidate_p95_ms"] = trial_error
+            if trial_error <= budget_ms and trial_error <= residual / 2:
+                model = trial
+                item["action"] = "recalibrate"
+                decisions.append({"candidate_start_s": previous[0][0] / 1e9,
+                                  "decision_s": item["end_s"], "old_p95_ms": residual,
+                                  "candidate_p95_ms": trial_error, "rate_ppm": trial[1] * 1e6})
+                candidate = None
+                continue
+        candidate = (index, events, fit(events))
     scored = [w for w in windows if "p95_ms" in w]
-    return {"budget_ms": budget_ms, "window_s": window_s, "windows": windows,
+    return {"budget_ms": budget_ms, "window_s": window_s, "windows": windows, "decisions": decisions,
             "scored_windows": len(scored), "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
 
 

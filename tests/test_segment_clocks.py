@@ -17,6 +17,20 @@ class SegmentTests(unittest.TestCase):
         self.assertEqual(report["over_budget_windows"], 0)
         self.assertEqual(report["windows"][-1]["action"], "insufficient_coverage")
 
+    def test_persistent_change_is_validated_before_switch(self):
+        report = assess(events(600, lambda t: 2_000_000 if t >= 20 else 0))
+        decision, = report["decisions"]
+        self.assertEqual(decision["candidate_start_s"], 20)
+        self.assertEqual(decision["decision_s"], 39.9)
+        self.assertEqual(report["windows"][4]["p95_ms"], 0)
+        prefix = assess(events(300, lambda t: 2_000_000 if t >= 20 else 0))
+        self.assertEqual(prefix["decisions"], [])
+
+    def test_transient_burst_does_not_move_calibration(self):
+        result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))
+        self.assertEqual(result["decisions"], [])
+        self.assertEqual(result["over_budget_windows"], 1)
+
     def test_step_at_training_boundary_is_not_fit_away(self):
         report = assess(events(400, lambda t: 2_000_000 if t >= 20 else 0))
         self.assertEqual(report["over_budget_windows"], 2)
