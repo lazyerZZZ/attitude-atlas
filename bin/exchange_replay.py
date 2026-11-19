@@ -26,7 +26,7 @@ def bracket_errors(pairs, anchors):
     return residuals
 
 
-def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status"):
+def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status", budget_ms=0.25, window_s=10.0):
     groups = defaultdict(list)
     query = """SELECT type, serialization_format, data FROM messages m JOIN topics t ON m.topic_id=t.id
                WHERE t.name=? ORDER BY m.id"""
@@ -46,5 +46,5 @@ def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status"):
                         "span_s": (pairs[-1][0] - pairs[0][0]) / 1e9,
                         "bracketed": len(errors), "bracket_median_ms": median(errors) if errors else None,
                         "bracket_p95_abs_ms": percentile95(list(map(abs, errors))) if errors else None,
-                        "comparison": compare_policies(pairs)})
+                        "comparison": compare_policies(pairs, budget_ms, window_s)})
     return reports
