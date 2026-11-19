@@ -46,6 +46,7 @@ function compare(){
     expectedView.pose(px4.q);observedView.pose(result.observedPx4);
     $("expected-q").textContent=formatQ(result.expected);$("actual-q").textContent=formatQ(result.observed);
     const details=$("diagnostics");details.replaceChildren();
+    summaryText(details,"Body-axis differences · forward "+degrees(result.forwardDeg)+" · left "+degrees(result.bodyAxisErrorsDeg.left)+" · up "+degrees(result.bodyAxisErrorsDeg.up));
     summaryText(details,"PX4 · "+normNote(px4.raw));
     summaryText(details,"ROS · "+normNote(ros.raw));
     if(ros.world || ros.child)summaryText(details,"ROS header.frame_id: "+(ros.world||"unspecified")+" · child_frame_id: "+(ros.child||"unspecified")+". Verify geographic and body-axis alignment in your TF tree.");
@@ -79,8 +80,8 @@ $("copy-pair").onclick=async()=>{
 };
 $("export-pair").onclick=()=>{
   if(!current)return;
-  const {expected,observed,rotationDeg,forwardDeg,timeOffsetMs}=current.result;
-  const file={...snapshot(),result:{expectedRosXYZW:expected,observedRosXYZW:observed,rotationDeg,forwardDeg,timeOffsetMs}};
+  const {expected,observed,rotationDeg,forwardDeg,bodyAxisErrorsDeg,timeOffsetMs}=current.result;
+  const file={...snapshot(),result:{expectedRosXYZW:expected,observedRosXYZW:observed,rotationDeg,forwardDeg,bodyAxisErrorsDeg,timeOffsetMs}};
   const link=document.createElement("a");
   link.href=URL.createObjectURL(new Blob([JSON.stringify(file,null,2)+"\n"],{type:"application/json"}));
   link.download="attitude-atlas-comparison.json";link.click();

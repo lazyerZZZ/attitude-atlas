@@ -49,3 +49,13 @@ test('clock offsets require usable timestamps and preserve signed nanoseconds',(
   const zero=msg({q:[1,0,0,0],timestamp_sample:0,timestamp:0},'px4');
   assert.equal(compareAttitudes(zero,ros,true).timeOffsetMs,null);
 });
+test('body-axis diagnostics distinguish roll, pitch and yaw errors with equal magnitude',()=>{
+  for(const [angles,expected] of [
+    [[90,0,0],[0,90,90]],[[0,90,0],[90,0,90]],[[0,0,90],[90,90,0]]
+  ]) {
+    const ros=msg(toRos(fromDegrees(angles)),'ros');
+    const r=compareAttitudes(identity,ros);
+    Object.values(r.bodyAxisErrorsDeg).forEach((angle,i)=>near(angle,expected[i]));
+    near(r.rotationDeg,90);
+  }
+});

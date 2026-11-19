@@ -20,9 +20,9 @@ async function main() {
     const text=values.ros==="-"?readFileSync(0,"utf8"):await readFile(values.ros,"utf8");
     observed=readMessage(text,"ros");
   }
-  const {rotationDeg,forwardDeg,timeOffsetMs,expected,observed:actual}=compareAttitudes(px4,observed,sharedClock && values.ros===undefined);
+  const {rotationDeg,forwardDeg,bodyAxisErrorsDeg,timeOffsetMs,expected,observed:actual}=compareAttitudes(px4,observed,sharedClock && values.ros===undefined);
   const withinLimit=limit===null?null:rotationDeg<=limit;
-  console.log(JSON.stringify({rotationDeg,forwardDeg,timeOffsetMs,expectedRosXYZW:expected,observedRosXYZW:actual,limitDeg:limit,withinLimit},null,2));
+  console.log(JSON.stringify({rotationDeg,forwardDeg,bodyAxisErrorsDeg,timeOffsetMs,expectedRosXYZW:expected,observedRosXYZW:actual,limitDeg:limit,withinLimit},null,2));
   if(withinLimit===false)process.exitCode=1;
 }
 main().catch(error=>{console.error(error.message);process.exitCode=2;});

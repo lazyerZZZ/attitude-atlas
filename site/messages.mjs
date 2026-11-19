@@ -66,9 +66,15 @@ export function compareAttitudes(px4, ros, sharedClock=false) {
   const relative = multiply([w,-x,-y,-z],[observed[3],...observed.slice(0,3)]);
   const degrees = 180 / Math.PI;
   const rotationDeg = 2*degrees*Math.atan2(Math.hypot(...relative.slice(1)), Math.abs(relative[0]));
-  const [fx,fy,fz] = rotate(relative,[1,0,0]);
-  const forwardDeg = degrees*Math.atan2(Math.hypot(fy,fz),fx);
+  const bodyAxisErrorsDeg={};
+  for(const [index,name] of ["forward","left","up"].entries()){
+    const basis=[0,0,0]; basis[index]=1;
+    const rotated=rotate(relative,basis);
+    const transverse=Math.hypot(rotated[(index+1)%3],rotated[(index+2)%3]);
+    bodyAxisErrorsDeg[name]=degrees*Math.atan2(transverse,rotated[index]);
+  }
+  const forwardDeg=bodyAxisErrorsDeg.forward;
   const timeOffsetMs = sharedClock && px4.stampNs !== null && ros.stampNs !== null
     ? Number(ros.stampNs - px4.stampNs)/1e6 : null;
-  return {expected, observed, observedPx4:fromRos(observed), rotationDeg, forwardDeg, timeOffsetMs};
+  return {expected, observed, observedPx4:fromRos(observed), rotationDeg, forwardDeg, bodyAxisErrorsDeg, timeOffsetMs};
 }
