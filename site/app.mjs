@@ -3,11 +3,12 @@ import {
   toDegrees,
   toRos,
   fromRos,
-  parseQuaternion, readComponents, unit, normNote,
+  parseQuaternion, normNote,
   parseTrack,
   frameAt,
   poseFixture,
 } from "./frames.mjs";
+import {readMessage} from "./messages.mjs";
 import { attitudeScene } from "./scene.mjs";
 
 const $ = (id) => document.getElementById(id);
@@ -138,14 +139,14 @@ $("share").onclick = () => {
 };
 $("apply").onclick = () => {
   try {
-    const raw = readComponents($("input").value);
-    const values = unit(raw);
+    const {raw, q:values} = readMessage($("input").value,$("format").value);
     $("input-norm").textContent = normNote(raw);
     $("preset").value = "custom";
     render($("format").value === "px4" ? values : fromRos(values));
     $("error").textContent = "";
     notice("Attitude updated");
   } catch (e) {
+    $("input-norm").textContent = "";
     $("error").textContent = e.message;
   }
 };
