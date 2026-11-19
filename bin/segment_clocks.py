@@ -34,8 +34,33 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
     if not all(math.isfinite(x) and x > 0 for x in (budget_ms, window_s)) or round(window_s * 1e9) < 1:
         raise ValueError("Use a finite positive budget and window")
     width = round(window_s * 1e9)
-    if any(x1 <= x0 or y1 <= y0 for (x0, y0), (x1, y1) in zip(pairs, pairs[1:])):
-        raise ValueError("Split non-increasing clocks before evaluation")
+    boundaries = [(0, "start")] if pairs else []
+    for i, ((x0, y0), (x1, y1)) in enumerate(zip(pairs, pairs[1:]), start=1):
+        if x1 <= x0 or y1 <= y0:
+            boundaries.append((i, "non_increasing_clock"))
+        elif x1 - x0 >= width:
+            boundaries.append((i, "observation_gap"))
+    epochs, windows, decisions = [], [], []
+    fixed_errors, adaptive_errors = [], []
+    for serial, (start, reason) in enumerate(boundaries):
+        stop = boundaries[serial + 1][0] if serial + 1 < len(boundaries) else len(pairs)
+        block, changes, fixed, adaptive = assess_epoch(pairs[start:stop], budget_ms, width)
+        epoch = serial + 1
+        epochs.append({"epoch": epoch, "first_pair": start + 1, "pairs": stop - start, "reason": reason})
+        windows.extend(dict(w, epoch=epoch) for w in block)
+        decisions.extend(dict(d, epoch=epoch) for d in changes)
+        fixed_errors.extend(fixed)
+        adaptive_errors.extend(adaptive)
+    scored = [w for w in windows if "p95_ms" in w]
+    comparison = {"pairs": len(adaptive_errors),
+                  "fixed_p95_ms": percentile95(fixed_errors) if fixed_errors else None,
+                  "adaptive_p95_ms": percentile95(adaptive_errors) if adaptive_errors else None}
+    return {"epochs": epochs, "evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s,
+            "windows": windows, "decisions": decisions, "scored_windows": len(scored),
+            "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
+
+
+def assess_epoch(pairs, budget_ms, width):
     windows = []
     history = []
     model = None
@@ -51,6 +76,8 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
         windows.append(item)
         if len(events) < 8 or events[-1][0] - events[0][0] < width * 0.7:
             candidate = None
+            if model is None:
+                history.clear()
             item["action"] = "insufficient_coverage"
             continue
         if model is None:
@@ -83,12 +110,7 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
                 candidate = None
                 continue
         candidate = (index, events, fit(events))
-    scored = [w for w in windows if "p95_ms" in w]
-    comparison = {"pairs": len(adaptive_errors),
-                  "fixed_p95_ms": percentile95(fixed_errors) if fixed_errors else None,
-                  "adaptive_p95_ms": percentile95(adaptive_errors) if adaptive_errors else None}
-    return {"evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s, "windows": windows, "decisions": decisions,
-            "scored_windows": len(scored), "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
+    return windows, decisions, fixed_errors, adaptive_errors
 
 
 def main():

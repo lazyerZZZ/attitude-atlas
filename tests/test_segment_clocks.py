@@ -32,6 +32,17 @@ class SegmentTests(unittest.TestCase):
         self.assertEqual(report["decisions"][0]["future_pairs"], 100)
         self.assertIsNone(assess([])["evaluation"]["adaptive_p95_ms"])
 
+    def test_resets_and_recording_gaps_force_new_training(self):
+        data = events(310)
+        data += [(x, y-10**12) for x,y in events(310)]
+        data += [(x+100*10**9, y) for x,y in events(310)]
+        result = assess(data)
+        self.assertEqual([e["reason"] for e in result["epochs"]],
+                         ["start", "non_increasing_clock", "observation_gap"])
+        self.assertEqual([e["first_pair"] for e in result["epochs"]], [1, 311, 621])
+        self.assertEqual(result["scored_windows"], 3)
+        self.assertEqual(result["decisions"], [])
+
     def test_transient_burst_does_not_move_calibration(self):
         result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))
         self.assertEqual(result["decisions"], [])
