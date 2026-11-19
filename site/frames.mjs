@@ -110,6 +110,19 @@ export function parseTrack(csv) {
       "CSV needs timestamp and q[0] through q[3] from vehicle_attitude.",
     );
   const frameColumn = header.indexOf("pose_frame");
+  const sampleColumn = header.indexOf("timestamp_sample");
+  for (const name of [
+    "timestamp",
+    "timestamp_sample",
+    "pose_frame",
+    "q[0]",
+    "q[1]",
+    "q[2]",
+    "q[3]",
+  ]) {
+    if (header.indexOf(name) !== header.lastIndexOf(name))
+      throw Error("Duplicate CSV column " + name + ".");
+  }
   const frames = [];
   let start, previous;
   for (const [i, line] of lines.entries()) {
@@ -126,11 +139,17 @@ export function parseTrack(csv) {
       throw Error(
         "Expected increasing microsecond timestamps on line " + (i + 2) + ".",
       );
+    const sampleUs = sampleColumn < 0 ? 0 : number(fields[sampleColumn] ?? "");
+    if (!Number.isSafeInteger(sampleUs) || sampleUs < 0)
+      throw Error("Invalid timestamp_sample on line " + (i + 2) + ".");
     if (start === undefined) start = time;
     previous = time;
     try {
       frames.push({
         t: (time - start) / 1e6,
+        timestampUs: time,
+        sampleUs,
+        raw: q,
         q: unit(q),
         norm: Math.hypot(...q),
       });

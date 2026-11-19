@@ -193,6 +193,11 @@ function seek(t) {
     " · held for " +
     Number((Math.max(0, t - frame.t) * 1000).toFixed(3)) +
     " ms";
+  $("source-time").textContent =
+    "PX4 timestamp " +
+    frame.timestampUs +
+    " µs" +
+    (frame.sampleUs ? " · sampled " + frame.sampleUs + " µs" : "");
   $("track-norm").textContent =
     "Sample norm " + Number(frame.norm.toPrecision(7));
   render(frame.q);

@@ -119,3 +119,16 @@ test("sample stepping resolves adjacent microsecond frames and holds gaps", asyn
   assert.equal(frameIndexAt(frames, 1.9), 1);
   assert.equal(frameIndexAt(frames, 2), 2);
 });
+test("replay preserves source and sample timestamps plus unnormalized components", () => {
+  const csv =
+    "timestamp,timestamp_sample,q[0],q[1],q[2],q[3]\n200,180,2,0,0,0\n300,0,0,1,0,0";
+  const rows = parseTrack(csv);
+  assert.deepEqual(
+    [rows[0].timestampUs, rows[0].sampleUs, rows[0].raw[0], rows[1].sampleUs],
+    [200, 180, 2, 0],
+  );
+  assert.throws(
+    () => parseTrack(csv.replace("timestamp_sample", "timestamp")),
+    /Duplicate/,
+  );
+});
