@@ -3,7 +3,7 @@ import {
   toDegrees,
   toRos,
   fromRos,
-  parseQuaternion,
+  parseQuaternion, readComponents, unit, normNote,
   parseTrack,
   frameAt,
   poseFixture,
@@ -138,7 +138,9 @@ $("share").onclick = () => {
 };
 $("apply").onclick = () => {
   try {
-    const values = parseQuaternion($("input").value);
+    const raw = readComponents($("input").value);
+    const values = unit(raw);
+    $("input-norm").textContent = normNote(raw);
     $("preset").value = "custom";
     render($("format").value === "px4" ? values : fromRos(values));
     $("error").textContent = "";
@@ -147,9 +149,14 @@ $("apply").onclick = () => {
     $("error").textContent = e.message;
   }
 };
+let hasDraft = false;
+$("input").oninput = () => {
+  hasDraft = true;
+  $("input-norm").textContent = $("error").textContent = "";
+};
 $("format").onchange = () => {
-  $("input").value = formatted($("format").value === "px4" ? q : toRos(q));
-  $("error").textContent = "";
+  if (!hasDraft) $("input").value = formatted($("format").value === "px4" ? q : toRos(q));
+  $("input-norm").textContent = $("error").textContent = "";
 };
 
 let track = [],
@@ -171,7 +178,9 @@ function seek(t) {
   $("timeline").value = t;
   $("clock").value = t.toFixed(2) + " / " + track.at(-1).t.toFixed(2) + " s";
   $("preset").value = "custom";
-  render(frameAt(track, t).q);
+  const frame = frameAt(track, t);
+  $("track-norm").textContent = "Sample norm " + Number(frame.norm.toPrecision(7));
+  render(frame.q);
 }
 function installTrack(frames, name, isSample) {
   stop();
@@ -245,7 +254,7 @@ document.querySelectorAll("[data-mode]").forEach(
         $(b.dataset.mode).hidden = !active;
         b.setAttribute("aria-pressed", active);
       });
-      if (mode === "paste")
+      if (mode === "paste" && !hasDraft)
         $("input").value = formatted(
           $("format").value === "px4" ? q : toRos(q),
         );

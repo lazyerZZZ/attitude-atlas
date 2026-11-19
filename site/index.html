@@ -87,6 +87,7 @@
             ><textarea id="input" rows="2" spellcheck="false">
 [1, 0, 0, 0]</textarea
             >
+            <p id="input-norm" role="status" class="hint"></p>
             <button id="apply" class="primary">Apply quaternion</button>
             <p class="hint">
               Accepts comma- or space-separated numbers. Input is normalized to
@@ -114,6 +115,7 @@
               Import a PX4 <code>vehicle_attitude</code> CSV from
               <code>ulog2csv</code>. Files are read in this browser.
             </p>
+            <p id="track-norm" class="hint"></p>
             <a href="sample.csv" download>Download sample CSV ↓</a>
           </div>
           <p role="status" id="error" class="error"></p>

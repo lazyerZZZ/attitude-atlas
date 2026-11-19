@@ -100,3 +100,10 @@ test("exported fixture identifies orders and north-facing forward vectors", asyn
   assert.equal(fixture.ros.order, "xyzw");
   assert.equal(fixture.schema, "attitude-atlas/pose-v1");
 });
+test("replay enforces the declared world frame on every row and retains input norms", () => {
+  const rows = "timestamp,pose_frame,q[0],q[1],q[2],q[3]\n0,1,1,0,0,0\n";
+  for (const frame of ["", "0", "2", "NaN"]) {
+    assert.throws(() => parseTrack(rows + "1000," + frame + ",1,0,0,0"), /Line 3.*NED/);
+  }
+  assert.equal(parseTrack(rows + "1000,1,100,0,0,0")[1].norm,100);
+});

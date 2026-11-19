@@ -68,11 +68,22 @@ export function toDegrees(q) {
 const decimal = /^[+-]?(?:\d+\.?\d*|\.\d+)(?:e[+-]?\d+)?$/i;
 const number = (s) => (decimal.test(s.trim()) ? Number(s) : NaN);
 
-export function parseQuaternion(input) {
+export function readComponents(input) {
   let s = input.trim();
   if (s.startsWith("[") && s.endsWith("]")) s = s.slice(1, -1).trim();
   const parts = s.includes(",") ? s.split(",") : s.split(/\s+/);
-  return unit(parts.map(number));
+  return parts.map(number);
+}
+
+export function parseQuaternion(input) {
+  return unit(readComponents(input));
+}
+
+export function normNote(raw) {
+  const norm = Math.hypot(...raw);
+  if (!Number.isFinite(norm)) return "Input norm exceeds numeric range. Display uses a unit quaternion.";
+  const n = Number(norm.toPrecision(7));
+  return "Input norm " + n + " · distance from unit length " + Number(Math.abs(norm-1).toPrecision(4));
 }
 
 // Accept numeric attitude exports. Other columns are ignored.
@@ -92,11 +103,14 @@ export function parseTrack(csv) {
     throw Error(
       "CSV needs timestamp and q[0] through q[3] from vehicle_attitude.",
     );
+  const frameColumn = header.indexOf("pose_frame");
   const frames = [];
   let start, previous;
   for (const [i, line] of lines.entries()) {
     if (!line.trim()) continue;
     const fields = line.split(",");
+    if (frameColumn >= 0 && number(fields[frameColumn] ?? "") !== 1)
+      throw Error("Line " + (i+2) + " requires pose_frame=1 (NED) to display geographic heading.");
     const [time, ...q] = columns.map((j) => number(fields[j] ?? ""));
     if (!Number.isSafeInteger(time) || time < 0 || time <= previous)
       throw Error(
@@ -105,7 +119,7 @@ export function parseTrack(csv) {
     if (start === undefined) start = time;
     previous = time;
     try {
-      frames.push({ t: (time - start) / 1e6, q: unit(q) });
+      frames.push({ t: (time - start) / 1e6, q: unit(q), norm: Math.hypot(...q) });
     } catch {
       throw Error("Invalid quaternion on line " + (i + 2) + ".");
     }
