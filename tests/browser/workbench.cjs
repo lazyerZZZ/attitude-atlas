@@ -40,9 +40,13 @@ async function main() {
     assert.ok(await page.locator("#result").isHidden());
     await page.getByRole("button",{name:"Compare attitudes",exact:true}).click();
     assert.match(await page.locator("#feedback").innerText(),/ROS input/);
+    assert.equal(await page.locator("#ros").getAttribute("aria-invalid"),"true");
+    assert.equal(await page.locator(":focus").getAttribute("id"),"ros");
     await page.locator("#example").selectOption("roll");
-    await page.setViewportSize({width:375,height:812});
-    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    for(const width of [320,375]) {
+      await page.setViewportSize({width,height:812});
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    }
     await page.getByRole("link",{name:"Pose explorer",exact:true}).click();
     await page.getByRole("button",{name:"Replay",exact:true}).click();
     await page.locator("#next-sample").click();

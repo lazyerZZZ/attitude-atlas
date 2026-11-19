@@ -9,13 +9,13 @@
 <div class="casebar"><label for="example">Example</label><select id="example">
 <option value="roll">Same heading, 90° of roll</option><option value="match">Matching attitudes</option><option value="opposite">Equivalent quaternion signs</option><option value="time">Samples taken 20 ms apart</option><option value="custom" disabled>Custom inputs</option></select><button type="button" id="open-case">Open case JSON</button><input id="case-file" type="file" accept=".json,application/json" hidden></div>
 <form id="pair-form">
-<div class="pair-inputs"><div><label for="px4">PX4 message <small>FRD → NED · w, x, y, z</small></label><textarea id="px4" spellcheck="false" rows="4" required></textarea></div>
-<div><label for="ros">ROS message <small>FLU → geographic ENU · x, y, z, w</small></label><textarea id="ros" spellcheck="false" rows="4" required></textarea></div></div>
+<div class="pair-inputs"><div><label for="px4">PX4 message <small>FRD → NED · w, x, y, z</small></label><textarea id="px4" aria-describedby="feedback" spellcheck="false" rows="4" required></textarea></div>
+<div><label for="ros">ROS message <small>FLU → geographic ENU · x, y, z, w</small></label><textarea id="ros" aria-describedby="feedback" spellcheck="false" rows="4" required></textarea></div></div>
 <div class="runbar"><button class="primary" type="submit">Compare attitudes</button><label><input id="shared" type="checkbox"> Timestamps use the same clock and epoch</label></div>
 <p class="hint">Paste four numbers or one YAML / JSON message per side. Align local map and sensor frames to the conventions above before comparing.</p>
 <p id="feedback" role="status"></p></form>
 <section id="result" hidden aria-label="Comparison result">
-<div class="metrics"><div><h2>Full rotation error</h2><output id="angle"></output></div><div><h2>Nose direction error</h2><output id="nose"></output></div><div><h2>Time offset <small>ROS − PX4</small></h2><output id="offset"></output></div></div>
+<div class="metrics"><div><h2>Full rotation error</h2><output aria-label="Full rotation error" id="angle"></output></div><div><h2>Nose direction error</h2><output aria-label="Nose direction error" id="nose"></output></div><div><h2>Time offset <small>ROS − PX4</small></h2><output aria-label="Time offset ROS minus PX4" id="offset"></output></div></div>
 <div class="paired-views">
 <figure><figcaption>Expected from PX4</figcaption><canvas tabindex="0" id="expected" aria-label="Expected aircraft orientation, drag or use arrow keys to orbit both views."></canvas><p id="expected-q"></p></figure>
 <figure><figcaption>Observed in ROS</figcaption><canvas tabindex="0" id="actual" aria-label="Observed aircraft orientation, drag or use arrow keys to orbit both views."></canvas><p id="actual-q"></p></figure>

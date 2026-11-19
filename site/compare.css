@@ -13,3 +13,5 @@
 .paired-views canvas{display:block;width:100%;height:220px;touch-action:none;cursor:grab}.paired-views figure p{padding:5px 8px;background:#f0f6f8;font: .79rem/1.5 ui-monospace,monospace;overflow-wrap:anywhere}
 #diagnostics p{font-size:.85rem;margin:8px 0;overflow-wrap:anywhere}
 @media(max-width:650px){.pair-inputs{grid-template-columns:1fr;gap:6px}.paired-views canvas{height:158px}.paired-views figcaption{font-size:.73rem;left:7px;top:6px}.paired-views figure p{font-size:.69rem}.metrics h2{font-size:.76rem}.metrics small{display:block;font-size:.68rem}.casebar{margin:10px 0}.metrics{gap:6px}}
+.pair-inputs textarea[aria-invalid=true]{border-color:#983d28}
+@media(max-width:400px){.metrics output{font-size:1.1rem}.metrics>div{min-width:0}.pair-inputs label small{font-size:.7rem}}

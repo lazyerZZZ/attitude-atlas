@@ -30,12 +30,13 @@ function formatQ(q){return "["+q.map(v=>Number(v.toFixed(6))).join(", ")+"]";}
 function degrees(value){return value>0 && value<.005 ? "< 0.005°" : value.toFixed(2)+"°";}
 function labeledInput(system){
   try{return readMessage($(system).value,system);}
-  catch(e){throw Error((system==="ros"?"ROS":"PX4")+" input · "+e.message);}
+  catch(e){$(system).setAttribute("aria-invalid","true");$(system).focus();throw Error((system==="ros"?"ROS":"PX4")+" input · "+e.message);}
 }
 function invalidate(message){
   current=null;$("result").hidden=true;$("feedback").textContent=message;
 }
 function compare(){
+  for(const id of ["px4","ros"])$(id).removeAttribute("aria-invalid");
   try{
     const px4=labeledInput("px4"),ros=labeledInput("ros");
     const result=compareAttitudes(px4,ros,$("shared").checked);
@@ -63,7 +64,7 @@ function setExample(name){
 $("example").onchange=()=>setExample($("example").value);
 $("pair-form").onsubmit=e=>{e.preventDefault();compare();};
 for (const id of ["px4","ros"])$(id).oninput=()=>{
-  revision++;
+  revision++;$(id).removeAttribute("aria-invalid");
   $("example").value="custom";$("shared").checked=false;invalidate("Inputs changed. Compare attitudes to update the result.");
 };
 $("shared").onchange=()=>{if(current)compare();};
