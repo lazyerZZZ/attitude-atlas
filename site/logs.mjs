@@ -31,7 +31,8 @@ function run(demo) {
   const skew = Number($("skew").value);
   const anchor =
     !demo && $("anchored").checked
-      ? { px: $("px-anchor").value, ros: $("ros-anchor").value }
+      ? { px: $("px-anchor").value, ros: $("ros-anchor").value,
+          endPx: $("px-end").value || undefined, endRos: $("ros-end").value || undefined }
       : null;
   if (!demo && (!px || !ros || (!$("common").checked && !anchor))) {
     clear("Choose both recordings and select how their clocks align.");
@@ -75,7 +76,7 @@ function run(demo) {
         " ns · nearest PX4 skew " +
         r.skewMs +
         " ms · " +
-        (r.rotationDeg === null ? "outside window" : angle(r.rotationDeg));
+        (r.outsideCalibration ? "outside calibration interval" : r.rotationDeg === null ? "outside window" : angle(r.rotationDeg));
       $("open-sample").hidden = !data.selected;
       if (data.selected) $("open-sample").href = caseUrl(data.selected);
       return;
@@ -97,7 +98,9 @@ function run(demo) {
       s.px4Samples +
       " · PX4 time field: " +
       data.field +
-      (data.offsetNs === null
+      (data.ratePpm != null
+        ? ` · ROS rate relative to PX4 ${data.ratePpm.toFixed(2)} ppm · ${data.outside} outside calibration interval`
+        : data.offsetNs === null
         ? " · common clock"
         : " · subtracted " +
           data.offsetNs +
@@ -123,11 +126,13 @@ for (const id of [
   "skew",
   "px-anchor",
   "ros-anchor",
+  "px-end",
+  "ros-end",
 ]) {
   $(id).oninput = () => {
     if (id === "px-file" || id === "ros-file") {
       $("common").checked = $("anchored").checked = false;
-      $("px-anchor").value = $("ros-anchor").value = "";
+      $("px-anchor").value = $("ros-anchor").value = $("px-end").value = $("ros-end").value = "";
     }
     $("anchors").hidden = !$("anchored").checked;
     clear("Inputs changed. Run the comparison to update the result.");

@@ -77,9 +77,15 @@
             >ROS nanoseconds
             <input id="ros-anchor" type="text" inputmode="numeric"
           /></label>
+          <label>Later PX4 microseconds (optional)
+            <input id="px-end" type="text" inputmode="numeric" />
+          </label>
+          <label>Later ROS nanoseconds (optional)
+            <input id="ros-end" type="text" inputmode="numeric" />
+          </label>
           <p class="hint">
-            Applies one constant offset across this capture. Clock drift
-            requires separate calibration.
+            One point applies a constant offset. With two points, match only
+            between them and compensate the measured difference in clock rate.
           </p>
         </fieldset>
         <button type="submit" class="primary">Compare my recordings</button>

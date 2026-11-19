@@ -152,6 +152,11 @@ async function main() {
       await page.locator("#detail").innerText(),
       /1699999999000000000/,
     );
+    await page.locator("#px-end").fill("1400000");
+    await page.locator("#ros-end").fill("1700000000400016000");
+    await page.getByRole("button", { name: "Compare my recordings", exact: true }).click();
+    await page.locator("#results").waitFor();
+    assert.match(await page.locator("#detail").innerText(), /40.00 ppm/);
     await page.locator("#worst").click();
     await page.locator("#result").waitFor();
     assert.equal(await page.locator("#offset").innerText(), "Unavailable");
