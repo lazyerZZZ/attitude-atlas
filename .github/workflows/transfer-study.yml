@@ -1,0 +1,23 @@
+name: Replay held-out calibration study
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r examples/clock-study/requirements.txt
+      - run: python examples/clock-study/fetch_transfer.py "$RUNNER_TEMP/study"
+      - name: Replay measured sessions and labeled controls
+        run: |
+          root="$RUNNER_TEMP/study"
+          python examples/clock-study/replay_transfer.py "$root/original" "$root/halo" "$root/dds" > transfer-results.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: transfer-results
+          path: transfer-results.json
