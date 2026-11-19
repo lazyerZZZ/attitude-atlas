@@ -26,6 +26,12 @@ class SegmentTests(unittest.TestCase):
         prefix = assess(events(300, lambda t: 2_000_000 if t >= 20 else 0))
         self.assertEqual(prefix["decisions"], [])
 
+    def test_switch_block_is_charged_to_old_model(self):
+        report = assess(events(500, lambda t: 2_000_000 if t >= 20 else 0))
+        self.assertEqual(report["evaluation"], {"pairs": 300, "fixed_p95_ms": 2, "adaptive_p95_ms": 2})
+        self.assertEqual(report["decisions"][0]["future_pairs"], 100)
+        self.assertIsNone(assess([])["evaluation"]["adaptive_p95_ms"])
+
     def test_transient_burst_does_not_move_calibration(self):
         result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))
         self.assertEqual(result["decisions"], [])

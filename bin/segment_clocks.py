@@ -25,9 +25,9 @@ def read_events(path):
     return pairs
 
 
-def error_ms(model, events):
+def errors_ms(model, events):
     origin, slope = model
-    return percentile95([abs(y - (origin + slope*x)) / 1e6 for x, y in events])
+    return [abs(y - (origin + slope * x)) / 1e6 for x, y in events]
 
 
 def assess(pairs, budget_ms=0.25, window_s=10.0):
@@ -40,6 +40,8 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
     history = []
     model = None
     candidate = None
+    baseline = None
+    fixed_errors, adaptive_errors = [], []
     decisions = []
     relative = relative_times(pairs) if pairs else []
     for index, group in groupby(relative, key=lambda p: p[0] // width):
@@ -55,9 +57,14 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
             history.append(events)
             item["action"] = "training"
             if len(history) == 2:
-                model = fit(history[0] + history[1])
+                model = baseline = fit(history[0] + history[1])
             continue
-        residual = error_ms(model, events)
+        fixed_errors.extend(errors_ms(baseline, events))
+        errors = errors_ms(model, events)
+        adaptive_errors.extend(errors)
+        residual = percentile95(errors)
+        if decisions:
+            decisions[-1]["future_pairs"] += len(events)
         item.update(p95_ms=residual, action="within_budget")
         if residual <= budget_ms:
             candidate = None
@@ -65,19 +72,22 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
         item["action"] = "over_budget"
         if candidate and candidate[0] == index - 1:
             _, previous, trial = candidate
-            trial_error = error_ms(trial, events)
+            trial_error = percentile95(errors_ms(trial, events))
             item["candidate_p95_ms"] = trial_error
             if trial_error <= budget_ms and trial_error <= residual / 2:
                 model = trial
                 item["action"] = "recalibrate"
                 decisions.append({"candidate_start_s": previous[0][0] / 1e9,
-                                  "decision_s": item["end_s"], "old_p95_ms": residual,
+                                  "decision_s": item["end_s"], "future_pairs": 0, "old_p95_ms": residual,
                                   "candidate_p95_ms": trial_error, "rate_ppm": trial[1] * 1e6})
                 candidate = None
                 continue
         candidate = (index, events, fit(events))
     scored = [w for w in windows if "p95_ms" in w]
-    return {"budget_ms": budget_ms, "window_s": window_s, "windows": windows, "decisions": decisions,
+    comparison = {"pairs": len(adaptive_errors),
+                  "fixed_p95_ms": percentile95(fixed_errors) if fixed_errors else None,
+                  "adaptive_p95_ms": percentile95(adaptive_errors) if adaptive_errors else None}
+    return {"evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s, "windows": windows, "decisions": decisions,
             "scored_windows": len(scored), "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
 
 
