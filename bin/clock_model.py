@@ -59,6 +59,16 @@ def clock_report(pairs):
         return None
     if any(x <= prev_x for (prev_x, _), (x, _) in zip(pairs, pairs[1:])):
         raise ValueError("PX4 sample time repeated or reversed in recording order; split the capture")
+    reversals = [(i, (prev_y - y) / 1e6)
+                 for i, ((_, prev_y), (_, y)) in enumerate(zip(pairs, pairs[1:]), start=2)
+                 if y < prev_y]
+    if reversals:
+        first, step_ms = reversals[0]
+        return {"rate_ppm": None, "holdout": None, "windows": [],
+                "span_s": (pairs[-1][0] - pairs[0][0]) / 1e9,
+                "backward_steps": len(reversals), "first_backward_pair": first,
+                "first_backward_ms": step_ms,
+                "diagnostic": "Clock moved backward in matched event order; inspect the boundary before fitting."}
     relative = relative_times(pairs)
     _, rate = fit(relative)
     return {"span_s": relative[-1][0] / 1e9,

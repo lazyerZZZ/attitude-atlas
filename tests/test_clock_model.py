@@ -28,6 +28,14 @@ class RateTests(unittest.TestCase):
         self.assertIsNone(windows[2]["rate_ppm"])
         self.assertAlmostEqual(windows[-1]["rate_ppm"], 100000)
 
+    def test_ros_time_step_with_increasing_px4_is_diagnostic(self):
+        report = clock_report([(10, 10**12), (20, 10**12 + 10), (30, 50), (40, 60)])
+        self.assertIsNone(report["rate_ppm"])
+        self.assertEqual(report["backward_steps"], 1)
+        self.assertEqual(report["first_backward_pair"], 3)
+        self.assertGreater(report["first_backward_ms"], 999_999)
+        self.assertIsNone(report["holdout"])
+
     def test_discontinuity_is_not_silently_sorted(self):
         with self.assertRaisesRegex(ValueError, "split"):
             clock_report([(100, 123), (50, 234)])
