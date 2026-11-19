@@ -2,7 +2,7 @@ import sys
 import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "bin"))
-from pair_clocks import join, signature
+from pair_clocks import Anchor, join, signature, timing_report
 
 
 class EventTests(unittest.TestCase):
@@ -12,6 +12,14 @@ class EventTests(unittest.TestCase):
         rows, counts = join(px, ros)
         self.assertEqual([r.px4_us for r in rows], [4])
         self.assertEqual(counts["unique_event_pairs"], 1)
+
+    def test_receipt_and_sample_timestamps_have_different_evidence(self):
+        anchors = [Anchor(i * 1000, i * 1000, 0, i * 1000000 + i - 3) for i in range(1, 10)]
+        report = timing_report(anchors)
+        self.assertIsNone(report["publish_clock"])
+        self.assertEqual(report["sample_clock"]["rate_ppm"], 0)
+        self.assertAlmostEqual(report["receive_clock"]["rate_ppm"], 1)
+        self.assertEqual(report["receive_minus_sample_ms"]["negative_count"], 2)
 
     def test_only_finite_nonzero_payloads(self):
         self.assertIsNone(signature([0] * 4))

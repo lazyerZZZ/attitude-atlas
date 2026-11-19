@@ -7,7 +7,9 @@ import math
 import struct
 import sys
 
-from clock_model import clock_report
+from statistics import median
+
+from clock_model import clock_report, percentile95
 
 
 @dataclass(frozen=True)
@@ -57,6 +59,23 @@ def read_bag(path, topic):
     return rows
 
 
+def timing_report(anchors):
+    report = {}
+    for name, field, scale in (("sample_clock", "ros_us", 1000),
+                               ("publish_clock", "publish_ns", 1),
+                               ("receive_clock", "receive_ns", 1)):
+        pairs = [(a.px4_us * 1000, getattr(a, field) * scale)
+                 for a in anchors if getattr(a, field) > 0]
+        report[name] = clock_report(pairs)
+        if report[name]:
+            report[name]["pairs"] = len(pairs)
+    gaps = [(a.receive_ns - a.ros_us * 1000) / 1e6 for a in anchors if a.receive_ns > 0]
+    report["receive_minus_sample_ms"] = (
+        {"median": median(gaps), "p95": percentile95(gaps), "negative_count": sum(g < 0 for g in gaps)}
+        if gaps else None)
+    return report
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("ulog")
@@ -64,7 +83,7 @@ def main():
     parser.add_argument("--topic", default="/fmu/out/vehicle_attitude")
     args = parser.parse_args()
     anchors, report = join(read_ulog(args.ulog), read_bag(args.mcap, args.topic))
-    report["sample_clock"] = clock_report([(a.px4_us * 1000, a.ros_us * 1000) for a in anchors])
+    report.update(timing_report(anchors))
     print(json.dumps(report, indent=2))
     return 0 if anchors else 1
 
