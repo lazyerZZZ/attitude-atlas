@@ -50,7 +50,7 @@ def read_ulog(path):
 def read_bag(path, topic, sync_topic):
     if Path(path).suffix.lower() == ".db3":
         from sqlite_bag import read_sqlite
-        return read_sqlite(path, topic, sync_topic)
+        return read_sqlite(path, topic, sync_topic, signature)
     from mcap.reader import make_reader
     from mcap_ros2.decoder import DecoderFactory
     rows, sync = [], defaultdict(list)

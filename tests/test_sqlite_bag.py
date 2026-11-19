@@ -25,6 +25,10 @@ class SQLiteTests(unittest.TestCase):
         for order, header in (("<", b"\0\1\0\0"), (">", b"\0\0\0\0")):
             data = header + struct.pack(order + "QQ8fB", 8, 7, 1,0,0,0,1,0,0,0,0)
             self.db.execute("INSERT INTO messages(topic_id,timestamp,data) VALUES(1,?,?)", (9000000011, data))
+        self.db.execute("INSERT INTO topics VALUES(2,'sync','px4_msgs/msg/TimesyncStatus','cdr')")
+        payload = b"\0\1\0\0" + struct.pack("<QB7xQqqI", 512, 2, 599, -88, -77, 932)
+        self.db.execute("INSERT INTO messages(topic_id,timestamp,data) VALUES(2,60,?)", (payload,))
         self.db.commit()
-        rows, _ = read_bag(self.path, "att", "sync")
+        rows, sync = read_bag(self.path, "att", "sync")
+        self.assertEqual(sync[2], [(512, -77, 932)])
         self.assertEqual(rows, [(signature([1,0,0,0]), 7, 0, 9000000011)] * 2)

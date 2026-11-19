@@ -1,4 +1,5 @@
 """Read recorded VehicleAttitude events from a rosbag2 SQLite CDR file."""
+from collections import defaultdict
 from contextlib import closing
 from pathlib import Path
 import sqlite3
@@ -11,15 +12,21 @@ def byte_order(data, sizes):
     return "<" if data[1] == 1 else ">"
 
 
-def read_sqlite(path, topic, sync_topic):
-    from pair_clocks import signature
+def read_sqlite(path, topic, sync_topic, signature):
     uri = Path(path).resolve().as_uri() + "?mode=ro"
-    rows = []
+    rows, sync = [], defaultdict(list)
     with closing(sqlite3.connect(uri, uri=True)) as db:
-        query = """SELECT t.type, t.serialization_format, m.timestamp, m.data
+        query = """SELECT t.name, t.type, t.serialization_format, m.timestamp, m.data
                    FROM messages m JOIN topics t ON t.id = m.topic_id
-                   WHERE t.name = ? ORDER BY m.id"""
-        for schema, fmt, receive_ns, data in db.execute(query, (topic,)):
+                   WHERE t.name IN (?, ?) ORDER BY m.id"""
+        for name, schema, fmt, receive_ns, data in db.execute(query, (topic, sync_topic)):
+            if name == sync_topic:
+                if schema != "px4_msgs/msg/TimesyncStatus" or fmt != "cdr":
+                    raise ValueError(f"Expected CDR TimesyncStatus on {sync_topic}")
+                order = byte_order(data, (48,))
+                stamp, protocol, _, _, estimate, rtt = struct.unpack_from(order + "QB7xQqqI", data, 4)
+                sync[protocol].append((stamp, estimate, rtt))
+                continue
             if schema != "px4_msgs/msg/VehicleAttitude" or fmt != "cdr":
                 raise ValueError(f"Expected CDR VehicleAttitude on {topic}")
             order = byte_order(data, (53, 56))
@@ -27,4 +34,4 @@ def read_sqlite(path, topic, sync_topic):
             rows.append((signature(q), sample, 0, receive_ns))
     if not rows:
         raise ValueError(f"No VehicleAttitude samples on {topic}")
-    return rows, {}
+    return rows, sync
