@@ -22,6 +22,18 @@ def exchanges(data):
     return pairs, rtts, stamps
 
 
+def exchange_resolution(pairs, rtts, budget_ms):
+    # The midpoint approximation has one half RTT of one-sided timing uncertainty.
+    offsets = [(peer - local) / 1e6 for local, peer in
+               [(x - pairs[0][0], y - pairs[0][1]) for x, y in pairs]]
+    jumps = [abs(b - a) for a, b in zip(offsets, offsets[1:])]
+    radii = [v / 2000 for v in rtts]
+    return {"half_rtt_exceeds_budget": sum(radius > budget_ms for radius in radii),
+            "max_adjacent_offset_change_ms": max(jumps, default=None),
+            "adjacent_changes_beyond_rtt_and_budget": sum(
+                j > a + b + budget_ms for j, a, b in zip(jumps, radii, radii[1:]))}
+
+
 def audit(path, budget_ms=0.25, window_s=10.0):
     from pyulog import ULog
     ulog = ULog(str(path), ["timesync_status", "vehicle_land_detected"])
@@ -42,7 +54,7 @@ def audit(path, budget_ms=0.25, window_s=10.0):
             "sys_hitl": int(ulog.initial_parameters["SYS_HITL"]) if "SYS_HITL" in ulog.initial_parameters else None,
             "exchanges": len(pairs), "airborne_exchanges": airborne, "unknown_land_state": unknown,
             "span_s": (stamps[-1] - stamps[0]) / 1e6, "median_rtt_us": median(rtts),
-            "p95_rtt_us": percentile95(rtts), "comparison": compare_policies(pairs, budget_ms, window_s)}
+            "p95_rtt_us": percentile95(rtts), "resolution": exchange_resolution(pairs, rtts, budget_ms), "comparison": compare_policies(pairs, budget_ms, window_s)}
 
 
 if __name__ == "__main__":
