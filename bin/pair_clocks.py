@@ -1,5 +1,6 @@
 """Audit a PX4 ULog against a ROS 2 MCAP carrying the mirrored PX4 estimate."""
 import argparse
+from bisect import bisect_right
 from pathlib import Path
 import sqlite3
 import csv
@@ -40,11 +41,41 @@ def join(px, ros):
                      "unique_event_pairs": len(anchors)}
 
 
-def read_ulog(path):
-    from pyulog import ULog
-    data = ULog(str(path), ["vehicle_attitude"]).get_dataset("vehicle_attitude", 0).data
+def attitude_rows(ulog):
+    data = ulog.get_dataset("vehicle_attitude", 0).data
     quaternions = zip(*(data["q[%d]" % i] for i in range(4)))
     return [(signature(q), int(t)) for q, t in zip(quaternions, data["timestamp_sample"])]
+
+
+def read_ulog(path):
+    from pyulog import ULog
+    return attitude_rows(ULog(str(path), ["vehicle_attitude"]))
+
+
+def read_flight(path):
+    from pyulog import ULog
+    ulog = ULog(str(path), ["vehicle_attitude", "vehicle_land_detected"])
+    states = []
+    for dataset in ulog.data_list:
+        if dataset.name == "vehicle_land_detected" and dataset.multi_id == 0:
+            states = [(int(t), bool(value)) for t, value in
+                      zip(dataset.data["timestamp"], dataset.data["landed"])]
+    hitl = ulog.initial_parameters.get("SYS_HITL")
+    platform = {"board": ulog.msg_info_dict.get("ver_hw"),
+                "sys_hitl": int(hitl) if hitl is not None else None}
+    return attitude_rows(ulog), platform, states
+
+
+def matched_land_states(anchors, states):
+    stamps = [t for t, _ in states]
+    if any(b < a for a, b in zip(stamps, stamps[1:])):
+        raise ValueError("Land-state timestamps moved backward")
+    counts = {"landed": 0, "airborne": 0, "unknown": 0}
+    for event in anchors:
+        i = bisect_right(stamps, event.px4_us) - 1
+        state = "unknown" if i < 0 else ("landed" if states[i][1] else "airborne")
+        counts[state] += 1
+    return counts
 
 
 def read_bag(path, topic, sync_topic):
@@ -119,7 +150,10 @@ def main():
     parser.add_argument("--events-out", metavar="NEW.csv", help="Export exact event timestamps with units")
     args = parser.parse_args()
     ros, sync = read_bag(args.bag, args.topic, args.sync_topic)
-    anchors, report = join(read_ulog(args.ulog), ros)
+    px, platform, states = read_flight(args.ulog)
+    anchors, report = join(px, ros)
+    report["platform"] = platform
+    report["matched_land_states"] = matched_land_states(anchors, states)
     report["timesync"] = sync_report(sync, anchors)
     report.update(timing_report(anchors))
     if args.events_out and anchors:

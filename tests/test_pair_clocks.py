@@ -41,6 +41,12 @@ class EventTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 write_events(path, [])
 
+    def test_hardware_state_uses_latest_report_before_each_event(self):
+        from pair_clocks import matched_land_states
+        anchors = [Anchor(t, t, 0, 0) for t in (1, 2, 4, 9)]
+        self.assertEqual(matched_land_states(anchors, [(2, True), (4, False)]),
+                         {"unknown": 1, "landed": 1, "airborne": 2})
+
     def test_only_finite_nonzero_payloads(self):
         self.assertIsNone(signature([0] * 4))
         self.assertIsNone(signature([float("nan"), 0, 0, 0]))
