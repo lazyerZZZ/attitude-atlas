@@ -73,6 +73,15 @@ class SegmentTests(unittest.TestCase):
         self.assertEqual(early["evaluation"]["pairs"], late["evaluation"]["pairs"])
         self.assertEqual(early["windows"][2]["action"], "headroom_used")
 
+    def test_alarm_is_judged_on_two_unseen_windows(self):
+        step = lambda t: 2000000 if t >= 20 else 0
+        d, = assess(events(600, step))["decisions"]
+        self.assertEqual(d["followup"]["outcome"], "prevented_breach")
+        d, = assess(events(480, step))["decisions"]
+        self.assertEqual(d["followup"]["outcome"], "insufficient_followup")
+        d, = assess(events(600, lambda t: 150000 if t >= 20 else 0), policy="headroom")["decisions"]
+        self.assertEqual(d["followup"]["outcome"], "old_fit_within_budget")
+
     def test_transient_burst_does_not_move_calibration(self):
         result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))
         self.assertEqual(result["decisions"], [])

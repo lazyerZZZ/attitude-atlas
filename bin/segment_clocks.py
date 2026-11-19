@@ -70,6 +70,24 @@ def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed"):
             "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
 
 
+def audit_switch(decision, old, events, index, budget, new_p95):
+    audit = decision["followup"]
+    if len(audit["windows"]) >= 2 or index != audit["first_window"] + len(audit["windows"]):
+        return
+    old_p95 = percentile95(errors_ms(old, events))
+    audit["windows"].append({"old_p95_ms": old_p95, "new_p95_ms": new_p95})
+    if len(audit["windows"]) == 2:
+        windows = audit["windows"]
+        if any(w["old_p95_ms"] <= budget < w["new_p95_ms"] for w in windows):
+            audit["outcome"] = "introduced_breach"
+        elif any(w["new_p95_ms"] <= budget < w["old_p95_ms"] for w in windows):
+            audit["outcome"] = "prevented_breach"
+        elif all(w["old_p95_ms"] <= budget for w in windows):
+            audit["outcome"] = "old_fit_within_budget"
+        else:
+            audit["outcome"] = "breach_remained"
+
+
 def assess_epoch(pairs, budget_ms, width, policy):
     trigger = budget_ms / 2 if policy == "headroom" else budget_ms
     windows = []
@@ -79,6 +97,7 @@ def assess_epoch(pairs, budget_ms, width, policy):
     baseline = None
     fixed_errors, adaptive_errors = [], []
     decisions = []
+    retired = None
     relative = relative_times(pairs) if pairs else []
     consumed = 0
     for index, group in groupby(relative, key=lambda p: p[0] // width):
@@ -107,6 +126,7 @@ def assess_epoch(pairs, budget_ms, width, policy):
         residual = percentile95(errors)
         if decisions:
             decisions[-1]["future_pairs"] += len(events)
+            audit_switch(decisions[-1], retired, events, index, budget_ms, residual)
         item.update(p95_ms=residual, action="within_budget")
         if residual <= trigger:
             candidate = None
@@ -123,7 +143,7 @@ def assess_epoch(pairs, budget_ms, width, policy):
                 next_px, next_ros = pairs[consumed]
                 decision_s = (next_px - pairs[0][0]) / 1e9
                 item["confirmed_s"] = decision_s
-                model = trial
+                retired, model = model, trial
                 last_x = previous[-1][0]
                 ref_px = pairs[0][0] + last_x
                 ref_ros = pairs[0][1] + last_x + round(trial[0] + trial[1] * last_x)
@@ -131,6 +151,7 @@ def assess_epoch(pairs, budget_ms, width, policy):
                 decisions.append({"candidate_start_s": previous[0][0] / 1e9,
                                   "eligible_after_px4_ns": str(next_px),
                                   "eligible_after_ros_ns": str(next_ros),
+                                  "followup": {"first_window": index + 1, "windows": [], "outcome": "insufficient_followup"},
                                   "decision_s": decision_s, "future_pairs": 0, "old_p95_ms": residual,
                                   "candidate_p95_ms": trial_error, "rate_ppm": trial[1] * 1e6,
                                   "model_reference_px4_ns": str(ref_px), "model_reference_ros_ns": str(ref_ros),
