@@ -1,16 +1,32 @@
 # Attitude Atlas
 
-Does your ROS node agree with the flight controller? Paste one PX4 attitude and one ROS 2 message. Attitude Atlas aligns their coordinate conventions, draws both aircraft and measures the smallest rotation between them.
+Find the moment your ROS node and PX4 flight controller disagree. Compare two recordings, open the worst pair as synchronized aircraft views, and attach a reproducible report to a GitHub issue.
 
-**[Try the 90° roll case](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)** · [Single-pose explorer](https://lazyerzzz.github.io/attitude-atlas/) · [中文说明](README.zh-CN.md)
+**[Try the recording demo](https://lazyerzzz.github.io/attitude-atlas/logs.html)** · [Compare one pair](https://lazyerzzz.github.io/attitude-atlas/compare.html) · [Pose explorer](https://lazyerzzz.github.io/attitude-atlas/) · [中文说明](README.zh-CN.md)
 
-[![Both aircraft point north, while the observed aircraft is rolled 90 degrees](media/bridge-check.png)](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)
+[![Synthetic recording shows a single 90-degree error and one unmatched ROS sample](media/recording-check.png)](https://lazyerzzz.github.io/attitude-atlas/logs.html)
 
-In this example both aircraft point north. Their **nose direction error is 0°**, while their **full rotation error is 90°**. The left and up axes each differ by 90°. Drag either view to orbit both together.
+The synthetic demo contains 22 ROS samples. With a 5 ms window, 21 match PX4 and the last one falls outside the window. The 95th percentile rounds to 0°, but ROS sample 13 has a 90° roll discrepancy. Open it to see both noses point north-east while the wings disagree.
+
+## Compare two recordings
+
+1. Export a PX4 attitude CSV with `ulog2csv -m vehicle_attitude flight.ulg`. During recording or bag playback, capture one ROS topic with `ros2 topic echo /odom --full-length > ros.yaml`; stop with Ctrl+C. A stamped orientation and consistent frame IDs are required. Inputs should already represent FRD in NED and FLU in geographic ENU.
+2. Open Recording check and choose the files. Confirm a shared clock and epoch, or enter a measured synchronization point consisting of PX4 microseconds and ROS nanoseconds at the same instant. A single point compensates a constant offset. Split captures at clock resets and calibrate drift separately.
+3. Set the maximum allowed timestamp difference. Matching selects the nearest PX4 sample for each ROS observation and picks the earlier sample on a tie. PX4 samples may be reused. Inspect the number of distinct PX4 samples, missing ROS matches and peak error alongside the nearest-rank percentile.
+4. Click an observation or move the sample slider with the arrow keys. Open a matched pair in Bridge check, then choose **Copy issue report**. The CSV download includes every observed row, both source timestamps, original clock difference, matching skew and rotation error. Unmatched rows have an empty rotation error.
+
+The browser reads up to 16 MiB per file in a local worker. The CLI takes the same files, or accepts native `.ulg` input when [pyulog](https://github.com/PX4/pyulog) provides `ulog2csv` on your PATH. This command runs the bundled synthetic example from the repository root:
+
+```sh
+node bin/check-recording.mjs site/samples/roll-spike.csv site/samples/roll-spike.yaml \
+  --shared-clock --max-skew-ms 5 --rows-out rows.csv --case-out worst.json
+```
+
+Use `--max-error-deg 2 --min-coverage-pct 95` to gate CI. This demo exceeds the 2° tolerance. Exit 0 means the configured checks passed, 1 indicates a failed check or zero matches, and 2 indicates invalid inputs or an I/O failure. Export paths must be new files. For different epochs, replace `--shared-clock` with `--px4-anchor-us US --ros-anchor-ns NS` using your measured synchronization readings. Exported single-pair cases preserve the original stamps and leave cross-clock time comparison unconfirmed.
 
 ## Compare messages from your bridge
 
-1. Paste a PX4 `vehicle_attitude` message and a ROS quaternion, PoseStamped or Odometry orientation. YAML from `ros2 topic echo --once`, JSON, and four numeric components are supported. The page retains the original numbers and displays each input norm.
+1. Paste a PX4 `vehicle_attitude` message and a ROS quaternion, PoseStamped, Odometry orientation or a single aligned TransformStamped. YAML from `ros2 topic echo --once`, JSON, and four numeric components are supported. The page retains the original numbers and displays each input norm.
 2. Check your conventions. PX4 uses FRD in NED, and the ROS side assumes FLU in geographic ENU. ROS frame IDs are shown for inspection. Align arbitrary map frames and sensor mounts before interpreting the angular difference.
 3. If your sample timestamps share a clock and epoch, enable the clock checkbox to see **ROS minus PX4** in milliseconds. PX4 uses the nonzero `timestamp_sample` when available, then `timestamp`. ROS uses `header.stamp`. Replacing either message clears the clock confirmation.
 4. Copy a comparison link for an issue, or export JSON and reopen it with **Open case JSON**. Both include extracted attitudes, frame IDs, timestamps and clock selection. The rest of each message stays local. See [running a case in CI](#run-a-bridge-regression-in-ci).
@@ -61,7 +77,7 @@ Open <http://localhost:8000>. Run the numerical tests with Node.js 18 or newer:
 node --test tests/*.test.mjs
 ```
 
-The tests cover frame conversion, rotation and axis errors, timestamp handling, message parsing, CSV playback, exported cases and CLI exit codes. The publishing workflow also exercises both pages in Chrome at desktop and mobile widths. Every sample in the included recording is checked against an independent direction-cosine matrix.
+The tests cover frame conversion, rotation and axis errors, timestamp handling, message parsing, CSV playback, exported cases and CLI exit codes. The publishing workflow also exercises all three pages in Chrome at desktop and mobile widths. Every sample in the included recording is checked against an independent direction-cosine matrix.
 
 ## Sample data
 

@@ -1,10 +1,27 @@
 # Attitude Atlas · 无人机姿态坐标系工作台
 
-把飞控发出的 PX4 姿态和 ROS 节点收到的姿态并排放进浏览器，可以看到两个机体朝向、完整旋转误差，以及前、左、上三个机体轴各自偏了多少度。
+把整段 PX4 和 ROS 2 姿态记录放进浏览器，找出两边从哪一帧开始不一致，再把那一对消息交给同事复现。
 
-**[试试 90° 滚转案例](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)** · [单姿态工作台](https://lazyerzzz.github.io/attitude-atlas/) · [English](README.md)
+**[打开整段日志对比](https://lazyerzzz.github.io/attitude-atlas/logs.html)** · [核对一对消息](https://lazyerzzz.github.io/attitude-atlas/compare.html) · [单姿态工作台](https://lazyerzzz.github.io/attitude-atlas/) · [English](README.md)
 
-[![两个机头都朝北，右翼滚转了 90°](media/bridge-check.png)](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)
+[![合成示例中有一处 90° 的误差和一条未匹配样本](media/recording-check.png)](https://lazyerzzz.github.io/attitude-atlas/logs.html)
+
+## 从一段日志定位到一帧
+
+内置合成示例有 22 条 ROS 样本。在 5 ms 时间窗内有 21 条匹配，最后一条超出时间窗。第 95 百分位显示为 0.00°，第 13 条却出现了 90° 滚转误差。点击最高点即可检查两架飞机的姿态，也可以复制带复现链接的 Markdown 报告。
+
+1. 用 `ulog2csv -m vehicle_attitude flight.ulg` 导出 PX4 CSV。录制或回放 ROS bag 时，运行 `ros2 topic echo /odom --full-length > ros.yaml` 保存一个带时间戳的话题，按 Ctrl+C 结束。
+2. 两份数据须分别符合 FRD → NED 和 FLU → 地理 ENU 的约定。确认使用同一时钟和时间原点，或输入同一物理时刻的两个已知读数（PX4 微秒、ROS 纳秒）。单个同步点仅校正常量偏移。时钟重启需分段处理。
+3. 选择允许的最大配对时间差。页面为每条 ROS 消息寻找最近的 PX4 样本，等距时取较早样本。可检查覆盖率、复用的样本与误差峰值。导出 CSV 保留未匹配行、两侧原始时间戳以及对齐后的时间差。
+
+浏览器在本地处理文件，每个文件上限 16 MiB。命令行支持 CSV，安装 pyulog 且 `ulog2csv` 在 PATH 中时也可以直接读取 `.ulg`。下面的命令运行内置样例：
+
+```sh
+node bin/check-recording.mjs site/samples/roll-spike.csv site/samples/roll-spike.yaml \
+  --shared-clock --max-skew-ms 5 --rows-out rows.csv --case-out worst.json
+```
+
+可以用 `--max-error-deg 2 --min-coverage-pct 95` 设置回归条件。通过返回 0，超限或零匹配返回 1，输入或读写错误返回 2。不同时间原点可用 `--px4-anchor-us US --ros-anchor-ns NS` 替代 `--shared-clock`。输出文件使用新路径。
 
 ## 核对自己的两条消息
 
