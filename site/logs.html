@@ -85,6 +85,19 @@
             <dd id="max"></dd>
           </div>
         </dl>
+        <h3>Rotation error over ROS time</h3>
+        <canvas
+          id="plot"
+          aria-label="Scatter plot of recording error against elapsed ROS time"
+        ></canvas
+        ><label for="sample">Inspect ROS sample</label
+        ><input id="sample" type="range" min="0" max="0" step="1" value="0" />
+        <p id="sample-info" aria-live="polite"></p>
+        <a id="open-sample" hidden>Inspect selected pair →</a>
+        <p class="hint">
+          Blue points are matched attitudes. Orange ticks below the axis mark
+          unmatched ROS samples. Click the plot or use the slider arrow keys.
+        </p>
         <p id="detail"></p>
         <p><a id="worst">Open worst pair in Bridge check →</a></p>
       </section>

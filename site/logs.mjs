@@ -1,5 +1,18 @@
+import { errorPlot } from "./error-plot.mjs";
 const $ = (id) => document.getElementById(id);
 let worker = null;
+const plot = errorPlot($("plot"), selectSample);
+function selectSample(index) {
+  if (!worker) return;
+  $("sample").value = index;
+  plot.mark(index);
+  $("open-sample").hidden = true;
+  worker.postMessage({ inspect: index });
+}
+$("sample").oninput = () => selectSample(Number($("sample").value));
+function caseUrl(c) {
+  return "compare.html#" + new URLSearchParams({ pair: JSON.stringify(c) });
+}
 function clear(text) {
   if (worker) {
     worker.terminate();
@@ -39,6 +52,22 @@ function run(demo) {
       clear(data.error);
       return;
     }
+    if (data.index !== undefined) {
+      if (data.index !== Number($("sample").value)) return;
+      const r = data.row;
+      $("sample-info").textContent =
+        "ROS sample " +
+        (r.ri + 1) +
+        " · header.stamp " +
+        data.sourceStamp +
+        " ns · nearest PX4 skew " +
+        r.skewMs +
+        " ms · " +
+        (r.rotationDeg === null ? "outside window" : angle(r.rotationDeg));
+      $("open-sample").hidden = !data.selected;
+      if (data.selected) $("open-sample").href = caseUrl(data.selected);
+      return;
+    }
     $("results").hidden = false;
     $("status").textContent = "";
     $("source").textContent = demo
@@ -57,12 +86,10 @@ function run(demo) {
       " · PX4 time field: " +
       data.field;
     $("worst").hidden = !data.worst;
-    if (data.worst)
-      $("worst").href =
-        "compare.html#" +
-        new URLSearchParams({ pair: JSON.stringify(data.worst) });
-    task.terminate();
-    worker = null;
+    if (data.worst) $("worst").href = caseUrl(data.worst);
+    $("sample").max = s.rosSamples - 1;
+    plot.set(data.times, data.angles, s.maxDeg);
+    selectSample(data.worstIndex);
   };
   task.postMessage({ px, ros, skew });
 }

@@ -106,6 +106,12 @@ async function main() {
     await page.locator("#results").waitFor();
     assert.equal(await page.locator("#coverage").innerText(), "21 / 22");
     assert.equal(await page.locator("#max").innerText(), "90.00°");
+    await page.locator("#sample").focus();
+    await page.keyboard.press("End");
+    await page.getByText(/ROS sample 22 .*outside window/).waitFor();
+    assert.ok(await page.locator("#open-sample").isHidden());
+    await page.keyboard.press("Home");
+    await page.locator("#open-sample").waitFor();
     await page.locator("#worst").click();
     await page.locator("#result").waitFor();
     assert.equal(await page.locator("#angle").innerText(), "90.00°");

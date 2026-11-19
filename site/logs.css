@@ -60,3 +60,16 @@
     font-size: 0.73rem;
   }
 }
+#plot {
+  display: block;
+  width: 100%;
+  height: 180px;
+  background: #edf5f7;
+  border-radius: 8px;
+  cursor: crosshair;
+  margin: 10px 0;
+}
+#sample-info {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
