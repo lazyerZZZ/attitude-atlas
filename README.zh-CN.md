@@ -8,9 +8,19 @@
 
 ## 找到同一架次，再查时钟漂移
 
-如果手上有一个 ROS 2 MCAP 和几个名字相似的 ULog，可用 `python bin/find_flight.py capture.mcap logs/*.ulg` 按两侧唯一出现的相同姿态事件排序。选定日志后，运行 `python bin/pair_clocks.py selected.ulg capture.mcap --events-out events.csv`，可分别查看消息采样、MCAP 发布和接收时间。工具从包内读取消息定义，支持包含 PX4 姿态镜像的 ROS 2 MCAP。[安装与复算步骤](examples/clock-study/)
+如果手上有一个 ROS 2 MCAP 或 SQLite bag 和几个名字相似的 ULog，可用 `python bin/find_flight.py capture.mcap logs/*.ulg` 按两侧唯一出现的相同姿态事件排序。选定日志后，运行 `python bin/pair_clocks.py selected.ulg capture.mcap --events-out events.csv`，可分别查看消息采样、MCAP 发布和接收时间。工具支持包含 PX4 姿态镜像的 MCAP 和标准 CDR 布局的 rosbag2 SQLite 文件。[安装与复算步骤](examples/clock-study/)
 
 两组真机记录中，ROS 消息采样时间相对 PX4 分别多走了 **3.014 ms（77 秒）** 和 **5.497 ms（257 秒）**。较长一组前后四分之一时段的等效速率差从 +13.61 增至 +28.43 ppm。用前段拟合偏移和速率后，后段 P95 采样时间残差仍有 0.956 ms。联调时可以据此检查自己的匹配时间窗。[查看两次实测曲线](https://lazyerzzz.github.io/attitude-atlas/clock-study.html)
+
+### 什么时候需要重新标定
+
+另一团队 HALO 公开的 7 组 ULog / ROS 2 bag 来自 3 架 ModalAI VOXL 2。最长一组的 986 个相同事件跨 49.59 秒，ROS 采样时间相对 PX4 多走 0.730 ms。用 10 秒窗口和 0.25 ms 的 P95 预算，其后三个窗口均在预算内。相同设置在原地效记录的第 100.04 秒和 170.04 秒确认重标定，固定模型与自适应模型在相同后续事件上的 P95 残差分别为 2.154 ms 和 0.299 ms。[交互回放全部九组](https://lazyerzzz.github.io/attitude-atlas/segments.html)
+
+```sh
+python bin/pair_clocks.py flight.ulg capture.db3 --segment-budget-ms 0.25 --window-s 10
+```
+
+报告会列出何时能确认切换、旧模型与候选模型各自的残差，以及可复用的纳秒级标定参数。另 6 组 HALO 记录的匹配跨度只有 7.15–19.35 秒，默认窗口下均返回证据不足。两批数据的时间桥接路径与记录时长不同，测得的 ppm 仅描述对应记录中的等效速率差。
 
 ## 从一段日志定位到一帧
 

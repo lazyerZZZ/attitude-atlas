@@ -10,9 +10,15 @@ The synthetic demo contains 22 ROS samples. With a 5 ms window, 21 match PX4 and
 
 ## Audit real flight clocks
 
-Which ULog goes with this bag? Give `bin/find_flight.py` a ROS 2 MCAP and the candidate ULogs to rank them by shared attitude events. Then audit the selected pair with `bin/pair_clocks.py` to measure drift, validate an offset correction on later samples, and inspect recorder jitter.
+Which ULog goes with this bag? Give `bin/find_flight.py` a ROS 2 MCAP or SQLite bag and the candidate ULogs to rank them by shared attitude events. Then audit the selected pair with `bin/pair_clocks.py` to measure drift, validate an offset correction on later samples, and inspect recorder jitter.
 
 Across two hardware captures, the ROS payload clock gained **3.014 ms in 77 s** and **5.497 ms in 257 s** relative to PX4. The longer flight’s rate changed from +13.61 to +28.43 ppm across its first and last quarters. [See both flight traces](https://lazyerzzz.github.io/attitude-atlas/clock-study.html) · [Run the audit on your logs](examples/clock-study/).
+
+**When should I recalibrate?** Seven additional HALO recordings match PX4 ULogs from three ModalAI VOXL 2 aircraft. The longest shared interval gained 0.730 ms in 49.59 s. Its initial calibration stayed within a 0.25 ms P95 budget on three later windows. A 257 s PX4_FMU_V6X recording needed two changes under the same rule. [Replay all nine recordings at four error budgets](https://lazyerzzz.github.io/attitude-atlas/segments.html).
+
+```sh
+python bin/pair_clocks.py flight.ulg capture.db3 --segment-budget-ms 0.25 --window-s 10
+```
 
 ## Compare two recordings
 

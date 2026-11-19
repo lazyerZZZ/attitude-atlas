@@ -15,13 +15,13 @@
 <p id="source-line"></p>
 <section aria-labelledby="outcome"><h2 id="outcome" role="status">Loading recorded windows…</h2>
 <p id="explanation"></p>
-<figure hidden id="trace"><figcaption>Held-forward P95 error (ms)</figcaption>
+<figure hidden id="trace"><figcaption>P95 error on later events (ms)</figcaption>
 <canvas id="chart" role="img" aria-label="Window errors for the initial fit, the adaptive fit and the selected budget. Exact values appear in the window table."></canvas>
 <div class="key"><span>Initial fit</span><span>Adaptive fit</span><span>Budget</span></div></figure>
 <details id="details" hidden><summary>Inspect each 10-second window</summary><table>
 <thead><tr><th>End (s)</th><th>Initial (ms)</th><th>Adaptive (ms)</th><th>Decision</th></tr></thead><tbody id="rows"></tbody></table></details></section>
 <h2>How a switch is confirmed</h2>
-<p>The first two eligible windows train a straight line between the clocks. An over-budget window trains a candidate. The next window must also exceed the old budget, and the candidate must meet the budget and at least halve the old error. Only later events receive the new correction. A window needs eight events spanning at least seven seconds.</p>
+<p>The first two eligible windows train a straight line between the clocks. An over-budget window trains a candidate. The next window must also exceed the old budget, and the candidate must meet the budget and at least halve the old error. The first event in the next window confirms the switch. A window needs eight events spanning at least seven seconds.</p>
 <p>Rates describe the recorded PX4-to-ROS timestamp path. The two hardware corpora differ in recording duration and bridge setup. A short recording can measure an offset change while supplying too few later events to validate recalibration.</p>
 <p><a href="https://github.com/lazyerZZZ/attitude-atlas/tree/main/examples/clock-study">Reproduce these flights or test your logs</a> · <a href="clock-study.html">Original drift study</a></p>
 </main></body></html>

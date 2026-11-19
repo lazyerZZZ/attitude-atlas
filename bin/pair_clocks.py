@@ -1,4 +1,4 @@
-"""Audit a PX4 ULog against a ROS 2 MCAP carrying the mirrored PX4 estimate."""
+"""Audit a PX4 ULog against a ROS 2 bag carrying the mirrored PX4 estimate."""
 import argparse
 from bisect import bisect_right
 from pathlib import Path
