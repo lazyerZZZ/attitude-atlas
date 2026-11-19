@@ -1,6 +1,6 @@
 """Audit a PX4 ULog against a ROS 2 MCAP carrying the mirrored PX4 estimate."""
 import argparse
-from collections import Counter
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 import json
 import math
@@ -44,19 +44,40 @@ def read_ulog(path):
     return [(signature(q), int(t)) for q, t in zip(quaternions, data["timestamp_sample"])]
 
 
-def read_bag(path, topic):
+def read_bag(path, topic, sync_topic):
     from mcap.reader import make_reader
     from mcap_ros2.decoder import DecoderFactory
-    rows = []
+    rows, sync = [], defaultdict(list)
     with open(path, "rb") as stream:
         reader = make_reader(stream, decoder_factories=[DecoderFactory()])
-        for schema, _, msg, data in reader.iter_decoded_messages(topics=[topic], log_time_order=False):
+        for schema, channel, msg, data in reader.iter_decoded_messages(topics=[topic, sync_topic], log_time_order=False):
+            if channel.topic == sync_topic:
+                if schema.name != "px4_msgs/msg/TimesyncStatus":
+                    raise ValueError(f"Unexpected schema {schema.name} on {sync_topic}")
+                sync[data.source_protocol].append((data.timestamp, data.estimated_offset, data.round_trip_time))
+                continue
             if schema.name != "px4_msgs/msg/VehicleAttitude":
                 raise ValueError(f"Unexpected schema {schema.name} on {topic}")
             rows.append((signature(data.q), data.timestamp_sample, msg.publish_time, msg.log_time))
     if not rows:
         raise ValueError(f"No VehicleAttitude samples on {topic}")
-    return rows
+    return rows, sync
+
+
+def sync_report(groups, anchors):
+    if not anchors:
+        return []
+    start, end = min(a.ros_us for a in anchors), max(a.ros_us for a in anchors)
+    reports = []
+    for protocol, samples in sorted(groups.items()):
+        overlap = [(offset, rtt) for stamp, offset, rtt in samples if start <= stamp <= end]
+        if not overlap:
+            continue
+        offsets, rtts = zip(*overlap)
+        reports.append({"source_protocol": protocol, "overlap_samples": len(offsets),
+                        "estimated_offset_change_us": offsets[-1] - offsets[0],
+                        "median_rtt_us": median(rtts), "p95_rtt_us": percentile95(rtts)})
+    return reports
 
 
 def timing_report(anchors):
@@ -81,8 +102,11 @@ def main():
     parser.add_argument("ulog")
     parser.add_argument("mcap")
     parser.add_argument("--topic", default="/fmu/out/vehicle_attitude")
+    parser.add_argument("--sync-topic", default="/fmu/out/timesync_status")
     args = parser.parse_args()
-    anchors, report = join(read_ulog(args.ulog), read_bag(args.mcap, args.topic))
+    ros, sync = read_bag(args.mcap, args.topic, args.sync_topic)
+    anchors, report = join(read_ulog(args.ulog), ros)
+    report["timesync"] = sync_report(sync, anchors)
     report.update(timing_report(anchors))
     print(json.dumps(report, indent=2))
     return 0 if anchors else 1

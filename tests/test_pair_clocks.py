@@ -2,7 +2,7 @@ import sys
 import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "bin"))
-from pair_clocks import Anchor, join, signature, timing_report
+from pair_clocks import Anchor, join, signature, timing_report, sync_report
 
 
 class EventTests(unittest.TestCase):
@@ -20,6 +20,13 @@ class EventTests(unittest.TestCase):
         self.assertEqual(report["sample_clock"]["rate_ppm"], 0)
         self.assertAlmostEqual(report["receive_clock"]["rate_ppm"], 1)
         self.assertEqual(report["receive_minus_sample_ms"]["negative_count"], 2)
+
+    def test_timesync_filters_window_and_keeps_protocols_separate(self):
+        anchors = [Anchor(1, 10, 0, 0), Anchor(2, 20, 0, 0)]
+        groups = {2: [(1, -500, 9), (10, -50, 2), (20, -53, 4)], 1: [(13, 30, 7)]}
+        a, b = sync_report(groups, anchors)
+        self.assertEqual((a["source_protocol"], a["median_rtt_us"]), (1, 7))
+        self.assertEqual((b["overlap_samples"], b["estimated_offset_change_us"]), (2, -3))
 
     def test_only_finite_nonzero_payloads(self):
         self.assertIsNone(signature([0] * 4))
