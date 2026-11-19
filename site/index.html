@@ -23,7 +23,8 @@
           ><span class="mark" aria-hidden="true">◢</span> Attitude Atlas</a
         >
         <nav>
-          <a href="compare.html">Bridge check</a><a href="#reference">Frame guide</a
+          <a href="compare.html">Bridge check</a
+          ><a href="#reference">Frame guide</a
           ><a href="https://github.com/lazyerZZZ/attitude-atlas">GitHub ↗</a>
         </nav>
       </div>
@@ -90,8 +91,8 @@
             <p id="input-norm" role="status" class="hint"></p>
             <button id="apply" class="primary">Apply quaternion</button>
             <p class="hint">
-              Paste four numbers or a PX4 / ROS 2 YAML or JSON message. Input is normalized to
-              unit length.
+              Paste four numbers or a PX4 / ROS 2 YAML or JSON message. Input is
+              normalized to unit length.
             </p>
           </div>
           <div id="track" class="pane" hidden>
@@ -115,9 +116,14 @@
               Import a PX4 <code>vehicle_attitude</code> CSV from
               <code>ulog2csv</code>. Files are read in this browser.
             </p>
-            <div class="track-step"><button id="prev-sample" disabled>Previous sample</button> <button id="next-sample" disabled>Next sample</button></div><p id="sample-age" class="hint"></p>
+            <div class="track-step">
+              <button id="prev-sample" disabled>Previous sample</button>
+              <button id="next-sample" disabled>Next sample</button>
+            </div>
+            <p id="sample-age" class="hint"></p>
             <p id="track-norm" class="hint"></p>
-            <button id="use-sample" type="button">Load sample</button> <a href="sample.csv" download>Download sample CSV ↓</a>
+            <button id="use-sample" type="button">Load sample</button>
+            <a href="sample.csv" download>Download sample CSV ↓</a>
           </div>
           <p role="status" id="error" class="error"></p>
         </section>

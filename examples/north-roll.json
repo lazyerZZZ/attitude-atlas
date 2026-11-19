@@ -1,0 +1,6 @@
+{
+  "schema": "attitude-atlas/comparison-v1",
+  "px4": { "q": [1, 0, 0, 0] },
+  "ros": { "orientation": { "x": 0.5, "y": 0.5, "z": 0.5, "w": 0.5 } },
+  "sharedClock": false
+}

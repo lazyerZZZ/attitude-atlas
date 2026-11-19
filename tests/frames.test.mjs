@@ -103,14 +103,19 @@ test("exported fixture identifies orders and north-facing forward vectors", asyn
 test("replay enforces the declared world frame on every row and retains input norms", () => {
   const rows = "timestamp,pose_frame,q[0],q[1],q[2],q[3]\n0,1,1,0,0,0\n";
   for (const frame of ["", "0", "2", "NaN"]) {
-    assert.throws(() => parseTrack(rows + "1000," + frame + ",1,0,0,0"), /Line 3.*NED/);
+    assert.throws(
+      () => parseTrack(rows + "1000," + frame + ",1,0,0,0"),
+      /Line 3.*NED/,
+    );
   }
-  assert.equal(parseTrack(rows + "1000,1,100,0,0,0")[1].norm,100);
+  assert.equal(parseTrack(rows + "1000,1,100,0,0,0")[1].norm, 100);
 });
-test("sample stepping resolves adjacent microsecond frames and holds gaps",async()=>{
-  const {frameIndexAt}=await import("../site/frames.mjs");
-  const frames=parseTrack("timestamp,q[0],q[1],q[2],q[3]\n10,1,0,0,0\n11,1,0,0,0\n2000010,1,0,0,0");
-  assert.equal(frameIndexAt(frames,.000001),1);
-  assert.equal(frameIndexAt(frames,1.9),1);
-  assert.equal(frameIndexAt(frames,2),2);
+test("sample stepping resolves adjacent microsecond frames and holds gaps", async () => {
+  const { frameIndexAt } = await import("../site/frames.mjs");
+  const frames = parseTrack(
+    "timestamp,q[0],q[1],q[2],q[3]\n10,1,0,0,0\n11,1,0,0,0\n2000010,1,0,0,0",
+  );
+  assert.equal(frameIndexAt(frames, 0.000001), 1);
+  assert.equal(frameIndexAt(frames, 1.9), 1);
+  assert.equal(frameIndexAt(frames, 2), 2);
 });

@@ -451,9 +451,27 @@ footer {
     height: 50px;
   }
 }
-@media(max-width:480px){
-  header .bar{height:auto;min-height:64px;align-items:flex-start;flex-direction:column;justify-content:center;gap:1px;padding:6px 0 3px}
-  header nav{width:100%;gap:20px}
-  header nav a{display:inline-flex;align-items:center;min-height:32px;white-space:nowrap}
-  .track-step button{margin-top:6px}
+@media (max-width: 480px) {
+  header .bar {
+    height: auto;
+    min-height: 64px;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    padding: 6px 0 3px;
+  }
+  header nav {
+    width: 100%;
+    gap: 20px;
+  }
+  header nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    white-space: nowrap;
+  }
+  .track-step button {
+    margin-top: 6px;
+  }
 }

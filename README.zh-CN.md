@@ -1,10 +1,25 @@
 # Attitude Atlas · 无人机姿态坐标系工作台
 
-把 PX4 或 ROS 2 消息里的四元数贴进浏览器，就能看到机头、右翼和机腹的朝向，以及同一姿态在另一个坐标系里的四元数。适合联调姿态可视化、排查坐标轴符号，以及给坐标转换代码做回归测试。
+把飞控发出的 PX4 姿态和 ROS 节点收到的姿态并排放进浏览器，可以看到两个机体朝向、完整旋转误差，以及前、左、上三个机体轴各自偏了多少度。
 
-**[打开在线工具](https://lazyerzzz.github.io/attitude-atlas/)** · [English](README.md)
+**[试试 90° 滚转案例](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)** · [单姿态工作台](https://lazyerzzz.github.io/attitude-atlas/) · [English](README.md)
 
-[![工作台界面](media/preview.png)](https://lazyerzzz.github.io/attitude-atlas/)
+[![两个机头都朝北，右翼滚转了 90°](media/bridge-check.png)](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)
+
+## 核对自己的两条消息
+
+1. 在 Bridge check 的左右输入框分别粘贴 PX4 和 ROS 消息，点击 Compare attitudes。支持四个数值、JSON，以及单条 `ros2 topic echo --once` 的 YAML 输出。
+2. 页面按 PX4 的 FRD → NED 和 ROS 的 FLU → 地理 ENU 进行转换。使用自定义 map、odom 或传感器安装坐标系时，先对齐参考系。输入原始模长和 ROS 帧名可在结果下方核对。
+3. 只有确认两条消息共用时钟和时间原点时，才勾选时间复选框。偏移为 ROS 时间减 PX4 时间，单位毫秒。更换任一消息后需要重新确认。
+4. 复制对比链接可以让同事复现同一对姿态。导出的 JSON 可重新打开，也可用于自动回归测试。分享内容包含提取的姿态、时间戳、帧名和时钟选择。
+
+仓库附有一个可直接运行的回归案例：
+
+```sh
+node bin/check-case.mjs examples/north-roll.json --max-error-deg 1
+```
+
+本例中两架飞机机头朝向相同，滚转相差 90°，会超过 1° 容差并返回退出码 1。要检查新版本节点的输出，可追加 `--ros observed.yaml`。通过检查返回 0，数据或参数无效返回 2。
 
 ## 先试一个容易判断的姿态
 
@@ -19,8 +34,8 @@
 
 ## 用自己的数据
 
-- **Quaternion** 支持粘贴逗号或空格分隔的四个分量，先选输入约定，再点 Apply quaternion。
-- **Replay** 可以播放内置的约八秒 PX4 姿态记录，也可以打开自己的 CSV。安装 pyulog 后，用 `ulog2csv -m vehicle_attitude flight.ulg` 导出，再打开生成的 `*_vehicle_attitude_0.csv`。需要微秒时间戳 `timestamp` 和 `q[0]` 至 `q[3]`，文件上限为 16 MiB。
+- **Quaternion** 支持粘贴消息原文，或逗号和空格分隔的四个分量，先选输入约定，再点 Apply quaternion。
+- **Replay** 可以播放内置的约八秒 PX4 姿态记录，也可以打开自己的 CSV。安装 pyulog 后，用 `ulog2csv -m vehicle_attitude flight.ulg` 导出，再打开生成的 `*_vehicle_attitude_0.csv`。需要微秒时间戳 `timestamp` 和 `q[0]` 至 `q[3]`，文件上限为 16 MiB。如果存在 pose_frame 列，每行均须明确为 NED（1）。可逐样本前后步进，并查看当前姿态已保持的时间。
 - **Copy pose link** 生成可贴进 GitHub issue 的链接，包含当前姿态的四个分量。CSV 在本地浏览器处理。
 - **Export test case** 下载 JSON，包含两套四元数、轴约定、分量顺序，以及机头单位向量在两个世界系里的期望值。
 

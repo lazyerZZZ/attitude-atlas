@@ -147,10 +147,12 @@ export function attitudeScene(canvas, onOrbit) {
       h = canvas.clientHeight;
     if (!w || !h) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    if (canvas.width !== Math.round(w*dpr)) canvas.width = Math.round(w*dpr);
-    if (canvas.height !== Math.round(h*dpr)) canvas.height = Math.round(h*dpr);
+    if (canvas.width !== Math.round(w * dpr))
+      canvas.width = Math.round(w * dpr);
+    if (canvas.height !== Math.round(h * dpr))
+      canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0,0,w,h);
+    ctx.clearRect(0, 0, w, h);
     const scale = Math.min(w / 10.6, h / 8.2);
     const cx = w / 2,
       cy = h * 0.45;
@@ -284,7 +286,7 @@ export function attitudeScene(canvas, onOrbit) {
     el = Math.max(0.15, Math.min(1.52, el + (e.clientY - pointer[1]) * 0.008));
     pointer = [e.clientX, e.clientY];
     draw();
-    onOrbit?.(az,el);
+    onOrbit?.(az, el);
   };
   canvas.onlostpointercapture = () => {
     pointer = null;
@@ -304,12 +306,16 @@ export function attitudeScene(canvas, onOrbit) {
       el = 0.55;
       draw();
     },
-    camera(azimuth,elevation) { az=azimuth; el=elevation; draw(); },
+    camera(azimuth, elevation) {
+      az = azimuth;
+      el = elevation;
+      draw();
+    },
     orbit(dx, dy) {
       az += dx;
       el = Math.max(0.15, Math.min(1.52, el + dy));
       draw();
-      onOrbit?.(az,el);
+      onOrbit?.(az, el);
     },
   };
 }

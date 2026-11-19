@@ -81,9 +81,15 @@ export function parseQuaternion(input) {
 
 export function normNote(raw) {
   const norm = Math.hypot(...raw);
-  if (!Number.isFinite(norm)) return "Input norm exceeds numeric range. Display uses a unit quaternion.";
+  if (!Number.isFinite(norm))
+    return "Input norm exceeds numeric range. Display uses a unit quaternion.";
   const n = Number(norm.toPrecision(7));
-  return "Input norm " + n + " · distance from unit length " + Number(Math.abs(norm-1).toPrecision(4));
+  return (
+    "Input norm " +
+    n +
+    " · distance from unit length " +
+    Number(Math.abs(norm - 1).toPrecision(4))
+  );
 }
 
 // Accept numeric attitude exports. Other columns are ignored.
@@ -110,7 +116,11 @@ export function parseTrack(csv) {
     if (!line.trim()) continue;
     const fields = line.split(",");
     if (frameColumn >= 0 && number(fields[frameColumn] ?? "") !== 1)
-      throw Error("Line " + (i+2) + " requires pose_frame=1 (NED) to display geographic heading.");
+      throw Error(
+        "Line " +
+          (i + 2) +
+          " requires pose_frame=1 (NED) to display geographic heading.",
+      );
     const [time, ...q] = columns.map((j) => number(fields[j] ?? ""));
     if (!Number.isSafeInteger(time) || time < 0 || time <= previous)
       throw Error(
@@ -119,7 +129,11 @@ export function parseTrack(csv) {
     if (start === undefined) start = time;
     previous = time;
     try {
-      frames.push({ t: (time - start) / 1e6, q: unit(q), norm: Math.hypot(...q) });
+      frames.push({
+        t: (time - start) / 1e6,
+        q: unit(q),
+        norm: Math.hypot(...q),
+      });
     } catch {
       throw Error("Invalid quaternion on line " + (i + 2) + ".");
     }
@@ -137,8 +151,8 @@ export function frameIndexAt(frames, time) {
   }
   return lo;
 }
-export function frameAt(frames,time) {
-  return frames[frameIndexAt(frames,time)];
+export function frameAt(frames, time) {
+  return frames[frameIndexAt(frames, time)];
 }
 
 // A body-forward unit vector expressed in each world frame gives consumers

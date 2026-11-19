@@ -3,12 +3,13 @@ import {
   toDegrees,
   toRos,
   fromRos,
-  parseQuaternion, normNote,
+  parseQuaternion,
+  normNote,
   parseTrack,
   frameIndexAt,
   poseFixture,
 } from "./frames.mjs";
-import {readMessage} from "./messages.mjs";
+import { readMessage } from "./messages.mjs";
 import { attitudeScene } from "./scene.mjs";
 
 const $ = (id) => document.getElementById(id);
@@ -139,7 +140,7 @@ $("share").onclick = () => {
 };
 $("apply").onclick = () => {
   try {
-    const {raw, q:values} = readMessage($("input").value,$("format").value);
+    const { raw, q: values } = readMessage($("input").value, $("format").value);
     $("input-norm").textContent = normNote(raw);
     $("preset").value = "custom";
     render($("format").value === "px4" ? values : fromRos(values));
@@ -156,7 +157,8 @@ $("input").oninput = () => {
   $("input-norm").textContent = $("error").textContent = "";
 };
 $("format").onchange = () => {
-  if (!hasDraft) $("input").value = formatted($("format").value === "px4" ? q : toRos(q));
+  if (!hasDraft)
+    $("input").value = formatted($("format").value === "px4" ? q : toRos(q));
   $("input-norm").textContent = $("error").textContent = "";
 };
 
@@ -179,11 +181,20 @@ function seek(t) {
   $("timeline").value = t;
   $("clock").value = t.toFixed(2) + " / " + track.at(-1).t.toFixed(2) + " s";
   $("preset").value = "custom";
-  const index = frameIndexAt(track,t);
+  const index = frameIndexAt(track, t);
   const frame = track[index];
-  $("prev-sample").disabled=index===0; $("next-sample").disabled=index===track.length-1;
-  $("sample-age").textContent="Sample "+(index+1)+" of "+track.length+" · held for "+Number((Math.max(0,t-frame.t)*1000).toFixed(3))+" ms";
-  $("track-norm").textContent = "Sample norm " + Number(frame.norm.toPrecision(7));
+  $("prev-sample").disabled = index === 0;
+  $("next-sample").disabled = index === track.length - 1;
+  $("sample-age").textContent =
+    "Sample " +
+    (index + 1) +
+    " of " +
+    track.length +
+    " · held for " +
+    Number((Math.max(0, t - frame.t) * 1000).toFixed(3)) +
+    " ms";
+  $("track-norm").textContent =
+    "Sample norm " + Number(frame.norm.toPrecision(7));
   render(frame.q);
 }
 function installTrack(frames, name, isSample) {
@@ -202,14 +213,18 @@ function startLoading() {
   stop();
   $("play").disabled = $("timeline").disabled = true;
   $("error").textContent = "";
-  $("prev-sample").disabled=$("next-sample").disabled=true;
+  $("prev-sample").disabled = $("next-sample").disabled = true;
   return ++loadId;
 }
-function loadFailed(id,message) {
-  if(id !== loadId)return;
+function loadFailed(id, message) {
+  if (id !== loadId) return;
   $("play").disabled = $("timeline").disabled = !track.length;
-  if(track.length && mode==="track") seek(position);
-  $("error").textContent=message+(track.length ? " Current track: "+$("track-name").textContent+"." : "");
+  if (track.length && mode === "track") seek(position);
+  $("error").textContent =
+    message +
+    (track.length
+      ? " Current track: " + $("track-name").textContent + "."
+      : "");
 }
 async function loadSample() {
   const id = startLoading();
@@ -219,7 +234,10 @@ async function loadSample() {
     const frames = parseTrack(await response.text());
     if (id === loadId) installTrack(frames, "PX4 sample log", true);
   } catch {
-    loadFailed(id, "Sample unavailable. Open a vehicle_attitude CSV to replay it.");
+    loadFailed(
+      id,
+      "Sample unavailable. Open a vehicle_attitude CSV to replay it.",
+    );
   }
 }
 $("play").onclick = () => {
@@ -239,11 +257,12 @@ $("play").onclick = () => {
   setPlayLabel();
 };
 function stepSample(offset) {
-  stop();const index=frameIndexAt(track,position)+offset;
-  if(track[index])seek(track[index].t);
+  stop();
+  const index = frameIndexAt(track, position) + offset;
+  if (track[index]) seek(track[index].t);
 }
-$("prev-sample").onclick=()=>stepSample(-1);
-$("next-sample").onclick=()=>stepSample(1);
+$("prev-sample").onclick = () => stepSample(-1);
+$("next-sample").onclick = () => stepSample(1);
 $("timeline").oninput = () => {
   stop();
   seek(Number($("timeline").value));
@@ -260,7 +279,7 @@ $("file").onchange = async () => {
     const frames = parseTrack(await file.text());
     if (id === loadId) installTrack(frames, file.name, false);
   } catch (e) {
-    loadFailed(id,e.message);
+    loadFailed(id, e.message);
   }
   $("file").value = "";
 };

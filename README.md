@@ -1,10 +1,19 @@
 # Attitude Atlas
 
-A visual quaternion debugger for PX4 and ROS 2. Paste an attitude from either system, see where the aircraft points, and export the equivalent pose as a regression test fixture.
+Does your ROS node agree with the flight controller? Paste one PX4 attitude and one ROS 2 message. Attitude Atlas aligns their coordinate conventions, draws both aircraft and measures the smallest rotation between them.
 
-**[Open the interactive workbench](https://lazyerzzz.github.io/attitude-atlas/)** · [中文说明](README.zh-CN.md) · [Try a north-facing pose](https://lazyerzzz.github.io/attitude-atlas/#q=1,0,0,0)
+**[Try the 90° roll case](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)** · [Single-pose explorer](https://lazyerzzz.github.io/attitude-atlas/) · [中文说明](README.zh-CN.md)
 
-[![Attitude Atlas displaying a banked aircraft and matching PX4 and ROS 2 quaternions](media/preview.png)](https://lazyerzzz.github.io/attitude-atlas/)
+[![Both aircraft point north, while the observed aircraft is rolled 90 degrees](media/bridge-check.png)](https://lazyerzzz.github.io/attitude-atlas/compare.html#example=roll)
+
+In this example both aircraft point north. Their **nose direction error is 0°**, while their **full rotation error is 90°**. The left and up axes each differ by 90°. Drag either view to orbit both together.
+
+## Compare messages from your bridge
+
+1. Paste a PX4 `vehicle_attitude` message and a ROS quaternion, PoseStamped or Odometry orientation. YAML from `ros2 topic echo --once`, JSON, and four numeric components are supported. The page retains the original numbers and displays each input norm.
+2. Check your conventions. PX4 uses FRD in NED, and the ROS side assumes FLU in geographic ENU. ROS frame IDs are shown for inspection. Align arbitrary map frames and sensor mounts before interpreting the angular difference.
+3. If your sample timestamps share a clock and epoch, enable the clock checkbox to see **ROS minus PX4** in milliseconds. PX4 uses the nonzero `timestamp_sample` when available, then `timestamp`. ROS uses `header.stamp`. Replacing either message clears the clock confirmation.
+4. Copy a comparison link for an issue, or export JSON and reopen it with **Open case JSON**. Both include extracted attitudes, frame IDs, timestamps and clock selection. The rest of each message stays local. See [running a case in CI](#run-a-bridge-regression-in-ci).
 
 ## A 30-second frame check
 
@@ -14,8 +23,8 @@ A visual quaternion debugger for PX4 and ROS 2. Paste an attitude from either sy
 
 ## Use it during development
 
-- **Inspect a message.** Choose Quaternion, select the source convention and paste four numbers. The viewer normalizes the input and displays both representations.
-- **Replay recorded attitudes.** Open Replay to scrub the bundled PX4 excerpt or import a numeric, comma-separated `vehicle_attitude` CSV up to 16 MiB. Timestamps determine playback speed. Between samples the viewer holds the last recorded attitude.
+- **Inspect a message.** Choose Quaternion, select the source convention and paste a message or four numbers. The viewer normalizes the input and displays both representations.
+- **Replay recorded attitudes.** Open Replay to scrub the bundled PX4 excerpt or import a numeric, comma-separated `vehicle_attitude` CSV up to 16 MiB. Timestamps determine playback speed. Between samples the viewer shows the last recorded attitude and its age. Step forward or back one sample to inspect changes across a gap.
 - **Share a bug.** Copy pose link puts the four PX4 components in the URL fragment. Anyone who opens the link sees the same physical attitude. The link contains a single pose. Imported files are processed locally.
 - **Test a bridge.** Export test case downloads JSON containing both quaternions, their component orders, frame names and the expected forward unit vector in each world frame. Compare rotations allowing for the equivalent signs of a unit quaternion.
 
@@ -25,7 +34,7 @@ To extract the attitude topic with [pyulog](https://github.com/PX4/pyulog), run:
 ulog2csv -m vehicle_attitude flight.ulg
 ```
 
-Open the resulting `*_vehicle_attitude_0.csv` in Replay. Required columns are `timestamp` in microseconds and `q[0]` through `q[3]`. Extra numeric columns and reordered headers are supported. [Download the example CSV](site/sample.csv).
+Open the resulting `*_vehicle_attitude_0.csv` in Replay. Required columns are `timestamp` in microseconds and `q[0]` through `q[3]`. Reordered headers and extra numeric columns are supported. A CSV with a declared `pose_frame` must specify NED (1) on every row. [Download the example CSV](site/sample.csv).
 
 ## Frame conventions
 
@@ -40,7 +49,7 @@ References: [PX4 VehicleAttitude](https://docs.px4.io/main/en/msg_docs/VehicleAt
 
 ## Run locally
 
-The static site has no build step, runtime dependencies or remote assets.
+The static site runs without a build or a package installation. It serves its assets locally, including [js-yaml 5.5.0](https://github.com/nodeca/js-yaml) under its [MIT notice](site/vendor/js-yaml.LICENSE).
 
 ```sh
 python3 -m http.server 8000 --directory site
@@ -52,7 +61,7 @@ Open <http://localhost:8000>. Run the numerical tests with Node.js 18 or newer:
 node --test tests/*.test.mjs
 ```
 
-The tests cover cardinal headings, pitch singularities, quaternion normalization, CSV validation and sample timing. Every sample in the included recording is checked against an independent direction-cosine matrix.
+The tests cover frame conversion, rotation and axis errors, timestamp handling, message parsing, CSV playback, exported cases and CLI exit codes. The publishing workflow also exercises both pages in Chrome at desktop and mobile widths. Every sample in the included recording is checked against an independent direction-cosine matrix.
 
 ## Sample data
 
@@ -69,3 +78,12 @@ node bin/check-case.mjs attitude-atlas-comparison.json --ros observed.yaml --max
 ```
 
 The command recomputes the smallest rotation angle. A result within the chosen tolerance exits 0, a mismatch exits 1, and invalid input exits 2. Omit `--ros` to check the stored pair, or use `--ros -` to read from stdin. A replacement message needs its own clock alignment, so its time offset is left unavailable.
+
+
+Try the included [roll mismatch](examples/north-roll.json) from a clean checkout:
+
+```sh
+node bin/check-case.mjs examples/north-roll.json
+```
+
+It reports a 90° rotation error and a 0° forward-axis error. With `--max-error-deg 1` it exits 1, which makes the mismatch visible to CI.
