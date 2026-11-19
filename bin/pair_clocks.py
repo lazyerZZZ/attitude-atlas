@@ -1,5 +1,7 @@
 """Audit a PX4 ULog against a ROS 2 MCAP carrying the mirrored PX4 estimate."""
 import argparse
+from pathlib import Path
+import sqlite3
 import csv
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -46,6 +48,9 @@ def read_ulog(path):
 
 
 def read_bag(path, topic, sync_topic):
+    if Path(path).suffix.lower() == ".db3":
+        from sqlite_bag import read_sqlite
+        return read_sqlite(path, topic, sync_topic)
     from mcap.reader import make_reader
     from mcap_ros2.decoder import DecoderFactory
     rows, sync = [], defaultdict(list)
@@ -108,12 +113,12 @@ def write_events(path, anchors):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("ulog")
-    parser.add_argument("mcap")
+    parser.add_argument("bag", help="ROS 2 .mcap or .db3 recording")
     parser.add_argument("--topic", default="/fmu/out/vehicle_attitude")
     parser.add_argument("--sync-topic", default="/fmu/out/timesync_status")
     parser.add_argument("--events-out", metavar="NEW.csv", help="Export exact event timestamps with units")
     args = parser.parse_args()
-    ros, sync = read_bag(args.mcap, args.topic, args.sync_topic)
+    ros, sync = read_bag(args.bag, args.topic, args.sync_topic)
     anchors, report = join(read_ulog(args.ulog), ros)
     report["timesync"] = sync_report(sync, anchors)
     report.update(timing_report(anchors))
@@ -126,5 +131,5 @@ def main():
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except (OSError, ImportError, KeyError, IndexError, ValueError) as error:
+    except (OSError, sqlite3.Error, ImportError, KeyError, IndexError, ValueError) as error:
         sys.exit(f"Clock audit: {error}")
