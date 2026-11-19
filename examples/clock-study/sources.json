@@ -1,0 +1,26 @@
+{
+  "repository": "BioMorphic-Intelligence-Lab/manipulator_assisted_landing",
+  "revision": "488db55fa1d7b541b5287bd4faeeb33a91b6d533",
+  "captures": {
+    "reference": {
+      "ulg": {
+        "path": "data/px4_logs/reference_flight_groundeffect.ulg",
+        "sha256": "b8b426b581eccd5a7bee882b8a6f805b4ea635bee97e31be6b3cc647367b3536"
+      },
+      "mcap": {
+        "path": "data/rosbags/ros2bag_reference_2025-08-26_15-35-13/ros2bag_reference_2025-08-26_15-35-13_0.mcap",
+        "sha256": "9cbdc4cc9e0df383ab3517e7fce0f745fc2aec2a9da88a11ae74db8e3ea7dbee"
+      }
+    },
+    "ground_effect": {
+      "ulg": {
+        "path": "data/px4_logs/ground_effect_test_26-08-2025.ulg",
+        "sha256": "e3bb38636a43fee3e92317df4ca479f5f07bfa2356e91e9133c2edd769399578"
+      },
+      "mcap": {
+        "path": "data/rosbags/ros2bag_groundeffect_2025-08-26_08-47-31/ros2bag_groundeffect_2025-08-26_08-47-31_0.mcap",
+        "sha256": "e5e20344c8e99f762a203843ac5b5177220d8d15541e62dcc9f1cd07912162b2"
+      }
+    }
+  }
+}

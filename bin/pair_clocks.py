@@ -40,7 +40,7 @@ def join(px, ros):
 
 def read_ulog(path):
     from pyulog import ULog
-    data = ULog(path, ["vehicle_attitude"]).get_dataset("vehicle_attitude", 0).data
+    data = ULog(str(path), ["vehicle_attitude"]).get_dataset("vehicle_attitude", 0).data
     quaternions = zip(*(data["q[%d]" % i] for i in range(4)))
     return [(signature(q), int(t)) for q, t in zip(quaternions, data["timestamp_sample"])]
 
