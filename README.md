@@ -8,10 +8,16 @@ Find the moment your ROS node and PX4 flight controller disagree. Compare two re
 
 The synthetic demo contains 22 ROS samples. With a 5 ms window, 21 match PX4 and the last one falls outside the window. The 95th percentile rounds to 0°, but ROS sample 13 has a 90° roll discrepancy. Open it to see both noses point north-east while the wings disagree.
 
+## Audit real flight clocks
+
+Which ULog goes with this bag? Give `bin/find_flight.py` a ROS 2 MCAP and the candidate ULogs to rank them by shared attitude events. Then audit the selected pair with `bin/pair_clocks.py` to measure drift, validate an offset correction on later samples, and inspect recorder jitter.
+
+Across two hardware captures, the ROS payload clock gained **3.014 ms in 77 s** and **5.497 ms in 257 s** relative to PX4. The longer flight’s rate changed from +13.61 to +28.43 ppm across its first and last quarters. [See both flight traces](https://lazyerzzz.github.io/attitude-atlas/clock-study.html) · [Run the audit on your logs](examples/clock-study/).
+
 ## Compare two recordings
 
 1. Export a PX4 attitude CSV with `ulog2csv -m vehicle_attitude flight.ulg`. During recording or bag playback, capture one ROS topic with `ros2 topic echo /odom --full-length > ros.yaml`; stop with Ctrl+C. A stamped orientation and consistent frame IDs are required. Inputs should already represent FRD in NED and FLU in geographic ENU.
-2. Open Recording check and choose the files. Confirm a shared clock and epoch, or enter a measured synchronization point consisting of PX4 microseconds and ROS nanoseconds at the same instant. A single point compensates a constant offset. Split captures at clock resets and calibrate drift separately.
+2. Open Recording check and choose the files. Confirm a shared clock and epoch, or enter a measured synchronization point consisting of PX4 microseconds and ROS nanoseconds at the same instant. A single point compensates a constant offset. Supply a second measured point to compensate the rate difference within the interval. Split captures at clock resets.
 3. Set the maximum allowed timestamp difference. Matching selects the nearest PX4 sample for each ROS observation and picks the earlier sample on a tie. PX4 samples may be reused. Inspect the number of distinct PX4 samples, missing ROS matches and peak error alongside the nearest-rank percentile.
 4. Click an observation or move the sample slider with the arrow keys. Open a matched pair in Bridge check, then choose **Copy issue report**. The CSV download includes every observed row, both source timestamps, original clock difference, matching skew and rotation error. Unmatched rows have an empty rotation error.
 
@@ -22,7 +28,7 @@ node bin/check-recording.mjs site/samples/roll-spike.csv site/samples/roll-spike
   --shared-clock --max-skew-ms 5 --rows-out rows.csv --case-out worst.json
 ```
 
-Use `--max-error-deg 2 --min-coverage-pct 95` to gate CI. This demo exceeds the 2° tolerance. Exit 0 means the configured checks passed, 1 indicates a failed check or zero matches, and 2 indicates invalid inputs or an I/O failure. Export paths must be new files. For different epochs, replace `--shared-clock` with `--px4-anchor-us US --ros-anchor-ns NS` using your measured synchronization readings. Exported single-pair cases preserve the original stamps and leave cross-clock time comparison unconfirmed.
+Use `--max-error-deg 2 --min-coverage-pct 95` to gate CI. This demo exceeds the 2° tolerance. Exit 0 means the configured checks passed, 1 indicates a failed check or zero matches, and 2 indicates invalid inputs or an I/O failure. Export paths must be new files. For different epochs, replace `--shared-clock` with `--px4-anchor-us US --ros-anchor-ns NS` using your measured synchronization readings. To compensate drift, also pass `--px4-end-us US --ros-end-ns NS`. Exported single-pair cases preserve the original stamps and leave cross-clock time comparison unconfirmed.
 
 ## Compare messages from your bridge
 
