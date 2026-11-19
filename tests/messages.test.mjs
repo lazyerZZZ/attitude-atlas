@@ -40,3 +40,12 @@ test('case snapshots retain numeric evidence and omit unrelated telemetry',async
   assert.doesNotMatch(JSON.stringify(snapshot),/position|private_note/);
   assert.throws(()=>openCase({...snapshot,sharedClock:'true'}));
 });
+test('clock offsets require usable timestamps and preserve signed nanoseconds',()=>{
+  const ros=msg({header:{stamp:{sec:1,nanosec:1}},orientation:{x:0,y:0,z:0,w:1}},'ros');
+  const fallback=msg({q:[1,0,0,0],timestamp_sample:0,timestamp:1000002},'px4');
+  assert.equal(fallback.stampField,'timestamp');
+  assert.equal(compareAttitudes(fallback,ros,true).timeOffsetMs,-.001999);
+  assert.equal(compareAttitudes(fallback,ros,false).timeOffsetMs,null);
+  const zero=msg({q:[1,0,0,0],timestamp_sample:0,timestamp:0},'px4');
+  assert.equal(compareAttitudes(zero,ros,true).timeOffsetMs,null);
+});

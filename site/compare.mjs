@@ -61,7 +61,7 @@ function setExample(name){
 $("example").onchange=()=>setExample($("example").value);
 $("pair-form").onsubmit=e=>{e.preventDefault();compare();};
 for (const id of ["px4","ros"])$(id).oninput=()=>{
-  $("example").value="custom";invalidate("Inputs changed. Compare attitudes to update the result.");
+  $("example").value="custom";$("shared").checked=false;invalidate("Inputs changed. Compare attitudes to update the result.");
 };
 $("shared").onchange=()=>{if(current)compare();};
 function snapshot(){
