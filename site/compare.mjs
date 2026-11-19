@@ -22,6 +22,7 @@ for(const [id,view] of [["expected",expectedView],["actual",observedView]]) {
   };
 }
 let current;
+let revision=0;
 function summaryText(node,text){
   const p=document.createElement("p");p.textContent=text;node.append(p);
 }
@@ -54,6 +55,7 @@ function compare(){
   }catch(e){invalidate(e.message);}
 }
 function setExample(name){
+  revision++;
   $("example").value=name;
   [$("px4").value,$("ros").value]=examples[name];
   $("shared").checked=name==="time"; compare();
@@ -61,6 +63,7 @@ function setExample(name){
 $("example").onchange=()=>setExample($("example").value);
 $("pair-form").onsubmit=e=>{e.preventDefault();compare();};
 for (const id of ["px4","ros"])$(id).oninput=()=>{
+  revision++;
   $("example").value="custom";$("shared").checked=false;invalidate("Inputs changed. Compare attitudes to update the result.");
 };
 $("shared").onchange=()=>{if(current)compare();};
@@ -82,7 +85,25 @@ $("export-pair").onclick=()=>{
   link.download="attitude-atlas-comparison.json";link.click();
   setTimeout(()=>URL.revokeObjectURL(link.href),1000);
 };
+function displayCase(value) {
+  const data=openCase(value);
+  $("px4").value=JSON.stringify(data.px4.source,null,2);
+  $("ros").value=JSON.stringify(data.ros.source,null,2);
+  $("shared").checked=data.sharedClock;$("example").value="custom";compare();
+}
+$("open-case").onclick=()=>$("case-file").click();
+$("case-file").onchange=async()=>{
+  const input=$("case-file"),file=input.files[0];input.value="";
+  if(!file)return;
+  const id=++revision;
+  try{
+    if(file.size>131072)throw Error("Choose one comparison JSON under 128 KiB.");
+    const value=JSON.parse(await file.text());
+    if(id===revision)displayCase(value);
+  }catch(e){if(id===revision)invalidate("Could not open case. "+e.message);}
+};
 function restoreLink(){
+  revision++;
   const params=new URLSearchParams(location.hash.slice(1));
   if(!params.has("pair")){
     setExample(Object.hasOwn(examples,params.get("example"))?params.get("example"):"roll");return;
@@ -90,10 +111,7 @@ function restoreLink(){
   try{
     const encoded=params.get("pair");
     if(encoded.length>8192)throw Error("Comparison link is too long.");
-    const data=openCase(JSON.parse(encoded));
-    $("px4").value=JSON.stringify(data.px4.source,null,2);
-    $("ros").value=JSON.stringify(data.ros.source,null,2);
-    $("shared").checked=data.sharedClock;$("example").value="custom";compare();
+    displayCase(JSON.parse(encoded));
   }catch(e){$("example").value="custom";invalidate("Invalid comparison link. Choose an example or paste your messages.");}
 }
 window.addEventListener("hashchange",restoreLink);

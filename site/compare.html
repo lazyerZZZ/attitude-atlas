@@ -7,7 +7,7 @@
 <main>
 <section class="intro"><div><h1>Bridge check</h1><p>Compare the attitude PX4 predicts in ROS coordinates with the one your node reports.</p></div></section>
 <div class="casebar"><label for="example">Example</label><select id="example">
-<option value="roll">Same heading, 90° of roll</option><option value="match">Matching attitudes</option><option value="opposite">Equivalent quaternion signs</option><option value="time">Samples taken 20 ms apart</option><option value="custom" disabled>Custom inputs</option></select></div>
+<option value="roll">Same heading, 90° of roll</option><option value="match">Matching attitudes</option><option value="opposite">Equivalent quaternion signs</option><option value="time">Samples taken 20 ms apart</option><option value="custom" disabled>Custom inputs</option></select><button type="button" id="open-case">Open case JSON</button><input id="case-file" type="file" accept=".json,application/json" hidden></div>
 <form id="pair-form">
 <div class="pair-inputs"><div><label for="px4">PX4 message <small>FRD → NED · w, x, y, z</small></label><textarea id="px4" spellcheck="false" rows="4" required></textarea></div>
 <div><label for="ros">ROS message <small>FLU → geographic ENU · x, y, z, w</small></label><textarea id="ros" spellcheck="false" rows="4" required></textarea></div></div>
