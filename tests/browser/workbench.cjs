@@ -106,6 +106,13 @@ async function main() {
     await page.locator("#results").waitFor();
     assert.equal(await page.locator("#coverage").innerText(), "21 / 22");
     assert.equal(await page.locator("#max").innerText(), "90.00°");
+    await page.setViewportSize({ width: 320, height: 720 });
+    await page.waitForFunction(
+      () => innerWidth === 320 && document.documentElement.scrollWidth <= 320,
+    );
+    await page
+      .getByRole("button", { name: "Download all rows as CSV" })
+      .scrollIntoViewIfNeeded();
     const captureDownload = page.waitForEvent("download");
     await page.locator("#rows-out").click();
     const rows = await readFile(await (await captureDownload).path(), "utf8");

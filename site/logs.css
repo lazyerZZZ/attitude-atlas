@@ -73,3 +73,10 @@
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
+.inputs > label,
+.stats > div {
+  min-width: 0;
+}
+.stats dd {
+  overflow-wrap: anywhere;
+}

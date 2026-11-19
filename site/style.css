@@ -475,3 +475,22 @@ footer {
     margin-top: 6px;
   }
 }
+@media (max-width: 520px) {
+  header .bar {
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: 6px;
+  }
+  header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 14px;
+    max-width: 100%;
+  }
+  header nav a {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
