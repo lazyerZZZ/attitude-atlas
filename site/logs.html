@@ -57,10 +57,31 @@
         </div>
         <p>
           <label
-            ><input id="common" type="checkbox" /> Both recordings use the same
-            clock and epoch</label
+            ><input id="common" type="radio" name="clock" /> Both recordings use
+            the same clock and epoch</label
           >
         </p>
+        <p>
+          <label
+            ><input id="anchored" type="radio" name="clock" /> I have a measured
+            synchronization point</label
+          >
+        </p>
+        <fieldset id="anchors" hidden>
+          <legend>Two clock readings at the same instant</legend>
+          <label
+            >PX4 microseconds
+            <input id="px-anchor" type="text" inputmode="numeric"
+          /></label>
+          <label
+            >ROS nanoseconds
+            <input id="ros-anchor" type="text" inputmode="numeric"
+          /></label>
+          <p class="hint">
+            Applies one constant offset across this capture. Clock drift
+            requires separate calibration.
+          </p>
+        </fieldset>
         <button type="submit" class="primary">Compare my recordings</button>
         <button type="button" id="demo">Run synthetic demo</button>
         <p class="hint">

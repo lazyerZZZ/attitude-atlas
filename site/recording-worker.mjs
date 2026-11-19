@@ -2,6 +2,7 @@ import {
   readPx4Recording,
   readRosRecording,
   matchRecording,
+  clockOffset,
   recordingSummary,
   comparisonCsv,
   sampleCase,
@@ -46,7 +47,10 @@ self.onmessage = async ({ data }) => {
     ]);
     const p = readPx4Recording(csv),
       ros = readRosRecording(yaml),
-      result = matchRecording(p.rows, ros, data.skew);
+      offset = data.anchor
+        ? clockOffset(data.anchor.px, data.anchor.ros)
+        : null,
+      result = matchRecording(p.rows, ros, data.skew, offset);
     recording = { p, ros, result };
     const times = Float64Array.from(
       ros,
@@ -60,6 +64,7 @@ self.onmessage = async ({ data }) => {
         worstIndex: result.worst?.ri ?? 0,
         summary: recordingSummary(result, p.rows, ros),
         field: p.field,
+        offsetNs: offset?.toString() ?? null,
         worst: result.worst ? sampleCase(result.worst, p.rows, ros) : null,
       },
       [times.buffer, angles.buffer],

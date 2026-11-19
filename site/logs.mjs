@@ -29,8 +29,12 @@ function run(demo) {
   const px = demo ? null : $("px-file").files[0],
     ros = demo ? null : $("ros-file").files[0];
   const skew = Number($("skew").value);
-  if (!demo && (!px || !ros || !$("common").checked)) {
-    clear("Choose both recordings and confirm their common time base.");
+  const anchor =
+    !demo && $("anchored").checked
+      ? { px: $("px-anchor").value, ros: $("ros-anchor").value }
+      : null;
+  if (!demo && (!px || !ros || (!$("common").checked && !anchor))) {
+    clear("Choose both recordings and select how their clocks align.");
     return;
   }
   if (!$("skew").value.trim() || !Number.isFinite(skew) || skew < 0) {
@@ -92,23 +96,43 @@ function run(demo) {
       " distinct PX4 samples used out of " +
       s.px4Samples +
       " · PX4 time field: " +
-      data.field;
+      data.field +
+      (data.offsetNs === null
+        ? " · common clock"
+        : " · subtracted " +
+          data.offsetNs +
+          " ns from ROS stamps for matching. Pair links retain original timestamps.");
     $("worst").hidden = !data.worst;
     if (data.worst) $("worst").href = caseUrl(data.worst);
     $("sample").max = s.rosSamples - 1;
     plot.set(data.times, data.angles, s.maxDeg);
     selectSample(data.worstIndex);
   };
-  task.postMessage({ px, ros, skew });
+  task.postMessage({ px, ros, skew, anchor });
 }
 $("capture").onsubmit = (e) => {
   e.preventDefault();
   run(false);
 };
 $("demo").onclick = () => run(true);
-for (const id of ["px-file", "ros-file", "common", "skew"])
-  $(id).oninput = () =>
+for (const id of [
+  "px-file",
+  "ros-file",
+  "common",
+  "anchored",
+  "skew",
+  "px-anchor",
+  "ros-anchor",
+]) {
+  $(id).oninput = () => {
+    if (id === "px-file" || id === "ros-file") {
+      $("common").checked = $("anchored").checked = false;
+      $("px-anchor").value = $("ros-anchor").value = "";
+    }
+    $("anchors").hidden = !$("anchored").checked;
     clear("Inputs changed. Run the comparison to update the result.");
+  };
+}
 run(true);
 
 $("rows-out").onclick = () => worker?.postMessage({ exportCsv: true });

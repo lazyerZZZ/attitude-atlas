@@ -127,8 +127,36 @@ async function main() {
     await page.locator("#worst").click();
     await page.locator("#result").waitFor();
     assert.equal(await page.locator("#angle").innerText(), "90.00°");
+    await page.getByRole("link", { name: "Recordings", exact: true }).click();
+    await page.locator("#results").waitFor();
+    await page.locator("#px-file").setInputFiles("site/samples/roll-spike.csv");
+    const epochYaml = (
+      await readFile("site/samples/roll-spike.yaml", "utf8")
+    ).replaceAll('"sec":1,', '"sec":1700000000,');
+    await page
+      .locator("#ros-file")
+      .setInputFiles({
+        name: "epoch.yaml",
+        mimeType: "text/plain",
+        buffer: Buffer.from(epochYaml),
+      });
+    await page.locator("#anchored").check();
+    await page.locator("#px-anchor").fill("1000000");
+    await page.locator("#ros-anchor").fill("1700000000000000000");
+    await page
+      .getByRole("button", { name: "Compare my recordings", exact: true })
+      .click();
+    await page.locator("#results").waitFor();
+    assert.equal(await page.locator("#coverage").innerText(), "21 / 22");
+    assert.match(
+      await page.locator("#detail").innerText(),
+      /1699999999000000000/,
+    );
+    await page.locator("#worst").click();
+    await page.locator("#result").waitFor();
+    assert.equal(await page.locator("#offset").innerText(), "Unavailable");
     assert.deepEqual(errors, []);
-    console.log("Browser checks passed for both workbenches.");
+    console.log("Browser checks passed for all three workbenches.");
   } finally {
     await browser.close();
   }
