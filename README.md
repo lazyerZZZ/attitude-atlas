@@ -59,3 +59,13 @@ The tests cover cardinal headings, pitch singularities, quaternion normalization
 The demo contains 187 attitude samples spanning 7.9992 seconds from the [PX4 pyulog test recording at revision 0b392f8](https://github.com/PX4/pyulog/blob/0b392f8444f843b796405b9766cc15a6dddedf62/test/sample.ulg). It takes every fourth `vehicle_attitude` sample in the first eight seconds of that topic and retains the original timestamp and quaternion. The aircraft drawing is illustrative. The recording's vehicle type and flight conditions are unspecified.
 
 The application and original illustrations use the [MIT license](LICENSE). The bundled PX4 sample carries its [upstream BSD 3-Clause notice](site/SAMPLE-LICENSE.txt).
+
+## Run a bridge regression in CI
+
+In [Bridge check](https://lazyerzzz.github.io/attitude-atlas/compare.html), compare a pair and click **Export JSON**. Reuse that PX4 input when testing a new output from your ROS node:
+
+```sh
+node bin/check-case.mjs attitude-atlas-comparison.json --ros observed.yaml --max-error-deg 0.1
+```
+
+The command recomputes the smallest rotation angle. A result within the chosen tolerance exits 0, a mismatch exits 1, and invalid input exits 2. Omit `--ros` to check the stored pair, or use `--ros -` to read from stdin. A replacement message needs its own clock alignment, so its time offset is left unavailable.
