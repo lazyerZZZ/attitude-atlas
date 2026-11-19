@@ -1,0 +1,217 @@
+{
+  "budget_ms": 0.25,
+  "window_s": 10,
+  "zero_match_controls": 72,
+  "captures": {
+    "reference": {
+      "board": "PX4_FMU_V6X",
+      "sys_hitl": 0,
+      "ulog_samples": 1544,
+      "bag_samples": 11211,
+      "unique_event_pairs": 935,
+      "land_states": {
+        "landed": 60,
+        "airborne": 875,
+        "unknown": 0
+      },
+      "span_s": 77.098265,
+      "rate_ppm": 38.98302709430356,
+      "offset_change_ms": 3.014,
+      "verdict": "within_budget_on_scored_windows",
+      "scored_windows": 5,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 597,
+        "fixed_p95_ms": 0.036096025505651254,
+        "adaptive_p95_ms": 0.036096025505651254
+      }
+    },
+    "ground_effect": {
+      "board": "PX4_FMU_V6X",
+      "sys_hitl": 0,
+      "ulog_samples": 5140,
+      "bag_samples": 29889,
+      "unique_event_pairs": 3123,
+      "land_states": {
+        "landed": 32,
+        "airborne": 3091,
+        "unknown": 0
+      },
+      "span_s": 256.897287,
+      "rate_ppm": 21.52576530928356,
+      "offset_change_ms": 5.497,
+      "verdict": "recalibration_confirmed",
+      "scored_windows": 23,
+      "decisions_s": [
+        99.945102,
+        169.848113
+      ],
+      "evaluation": {
+        "pairs": 2795,
+        "fixed_p95_ms": 2.1543910411468654,
+        "adaptive_p95_ms": 0.29867708127839493
+      }
+    },
+    "halo_135413_D0015": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 194,
+      "bag_samples": 1937,
+      "unique_event_pairs": 170,
+      "land_states": {
+        "landed": 45,
+        "airborne": 125,
+        "unknown": 0
+      },
+      "span_s": 8.55073,
+      "rate_ppm": -1.7792530081386237,
+      "offset_change_ms": -0.024,
+      "verdict": "insufficient_evidence",
+      "scored_windows": 0,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 0,
+        "fixed_p95_ms": null,
+        "adaptive_p95_ms": null
+      }
+    },
+    "halo_135413_D0016": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 189,
+      "bag_samples": 1838,
+      "unique_event_pairs": 144,
+      "land_states": {
+        "landed": 32,
+        "airborne": 112,
+        "unknown": 0
+      },
+      "span_s": 7.150413,
+      "rate_ppm": 0.39862598984510184,
+      "offset_change_ms": 0.002,
+      "verdict": "insufficient_evidence",
+      "scored_windows": 0,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 0,
+        "fixed_p95_ms": null,
+        "adaptive_p95_ms": null
+      }
+    },
+    "halo_143210_D0015": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 192,
+      "bag_samples": 1872,
+      "unique_event_pairs": 149,
+      "land_states": {
+        "landed": 25,
+        "airborne": 124,
+        "unknown": 0
+      },
+      "span_s": 7.397034,
+      "rate_ppm": 5.256708713897288,
+      "offset_change_ms": 0.051,
+      "verdict": "insufficient_evidence",
+      "scored_windows": 0,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 0,
+        "fixed_p95_ms": null,
+        "adaptive_p95_ms": null
+      }
+    },
+    "halo_143210_D0016": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 1150,
+      "bag_samples": 9384,
+      "unique_event_pairs": 986,
+      "land_states": {
+        "landed": 26,
+        "airborne": 960,
+        "unknown": 0
+      },
+      "span_s": 49.593719,
+      "rate_ppm": 14.714266568977786,
+      "offset_change_ms": 0.73,
+      "verdict": "within_budget_on_scored_windows",
+      "scored_windows": 3,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 587,
+        "fixed_p95_ms": 0.10867906554177414,
+        "adaptive_p95_ms": 0.10867906554177414
+      }
+    },
+    "halo_152831_D0016": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 277,
+      "bag_samples": 2424,
+      "unique_event_pairs": 233,
+      "land_states": {
+        "landed": 22,
+        "airborne": 211,
+        "unknown": 0
+      },
+      "span_s": 11.650368,
+      "rate_ppm": 1.846180340853725,
+      "offset_change_ms": 0.03,
+      "verdict": "insufficient_evidence",
+      "scored_windows": 0,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 0,
+        "fixed_p95_ms": null,
+        "adaptive_p95_ms": null
+      }
+    },
+    "halo_152831_D0015": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 204,
+      "bag_samples": 1916,
+      "unique_event_pairs": 161,
+      "land_states": {
+        "landed": 31,
+        "airborne": 130,
+        "unknown": 0
+      },
+      "span_s": 8.000102,
+      "rate_ppm": -3.294727592179823,
+      "offset_change_ms": -0.02,
+      "verdict": "insufficient_evidence",
+      "scored_windows": 0,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 0,
+        "fixed_p95_ms": null,
+        "adaptive_p95_ms": null
+      }
+    },
+    "halo_152831_D0013": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 403,
+      "bag_samples": 3901,
+      "unique_event_pairs": 374,
+      "land_states": {
+        "landed": 79,
+        "airborne": 295,
+        "unknown": 0
+      },
+      "span_s": 19.346557,
+      "rate_ppm": 0.14101747311708854,
+      "offset_change_ms": -0.016,
+      "verdict": "insufficient_evidence",
+      "scored_windows": 0,
+      "decisions_s": [],
+      "evaluation": {
+        "pairs": 0,
+        "fixed_p95_ms": null,
+        "adaptive_p95_ms": null
+      }
+    }
+  }
+}

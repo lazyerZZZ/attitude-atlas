@@ -1,0 +1,76 @@
+{
+  "repository": "zafarb-21/HALO_ARCHIVAL_TOOL",
+  "revision": "61a28f574a86f73c6cd8032350098132e63599c0",
+  "captures": {
+    "halo_135413_D0015": {
+      "ulg": {
+        "path": "archives/20261002_135413_UTC_three_drone_flight/drones/D0015/px4_logs/log100.ulg",
+        "sha256": "8ba82ae6eae64f06314308ed97de8b5a26422724f88215b8a5a1a0bdc0920310"
+      },
+      "db3": {
+        "path": "archives/20261002_135413_UTC_three_drone_flight/drones/D0015/ros_bags/20261002_135413_UTC_three_drone_flight__D0015_ground_rosbag/20261002_135413_UTC_three_drone_flight__D0015_ground_rosbag_0.db3",
+        "sha256": "d231cbb7079b22c4f441e07afab3964a230227f0c44b526dab8b7323d4f15718"
+      }
+    },
+    "halo_135413_D0016": {
+      "ulg": {
+        "path": "archives/20261002_135413_UTC_three_drone_flight/drones/D0016/px4_logs/log100.ulg",
+        "sha256": "68b0ee9160055713ced71d9ac6f8628774622e2e6fba0e1a485116b347fe040f"
+      },
+      "db3": {
+        "path": "archives/20261002_135413_UTC_three_drone_flight/drones/D0016/ros_bags/20261002_135413_UTC_three_drone_flight__D0016_ground_rosbag/20261002_135413_UTC_three_drone_flight__D0016_ground_rosbag_0.db3",
+        "sha256": "d10f11a99ec42658609d058c15005a227d09d2caaca31f25b29312915963cfd8"
+      }
+    },
+    "halo_143210_D0015": {
+      "ulg": {
+        "path": "archives/20261002_143210_601498_UTC_three_drone_flight/drones/D0015/px4_logs/log100.ulg",
+        "sha256": "7f520681884061e9bb16c04909dd71734d9f08ee1d600dcf75c826ad936b4339"
+      },
+      "db3": {
+        "path": "archives/20261002_143210_601498_UTC_three_drone_flight/drones/D0015/ros_bags/20261002_143210_601498_UTC_three_drone_flight__D0015_ground_rosbag/20261002_143210_601498_UTC_three_drone_flight__D0015_ground_rosbag_0.db3",
+        "sha256": "ab9f52a33fbc514e7cd64743021f752cb4ab59ec791f0fe7219525788165996d"
+      }
+    },
+    "halo_143210_D0016": {
+      "ulg": {
+        "path": "archives/20261002_143210_601498_UTC_three_drone_flight/drones/D0016/px4_logs/log101.ulg",
+        "sha256": "9c3c3e45b3f545ebdbfaf873f5eb87a42b93e076e431f3cbaaf2042c2fcc2b27"
+      },
+      "db3": {
+        "path": "archives/20261002_143210_601498_UTC_three_drone_flight/drones/D0016/ros_bags/20261002_143210_601498_UTC_three_drone_flight__D0016_ground_rosbag/20261002_143210_601498_UTC_three_drone_flight__D0016_ground_rosbag_0.db3",
+        "sha256": "f73570cf2a198196fc9af9003a3fa4b4c053a20437daf56bdd1b8dbf3ce71f85"
+      }
+    },
+    "halo_152831_D0016": {
+      "ulg": {
+        "path": "archives/20261002_152831_265580_UTC_four_drone_flight/drones/D0016/px4_logs/log100.ulg",
+        "sha256": "90eaa59740a67dc29cade1c19c7884ab230755283e80bd83287a0ec0ff321d0b"
+      },
+      "db3": {
+        "path": "archives/20261002_152831_265580_UTC_four_drone_flight/drones/D0016/ros_bags/20261002_152831_265580_UTC_four_drone_flight__D0016_ground_rosbag/20261002_152831_265580_UTC_four_drone_flight__D0016_ground_rosbag_0.db3",
+        "sha256": "70c991c7fb763cd7f616c0acb20586a4c2c90669144ccf90e38f5114f406f85d"
+      }
+    },
+    "halo_152831_D0015": {
+      "ulg": {
+        "path": "archives/20261002_152831_265580_UTC_four_drone_flight/drones/D0015/px4_logs/log100.ulg",
+        "sha256": "a543579caa40d11d47dd290d47c07e2a57216cce18efd8d9cb94d780ce027a24"
+      },
+      "db3": {
+        "path": "archives/20261002_152831_265580_UTC_four_drone_flight/drones/D0015/ros_bags/20261002_152831_265580_UTC_four_drone_flight__D0015_ground_rosbag/20261002_152831_265580_UTC_four_drone_flight__D0015_ground_rosbag_0.db3",
+        "sha256": "4274ed7a42fbecc4aaba6b67753ac7b8c87906b5b7017df7adf19a544c9c3f33"
+      }
+    },
+    "halo_152831_D0013": {
+      "ulg": {
+        "path": "archives/20261002_152831_265580_UTC_four_drone_flight/drones/D0013/px4_logs/log100.ulg",
+        "sha256": "995e59c632dcb5905c0de77b2d42e8a43045b4e617a4da6958056d942369b13d"
+      },
+      "db3": {
+        "path": "archives/20261002_152831_265580_UTC_four_drone_flight/drones/D0013/ros_bags/20261002_152831_265580_UTC_four_drone_flight__D0013_ground_rosbag/20261002_152831_265580_UTC_four_drone_flight__D0013_ground_rosbag_0.db3",
+        "sha256": "c2716756f670a3acd07fe05bd8555ef95d36e836de6c602ccb1a1c1eda2e9f70"
+      }
+    }
+  }
+}
