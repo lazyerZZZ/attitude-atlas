@@ -43,8 +43,8 @@
       "verdict": "recalibration_confirmed",
       "scored_windows": 23,
       "decisions_s": [
-        99.945102,
-        169.848113
+        100.044453,
+        170.044883
       ],
       "evaluation": {
         "pairs": 2795,

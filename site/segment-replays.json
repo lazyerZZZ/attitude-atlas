@@ -241,7 +241,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 0.152076,
             "p95_ms": 0.152076,
-            "candidate_p95_ms": 0.011926
+            "candidate_p95_ms": 0.011926,
+            "confirmed_s": 70.044495
           },
           {
             "end_s": 79.9,
@@ -272,7 +273,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 0.519762,
             "p95_ms": 0.169416,
-            "candidate_p95_ms": 0.023736
+            "candidate_p95_ms": 0.023736,
+            "confirmed_s": 120.044721
           },
           {
             "end_s": 129.95,
@@ -297,7 +299,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 0.959604,
             "p95_ms": 0.162764,
-            "candidate_p95_ms": 0.015964
+            "candidate_p95_ms": 0.015964,
+            "confirmed_s": 160.04803
           },
           {
             "end_s": 169.85,
@@ -328,7 +331,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 1.649891,
             "p95_ms": 0.142871,
-            "candidate_p95_ms": 0.016327
+            "candidate_p95_ms": 0.016327,
+            "confirmed_s": 210.095074
           },
           {
             "end_s": 219.9,
@@ -418,7 +422,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 0.35055,
             "p95_ms": 0.35055,
-            "candidate_p95_ms": 0.022377
+            "candidate_p95_ms": 0.022377,
+            "confirmed_s": 100.044453
           },
           {
             "end_s": 109.9,
@@ -461,7 +466,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 1.090046,
             "p95_ms": 0.330583,
-            "candidate_p95_ms": 0.01257
+            "candidate_p95_ms": 0.01257,
+            "confirmed_s": 170.044883
           },
           {
             "end_s": 179.94,
@@ -593,7 +599,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 0.619874,
             "p95_ms": 0.619874,
-            "candidate_p95_ms": 0.013631
+            "candidate_p95_ms": 0.013631,
+            "confirmed_s": 130.000314
           },
           {
             "end_s": 140.0,
@@ -666,7 +673,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 2.330722,
             "p95_ms": 0.632982,
-            "candidate_p95_ms": 0.017584
+            "candidate_p95_ms": 0.017584,
+            "confirmed_s": 250.097478
           },
           {
             "end_s": 256.9,
@@ -780,7 +788,8 @@
             "action": "recalibrate",
             "fixed_p95_ms": 1.21104,
             "p95_ms": 1.21104,
-            "candidate_p95_ms": 0.012206
+            "candidate_p95_ms": 0.012206,
+            "confirmed_s": 180.04361
           },
           {
             "end_s": 189.95,

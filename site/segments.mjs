@@ -1,7 +1,7 @@
 const byId = id => document.getElementById(id);
 const names = {reference: "Reference flight", ground_effect: "Ground-effect test"};
 const actions = {training: "Training", insufficient_coverage: "Sparse window", within_budget: "Within budget",
-  over_budget: "Over budget", recalibrate: "Switch confirmed"};
+  await_next_window: "Await next window", over_budget: "Over budget", recalibrate: "Switch confirmed"};
 const verdicts = {insufficient_evidence: "Too little time to validate a fit", within_budget_on_scored_windows: "Initial fit stayed within budget",
   budget_exceeded_unconfirmed: "Budget exceeded, switch unconfirmed", recalibration_confirmed: "Recalibration confirmed"};
 let dataset, current;
@@ -49,7 +49,7 @@ function update() {
   byId("source-line").textContent = [c.board, c.pairs + " shared events", c.span_s.toFixed(2) + " s",
     (c.rate_ppm >= 0 ? "+" : "") + c.rate_ppm.toFixed(2) + " ppm"].join(" · ");
   byId("outcome").textContent = verdicts[current.verdict];
-  byId("explanation").textContent = changes.length ? "Confirmed after " + changes.map(w => w.end_s.toFixed(1) + " s").join(" and ") + "."
+  byId("explanation").textContent = changes.length ? "Confirmed after " + changes.map(w => w.confirmed_s.toFixed(1) + " s").join(" and ") + "."
     : scored.length ? scored.length + " later windows evaluated at this budget."
     : "The capture ended before a later window could be scored.";
   byId("trace").hidden = !scored.length;

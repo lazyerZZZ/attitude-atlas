@@ -30,7 +30,7 @@ def replay_case(anchors, case):
         windows = []
         for w in report["windows"]:
             item = {"end_s": round(w["end_s"], 2), "action": w["action"]}
-            for key in ("fixed_p95_ms", "p95_ms", "candidate_p95_ms"):
+            for key in ("fixed_p95_ms", "p95_ms", "candidate_p95_ms", "confirmed_s"):
                 if key in w:
                     item[key] = round(w[key], 6)
             windows.append(item)

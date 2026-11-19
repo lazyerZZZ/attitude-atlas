@@ -21,9 +21,9 @@ class SegmentTests(unittest.TestCase):
         report = assess(events(600, lambda t: 2_000_000 if t >= 20 else 0))
         decision, = report["decisions"]
         self.assertEqual(decision["candidate_start_s"], 20)
-        self.assertEqual(decision["decision_s"], 39.9)
+        self.assertEqual(decision["decision_s"], 40.0)
         self.assertEqual(report["verdict"], "recalibration_confirmed")
-        self.assertEqual(decision["eligible_after_px4_ns"], str(events(400)[-1][0]))
+        self.assertEqual(decision["eligible_after_px4_ns"], str(events(401)[-1][0]))
         self.assertEqual(assess(events(99))["verdict"], "insufficient_evidence")
         self.assertEqual(report["windows"][4]["p95_ms"], 0)
         prefix = assess(events(300, lambda t: 2_000_000 if t >= 20 else 0))
@@ -45,6 +45,14 @@ class SegmentTests(unittest.TestCase):
         self.assertEqual([e["first_pair"] for e in result["epochs"]], [1, 311, 621])
         self.assertEqual(result["scored_windows"], 3)
         self.assertEqual(result["decisions"], [])
+
+    def test_trailing_partial_window_cannot_confirm_a_switch(self):
+        shifted = lambda t: 2_000_000 if t >= 20 else 0
+        for stop in (379, 399, 400):
+            result = assess(events(stop, shifted))
+            self.assertEqual(result["decisions"], [])
+            self.assertEqual(result["windows"][-1]["action"], "await_next_window")
+        self.assertEqual(assess(events(401, shifted))["decisions"][0]["decision_s"], 40)
 
     def test_transient_burst_does_not_move_calibration(self):
         result = assess(events(700, lambda t: 2_000_000 if 20 <= t < 30 else 0))

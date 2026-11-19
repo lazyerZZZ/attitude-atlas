@@ -77,8 +77,10 @@ def assess_epoch(pairs, budget_ms, width):
     fixed_errors, adaptive_errors = [], []
     decisions = []
     relative = relative_times(pairs) if pairs else []
+    consumed = 0
     for index, group in groupby(relative, key=lambda p: p[0] // width):
         events = list(group)
+        consumed += len(events)
         item = {"index": index, "start_s": events[0][0] / 1e9, "end_s": events[-1][0] / 1e9,
                 "pairs": len(events)}
         windows.append(item)
@@ -112,12 +114,18 @@ def assess_epoch(pairs, budget_ms, width):
             trial_error = percentile95(errors_ms(trial, events))
             item["candidate_p95_ms"] = trial_error
             if trial_error <= budget_ms and trial_error <= residual / 2:
+                if consumed == len(pairs):
+                    item["action"] = "await_next_window"
+                    continue
+                next_px, next_ros = pairs[consumed]
+                decision_s = (next_px - pairs[0][0]) / 1e9
+                item["confirmed_s"] = decision_s
                 model = trial
                 item["action"] = "recalibrate"
                 decisions.append({"candidate_start_s": previous[0][0] / 1e9,
-                                  "eligible_after_px4_ns": str(pairs[0][0] + events[-1][0]),
-                                  "eligible_after_ros_ns": str(pairs[0][1] + events[-1][0] + events[-1][1]),
-                                  "decision_s": item["end_s"], "future_pairs": 0, "old_p95_ms": residual,
+                                  "eligible_after_px4_ns": str(next_px),
+                                  "eligible_after_ros_ns": str(next_ros),
+                                  "decision_s": decision_s, "future_pairs": 0, "old_p95_ms": residual,
                                   "candidate_p95_ms": trial_error, "rate_ppm": trial[1] * 1e6})
                 candidate = None
                 continue
