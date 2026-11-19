@@ -1,0 +1,1263 @@
+{
+  "reference": {
+    "board": "PX4_FMU_V6X",
+    "pairs": 935,
+    "span_s": 77.098,
+    "rate_ppm": 38.983,
+    "budgets": {
+      "0.1": {
+        "verdict": "within_budget_on_scored_windows",
+        "windows": [
+          {
+            "end_s": 9.84,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.85,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.019265,
+            "p95_ms": 0.019265
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.020993,
+            "p95_ms": 0.020993
+          },
+          {
+            "end_s": 49.8,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.027075,
+            "p95_ms": 0.027075
+          },
+          {
+            "end_s": 59.65,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.032957,
+            "p95_ms": 0.032957
+          },
+          {
+            "end_s": 69.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.044343,
+            "p95_ms": 0.044343
+          },
+          {
+            "end_s": 77.1,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "within_budget_on_scored_windows",
+        "windows": [
+          {
+            "end_s": 9.84,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.85,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.019265,
+            "p95_ms": 0.019265
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.020993,
+            "p95_ms": 0.020993
+          },
+          {
+            "end_s": 49.8,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.027075,
+            "p95_ms": 0.027075
+          },
+          {
+            "end_s": 59.65,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.032957,
+            "p95_ms": 0.032957
+          },
+          {
+            "end_s": 69.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.044343,
+            "p95_ms": 0.044343
+          },
+          {
+            "end_s": 77.1,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "within_budget_on_scored_windows",
+        "windows": [
+          {
+            "end_s": 9.84,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.85,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.019265,
+            "p95_ms": 0.019265
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.020993,
+            "p95_ms": 0.020993
+          },
+          {
+            "end_s": 49.8,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.027075,
+            "p95_ms": 0.027075
+          },
+          {
+            "end_s": 59.65,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.032957,
+            "p95_ms": 0.032957
+          },
+          {
+            "end_s": 69.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.044343,
+            "p95_ms": 0.044343
+          },
+          {
+            "end_s": 77.1,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "within_budget_on_scored_windows",
+        "windows": [
+          {
+            "end_s": 9.84,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.85,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.019265,
+            "p95_ms": 0.019265
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.020993,
+            "p95_ms": 0.020993
+          },
+          {
+            "end_s": 49.8,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.027075,
+            "p95_ms": 0.027075
+          },
+          {
+            "end_s": 59.65,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.032957,
+            "p95_ms": 0.032957
+          },
+          {
+            "end_s": 69.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.044343,
+            "p95_ms": 0.044343
+          },
+          {
+            "end_s": 77.1,
+            "action": "insufficient_coverage"
+          }
+        ]
+      }
+    }
+  },
+  "ground_effect": {
+    "board": "PX4_FMU_V6X",
+    "pairs": 3123,
+    "span_s": 256.897,
+    "rate_ppm": 21.526,
+    "budgets": {
+      "0.1": {
+        "verdict": "recalibration_confirmed",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.016047,
+            "p95_ms": 0.016047
+          },
+          {
+            "end_s": 39.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.035181,
+            "p95_ms": 0.035181
+          },
+          {
+            "end_s": 49.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.062332,
+            "p95_ms": 0.062332
+          },
+          {
+            "end_s": 59.99,
+            "action": "over_budget",
+            "fixed_p95_ms": 0.105136,
+            "p95_ms": 0.105136
+          },
+          {
+            "end_s": 69.99,
+            "action": "recalibrate",
+            "fixed_p95_ms": 0.152076,
+            "p95_ms": 0.152076,
+            "candidate_p95_ms": 0.011926
+          },
+          {
+            "end_s": 79.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.210909,
+            "p95_ms": 0.026728
+          },
+          {
+            "end_s": 89.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.27346,
+            "p95_ms": 0.047564
+          },
+          {
+            "end_s": 99.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.35055,
+            "p95_ms": 0.083434
+          },
+          {
+            "end_s": 109.9,
+            "action": "over_budget",
+            "fixed_p95_ms": 0.422819,
+            "p95_ms": 0.117719
+          },
+          {
+            "end_s": 119.7,
+            "action": "recalibrate",
+            "fixed_p95_ms": 0.519762,
+            "p95_ms": 0.169416,
+            "candidate_p95_ms": 0.023736
+          },
+          {
+            "end_s": 129.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.619874,
+            "p95_ms": 0.047037
+          },
+          {
+            "end_s": 140.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.72537,
+            "p95_ms": 0.078392
+          },
+          {
+            "end_s": 149.8,
+            "action": "over_budget",
+            "fixed_p95_ms": 0.838086,
+            "p95_ms": 0.116475
+          },
+          {
+            "end_s": 159.95,
+            "action": "recalibrate",
+            "fixed_p95_ms": 0.959604,
+            "p95_ms": 0.162764,
+            "candidate_p95_ms": 0.015964
+          },
+          {
+            "end_s": 169.85,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.090046,
+            "p95_ms": 0.03061
+          },
+          {
+            "end_s": 179.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.21104,
+            "p95_ms": 0.047245
+          },
+          {
+            "end_s": 189.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.362082,
+            "p95_ms": 0.07373
+          },
+          {
+            "end_s": 200.0,
+            "action": "over_budget",
+            "fixed_p95_ms": 1.510744,
+            "p95_ms": 0.108086
+          },
+          {
+            "end_s": 209.75,
+            "action": "recalibrate",
+            "fixed_p95_ms": 1.649891,
+            "p95_ms": 0.142871,
+            "candidate_p95_ms": 0.016327
+          },
+          {
+            "end_s": 219.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.818817,
+            "p95_ms": 0.017215
+          },
+          {
+            "end_s": 229.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.985984,
+            "p95_ms": 0.020769
+          },
+          {
+            "end_s": 239.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 2.155567,
+            "p95_ms": 0.034694
+          },
+          {
+            "end_s": 250.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 2.330722,
+            "p95_ms": 0.052958
+          },
+          {
+            "end_s": 256.9,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "recalibration_confirmed",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.016047,
+            "p95_ms": 0.016047
+          },
+          {
+            "end_s": 39.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.035181,
+            "p95_ms": 0.035181
+          },
+          {
+            "end_s": 49.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.062332,
+            "p95_ms": 0.062332
+          },
+          {
+            "end_s": 59.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.105136,
+            "p95_ms": 0.105136
+          },
+          {
+            "end_s": 69.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.152076,
+            "p95_ms": 0.152076
+          },
+          {
+            "end_s": 79.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.210909,
+            "p95_ms": 0.210909
+          },
+          {
+            "end_s": 89.99,
+            "action": "over_budget",
+            "fixed_p95_ms": 0.27346,
+            "p95_ms": 0.27346
+          },
+          {
+            "end_s": 99.95,
+            "action": "recalibrate",
+            "fixed_p95_ms": 0.35055,
+            "p95_ms": 0.35055,
+            "candidate_p95_ms": 0.022377
+          },
+          {
+            "end_s": 109.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.422819,
+            "p95_ms": 0.037039
+          },
+          {
+            "end_s": 119.7,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.519762,
+            "p95_ms": 0.067357
+          },
+          {
+            "end_s": 129.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.619874,
+            "p95_ms": 0.1057
+          },
+          {
+            "end_s": 140.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.72537,
+            "p95_ms": 0.149874
+          },
+          {
+            "end_s": 149.8,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.838086,
+            "p95_ms": 0.201541
+          },
+          {
+            "end_s": 159.95,
+            "action": "over_budget",
+            "fixed_p95_ms": 0.959604,
+            "p95_ms": 0.261192
+          },
+          {
+            "end_s": 169.85,
+            "action": "recalibrate",
+            "fixed_p95_ms": 1.090046,
+            "p95_ms": 0.330583,
+            "candidate_p95_ms": 0.01257
+          },
+          {
+            "end_s": 179.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.21104,
+            "p95_ms": 0.018106
+          },
+          {
+            "end_s": 189.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.362082,
+            "p95_ms": 0.0322
+          },
+          {
+            "end_s": 200.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.510744,
+            "p95_ms": 0.056089
+          },
+          {
+            "end_s": 209.75,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.649891,
+            "p95_ms": 0.079764
+          },
+          {
+            "end_s": 219.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.818817,
+            "p95_ms": 0.127933
+          },
+          {
+            "end_s": 229.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.985984,
+            "p95_ms": 0.170203
+          },
+          {
+            "end_s": 239.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 2.155567,
+            "p95_ms": 0.21372
+          },
+          {
+            "end_s": 250.0,
+            "action": "over_budget",
+            "fixed_p95_ms": 2.330722,
+            "p95_ms": 0.263412
+          },
+          {
+            "end_s": 256.9,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "recalibration_confirmed",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.016047,
+            "p95_ms": 0.016047
+          },
+          {
+            "end_s": 39.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.035181,
+            "p95_ms": 0.035181
+          },
+          {
+            "end_s": 49.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.062332,
+            "p95_ms": 0.062332
+          },
+          {
+            "end_s": 59.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.105136,
+            "p95_ms": 0.105136
+          },
+          {
+            "end_s": 69.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.152076,
+            "p95_ms": 0.152076
+          },
+          {
+            "end_s": 79.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.210909,
+            "p95_ms": 0.210909
+          },
+          {
+            "end_s": 89.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.27346,
+            "p95_ms": 0.27346
+          },
+          {
+            "end_s": 99.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.35055,
+            "p95_ms": 0.35055
+          },
+          {
+            "end_s": 109.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.422819,
+            "p95_ms": 0.422819
+          },
+          {
+            "end_s": 119.7,
+            "action": "over_budget",
+            "fixed_p95_ms": 0.519762,
+            "p95_ms": 0.519762
+          },
+          {
+            "end_s": 129.95,
+            "action": "recalibrate",
+            "fixed_p95_ms": 0.619874,
+            "p95_ms": 0.619874,
+            "candidate_p95_ms": 0.013631
+          },
+          {
+            "end_s": 140.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.72537,
+            "p95_ms": 0.028377
+          },
+          {
+            "end_s": 149.8,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.838086,
+            "p95_ms": 0.050104
+          },
+          {
+            "end_s": 159.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.959604,
+            "p95_ms": 0.078876
+          },
+          {
+            "end_s": 169.85,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.090046,
+            "p95_ms": 0.117405
+          },
+          {
+            "end_s": 179.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.21104,
+            "p95_ms": 0.154971
+          },
+          {
+            "end_s": 189.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.362082,
+            "p95_ms": 0.205578
+          },
+          {
+            "end_s": 200.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.510744,
+            "p95_ms": 0.262331
+          },
+          {
+            "end_s": 209.75,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.649891,
+            "p95_ms": 0.317557
+          },
+          {
+            "end_s": 219.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.818817,
+            "p95_ms": 0.3995
+          },
+          {
+            "end_s": 229.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.985984,
+            "p95_ms": 0.475214
+          },
+          {
+            "end_s": 239.95,
+            "action": "over_budget",
+            "fixed_p95_ms": 2.155567,
+            "p95_ms": 0.550563
+          },
+          {
+            "end_s": 250.0,
+            "action": "recalibrate",
+            "fixed_p95_ms": 2.330722,
+            "p95_ms": 0.632982,
+            "candidate_p95_ms": 0.017584
+          },
+          {
+            "end_s": 256.9,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "recalibration_confirmed",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 29.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.016047,
+            "p95_ms": 0.016047
+          },
+          {
+            "end_s": 39.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.035181,
+            "p95_ms": 0.035181
+          },
+          {
+            "end_s": 49.94,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.062332,
+            "p95_ms": 0.062332
+          },
+          {
+            "end_s": 59.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.105136,
+            "p95_ms": 0.105136
+          },
+          {
+            "end_s": 69.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.152076,
+            "p95_ms": 0.152076
+          },
+          {
+            "end_s": 79.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.210909,
+            "p95_ms": 0.210909
+          },
+          {
+            "end_s": 89.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.27346,
+            "p95_ms": 0.27346
+          },
+          {
+            "end_s": 99.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.35055,
+            "p95_ms": 0.35055
+          },
+          {
+            "end_s": 109.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.422819,
+            "p95_ms": 0.422819
+          },
+          {
+            "end_s": 119.7,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.519762,
+            "p95_ms": 0.519762
+          },
+          {
+            "end_s": 129.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.619874,
+            "p95_ms": 0.619874
+          },
+          {
+            "end_s": 140.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.72537,
+            "p95_ms": 0.72537
+          },
+          {
+            "end_s": 149.8,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.838086,
+            "p95_ms": 0.838086
+          },
+          {
+            "end_s": 159.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.959604,
+            "p95_ms": 0.959604
+          },
+          {
+            "end_s": 169.85,
+            "action": "over_budget",
+            "fixed_p95_ms": 1.090046,
+            "p95_ms": 1.090046
+          },
+          {
+            "end_s": 179.94,
+            "action": "recalibrate",
+            "fixed_p95_ms": 1.21104,
+            "p95_ms": 1.21104,
+            "candidate_p95_ms": 0.012206
+          },
+          {
+            "end_s": 189.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.362082,
+            "p95_ms": 0.016903
+          },
+          {
+            "end_s": 200.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.510744,
+            "p95_ms": 0.034126
+          },
+          {
+            "end_s": 209.75,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.649891,
+            "p95_ms": 0.0518
+          },
+          {
+            "end_s": 219.9,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.818817,
+            "p95_ms": 0.093448
+          },
+          {
+            "end_s": 229.99,
+            "action": "within_budget",
+            "fixed_p95_ms": 1.985984,
+            "p95_ms": 0.1295
+          },
+          {
+            "end_s": 239.95,
+            "action": "within_budget",
+            "fixed_p95_ms": 2.155567,
+            "p95_ms": 0.167635
+          },
+          {
+            "end_s": 250.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 2.330722,
+            "p95_ms": 0.210203
+          },
+          {
+            "end_s": 256.9,
+            "action": "insufficient_coverage"
+          }
+        ]
+      }
+    }
+  },
+  "halo_135413_D0015": {
+    "board": "MODALAI_VOXL2",
+    "pairs": 170,
+    "span_s": 8.551,
+    "rate_ppm": -1.779,
+    "budgets": {
+      "0.1": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.55,
+            "action": "training"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.55,
+            "action": "training"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.55,
+            "action": "training"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.55,
+            "action": "training"
+          }
+        ]
+      }
+    }
+  },
+  "halo_135413_D0016": {
+    "board": "MODALAI_VOXL2",
+    "pairs": 144,
+    "span_s": 7.15,
+    "rate_ppm": 0.399,
+    "budgets": {
+      "0.1": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.15,
+            "action": "training"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.15,
+            "action": "training"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.15,
+            "action": "training"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.15,
+            "action": "training"
+          }
+        ]
+      }
+    }
+  },
+  "halo_143210_D0015": {
+    "board": "MODALAI_VOXL2",
+    "pairs": 149,
+    "span_s": 7.397,
+    "rate_ppm": 5.257,
+    "budgets": {
+      "0.1": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.4,
+            "action": "training"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.4,
+            "action": "training"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.4,
+            "action": "training"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 7.4,
+            "action": "training"
+          }
+        ]
+      }
+    }
+  },
+  "halo_143210_D0016": {
+    "board": "MODALAI_VOXL2",
+    "pairs": 986,
+    "span_s": 49.594,
+    "rate_ppm": 14.714,
+    "budgets": {
+      "0.1": {
+        "verdict": "budget_exceeded_unconfirmed",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 30.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.030037,
+            "p95_ms": 0.030037
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.069397,
+            "p95_ms": 0.069397
+          },
+          {
+            "end_s": 49.59,
+            "action": "over_budget",
+            "fixed_p95_ms": 0.11565,
+            "p95_ms": 0.11565
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "within_budget_on_scored_windows",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 30.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.030037,
+            "p95_ms": 0.030037
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.069397,
+            "p95_ms": 0.069397
+          },
+          {
+            "end_s": 49.59,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.11565,
+            "p95_ms": 0.11565
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "within_budget_on_scored_windows",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 30.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.030037,
+            "p95_ms": 0.030037
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.069397,
+            "p95_ms": 0.069397
+          },
+          {
+            "end_s": 49.59,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.11565,
+            "p95_ms": 0.11565
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "within_budget_on_scored_windows",
+        "windows": [
+          {
+            "end_s": 9.99,
+            "action": "training"
+          },
+          {
+            "end_s": 19.99,
+            "action": "training"
+          },
+          {
+            "end_s": 30.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.030037,
+            "p95_ms": 0.030037
+          },
+          {
+            "end_s": 40.0,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.069397,
+            "p95_ms": 0.069397
+          },
+          {
+            "end_s": 49.59,
+            "action": "within_budget",
+            "fixed_p95_ms": 0.11565,
+            "p95_ms": 0.11565
+          }
+        ]
+      }
+    }
+  },
+  "halo_152831_D0016": {
+    "board": "MODALAI_VOXL2",
+    "pairs": 233,
+    "span_s": 11.65,
+    "rate_ppm": 1.846,
+    "budgets": {
+      "0.1": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 11.65,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 11.65,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 11.65,
+            "action": "insufficient_coverage"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 11.65,
+            "action": "insufficient_coverage"
+          }
+        ]
+      }
+    }
+  },
+  "halo_152831_D0015": {
+    "board": "MODALAI_VOXL2",
+    "pairs": 161,
+    "span_s": 8.0,
+    "rate_ppm": -3.295,
+    "budgets": {
+      "0.1": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.0,
+            "action": "training"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.0,
+            "action": "training"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.0,
+            "action": "training"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 8.0,
+            "action": "training"
+          }
+        ]
+      }
+    }
+  },
+  "halo_152831_D0013": {
+    "board": "MODALAI_VOXL2",
+    "pairs": 374,
+    "span_s": 19.347,
+    "rate_ppm": 0.141,
+    "budgets": {
+      "0.1": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 19.35,
+            "action": "training"
+          }
+        ]
+      },
+      "0.25": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 19.35,
+            "action": "training"
+          }
+        ]
+      },
+      "0.5": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 19.35,
+            "action": "training"
+          }
+        ]
+      },
+      "1.0": {
+        "verdict": "insufficient_evidence",
+        "windows": [
+          {
+            "end_s": 9.95,
+            "action": "training"
+          },
+          {
+            "end_s": 19.35,
+            "action": "training"
+          }
+        ]
+      }
+    }
+  }
+}

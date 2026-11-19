@@ -22,7 +22,24 @@ def measure(anchors, counts, platform, states):
             "evaluation": report["evaluation"]}
 
 
-def compare(original_root, halo_root):
+def replay_case(anchors, case):
+    pairs = [(a.px4_us * 1000, a.ros_us * 1000) for a in anchors]
+    budgets = {}
+    for budget in (0.1, 0.25, 0.5, 1.0):
+        report = assess(pairs, budget)
+        windows = []
+        for w in report["windows"]:
+            item = {"end_s": round(w["end_s"], 2), "action": w["action"]}
+            for key in ("fixed_p95_ms", "p95_ms", "candidate_p95_ms"):
+                if key in w:
+                    item[key] = round(w[key], 6)
+            windows.append(item)
+        budgets[str(budget)] = {"verdict": report["verdict"], "windows": windows}
+    return {"board": case["board"], "pairs": len(anchors), "span_s": round(case["span_s"], 3),
+            "rate_ppm": round(case["rate_ppm"], 3), "budgets": budgets}
+
+
+def compare(original_root, halo_root, replays=None):
     cases, ulgs, bags = {}, {}, {}
     for manifest, root in (("sources.json", original_root), ("halo-sources.json", halo_root)):
         for name, files in json.loads((HERE / manifest).read_text())["captures"].items():
@@ -31,6 +48,8 @@ def compare(original_root, halo_root):
             bags[name], _ = read_bag(verified_file(root, entry), "/fmu/out/vehicle_attitude", "/fmu/out/timesync_status")
             anchors, counts = join(ulgs[name], bags[name])
             cases[name] = measure(anchors, counts, platform, states)
+            if replays is not None:
+                replays[name] = replay_case(anchors, cases[name])
     negatives = 0
     for name, px in ulgs.items():
         for other, ros in bags.items():
@@ -46,12 +65,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("original_checkout", type=Path)
     parser.add_argument("halo_checkout", type=Path)
+    parser.add_argument("--replays", action="store_true", help="Print window-by-window sensitivity to the error budget")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    result = compare(args.original_checkout, args.halo_checkout)
+    replays = {}
+    result = compare(args.original_checkout, args.halo_checkout, replays)
     if args.check:
         if not equivalent(result, json.loads((HERE / "hardware-results.json").read_text())):
             raise SystemExit("Hardware comparison differs from the published results")
+        replay_path = HERE.parents[1] / "site" / "segment-replays.json"
+        if not equivalent(replays, json.loads(replay_path.read_text())):
+            raise SystemExit("Published segmentation replay differs from recomputed windows")
         print(f"Verified {len(result['captures'])} paired captures and {result['zero_match_controls']} negative controls.")
     else:
-        print(json.dumps(result, indent=2))
+        print(json.dumps(replays if args.replays else result, indent=2))

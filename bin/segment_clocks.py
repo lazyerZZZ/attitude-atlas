@@ -94,7 +94,9 @@ def assess_epoch(pairs, budget_ms, width):
             if len(history) == 2:
                 model = baseline = fit(history[0] + history[1])
             continue
-        fixed_errors.extend(errors_ms(baseline, events))
+        fixed = errors_ms(baseline, events)
+        fixed_errors.extend(fixed)
+        item["fixed_p95_ms"] = percentile95(fixed)
         errors = errors_ms(model, events)
         adaptive_errors.extend(errors)
         residual = percentile95(errors)
