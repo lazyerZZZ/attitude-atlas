@@ -22,9 +22,9 @@
 </div>
 <p class="hint">Both readouts use ROS x, y, z, w. Drag either aircraft to orbit both views together.</p>
 <div id="diagnostics"></div>
-<div class="runbar"><button id="reset-camera">Reset view</button></div>
+<div class="runbar"><button id="copy-pair">Copy comparison link</button><button id="export-pair">Export JSON</button><button id="reset-camera">Reset view</button></div>
 
-</section>
+<p class="hint">Links and exports include the two attitudes, extracted timestamps, frame IDs and clock selection. Other message fields stay in this browser.</p></section>
 <details><summary>How the comparison works</summary><p>Both rotations are expressed in geographic ENU with a forward-left-up body. The full rotation error is the smallest angle aligning them, from 0° to 180°. Nose direction compares only their forward axes. The clock offset uses PX4 timestamp_sample when available, falling back to timestamp, and ROS header.stamp. A zero stamp is treated as unavailable. A time offset or an unaligned map can explain an angular difference.</p></details>
 <footer><a href="./">Open pose explorer</a><a href="https://github.com/lazyerZZZ/attitude-atlas">Source on GitHub ↗</a></footer>
 </main><div id="notice" role="status"></div></body></html>

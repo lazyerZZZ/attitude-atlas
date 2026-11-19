@@ -30,3 +30,13 @@ test('rejects unknown frames, zero quaternions, ambiguous or incomplete messages
   for(const txt of ['pose_frame: 2\nq: [1,0,0,0]','q: [0,0,0,0]','q: [1,0,0,0]\n---\nq: [0,0,0,1]','q: [1,0,0,0]\nq: [0,0,0,1]']) assert.throws(()=>readMessage(txt,'px4'));
   for(const txt of ['x: 1\ny: 0','header: {stamp: {sec: 1, nanosec: 1000000000}}\norientation: {x: 0,y: 0,z: 0,w: 1}','orientation_covariance: [-1]\norientation: {x: 0, y: 0, z: 0, w: 1}']) assert.throws(()=>readMessage(txt,'ros'));
 });
+test('case snapshots retain numeric evidence and omit unrelated telemetry',async()=>{
+  const {comparisonCase,openCase}=await import('../site/cases.mjs');
+  const px4=msg({q:[32,0,0,0],timestamp_sample:12,position:[55,22,1]},'px4');
+  const ros=msg({orientation:{x:0,y:0,z:0,w:1},child_frame_id:'base_link',private_note:'omit'},'ros');
+  const snapshot=comparisonCase(px4,ros,false);
+  const restored=openCase(JSON.parse(JSON.stringify(snapshot)));
+  assert.deepEqual(restored,{px4,ros,sharedClock:false});
+  assert.doesNotMatch(JSON.stringify(snapshot),/position|private_note/);
+  assert.throws(()=>openCase({...snapshot,sharedClock:'true'}));
+});

@@ -1,3 +1,4 @@
+import {comparisonCase,openCase} from "./cases.mjs";
 import {normNote} from "./frames.mjs";
 import {readMessage, compareAttitudes} from "./messages.mjs";
 import {attitudeScene} from "./scene.mjs";
@@ -63,4 +64,37 @@ for (const id of ["px4","ros"])$(id).oninput=()=>{
   $("example").value="custom";invalidate("Inputs changed. Compare attitudes to update the result.");
 };
 $("shared").onchange=()=>{if(current)compare();};
-setExample("roll");
+function snapshot(){
+  return comparisonCase(current.px4,current.ros,$("shared").checked);
+}
+$("copy-pair").onclick=async()=>{
+  if(!current)return;
+  const url=new URL(location.href);url.hash=new URLSearchParams({pair:JSON.stringify(snapshot())}).toString();
+  try{await navigator.clipboard.writeText(url.href);$("feedback").textContent="Comparison link copied.";}
+  catch{window.prompt("Select and copy the comparison link",url.href);}
+};
+$("export-pair").onclick=()=>{
+  if(!current)return;
+  const {expected,observed,rotationDeg,forwardDeg,timeOffsetMs}=current.result;
+  const file={...snapshot(),result:{expectedRosXYZW:expected,observedRosXYZW:observed,rotationDeg,forwardDeg,timeOffsetMs}};
+  const link=document.createElement("a");
+  link.href=URL.createObjectURL(new Blob([JSON.stringify(file,null,2)+"\n"],{type:"application/json"}));
+  link.download="attitude-atlas-comparison.json";link.click();
+  setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+};
+function restoreLink(){
+  const params=new URLSearchParams(location.hash.slice(1));
+  if(!params.has("pair")){
+    setExample(Object.hasOwn(examples,params.get("example"))?params.get("example"):"roll");return;
+  }
+  try{
+    const encoded=params.get("pair");
+    if(encoded.length>8192)throw Error("Comparison link is too long.");
+    const data=openCase(JSON.parse(encoded));
+    $("px4").value=JSON.stringify(data.px4.source,null,2);
+    $("ros").value=JSON.stringify(data.ros.source,null,2);
+    $("shared").checked=data.sharedClock;$("example").value="custom";compare();
+  }catch(e){$("example").value="custom";invalidate("Invalid comparison link. Choose an example or paste your messages.");}
+}
+window.addEventListener("hashchange",restoreLink);
+restoreLink();
