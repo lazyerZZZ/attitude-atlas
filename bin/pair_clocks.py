@@ -1,5 +1,6 @@
 """Audit a PX4 ULog against a ROS 2 MCAP carrying the mirrored PX4 estimate."""
 import argparse
+import csv
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 import json
@@ -97,17 +98,27 @@ def timing_report(anchors):
     return report
 
 
+def write_events(path, anchors):
+    with open(path, "x", newline="", encoding="utf-8") as out:
+        writer = csv.writer(out)
+        writer.writerow(["px4_sample_us", "ros_sample_us", "mcap_publish_ns", "mcap_log_ns"])
+        writer.writerows((a.px4_us, a.ros_us, a.publish_ns, a.receive_ns) for a in anchors)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("ulog")
     parser.add_argument("mcap")
     parser.add_argument("--topic", default="/fmu/out/vehicle_attitude")
     parser.add_argument("--sync-topic", default="/fmu/out/timesync_status")
+    parser.add_argument("--events-out", metavar="NEW.csv", help="Export exact event timestamps with units")
     args = parser.parse_args()
     ros, sync = read_bag(args.mcap, args.topic, args.sync_topic)
     anchors, report = join(read_ulog(args.ulog), ros)
     report["timesync"] = sync_report(sync, anchors)
     report.update(timing_report(anchors))
+    if args.events_out and anchors:
+        write_events(args.events_out, anchors)
     print(json.dumps(report, indent=2))
     return 0 if anchors else 1
 

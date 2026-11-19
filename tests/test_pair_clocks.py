@@ -1,8 +1,10 @@
+import csv
 import sys
+from tempfile import TemporaryDirectory
 import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "bin"))
-from pair_clocks import Anchor, join, signature, timing_report, sync_report
+from pair_clocks import Anchor, join, signature, timing_report, sync_report, write_events
 
 
 class EventTests(unittest.TestCase):
@@ -27,6 +29,17 @@ class EventTests(unittest.TestCase):
         a, b = sync_report(groups, anchors)
         self.assertEqual((a["source_protocol"], a["median_rtt_us"]), (1, 7))
         self.assertEqual((b["overlap_samples"], b["estimated_offset_change_us"]), (2, -3))
+
+    def test_export_round_trips_epoch_nanoseconds_without_overwriting(self):
+        with TemporaryDirectory() as folder:
+            path = Path(folder) / "events.csv"
+            data = [Anchor(10001, 20000, 1756198346213437154, 1756198346213437199)]
+            write_events(path, data)
+            with path.open() as stream:
+                row = next(csv.DictReader(stream))
+            self.assertEqual(int(row["mcap_log_ns"]), data[0].receive_ns)
+            with self.assertRaises(FileExistsError):
+                write_events(path, [])
 
     def test_only_finite_nonzero_payloads(self):
         self.assertIsNone(signature([0] * 4))
