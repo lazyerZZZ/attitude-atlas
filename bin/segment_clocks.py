@@ -55,7 +55,15 @@ def assess(pairs, budget_ms=0.25, window_s=10.0):
     comparison = {"pairs": len(adaptive_errors),
                   "fixed_p95_ms": percentile95(fixed_errors) if fixed_errors else None,
                   "adaptive_p95_ms": percentile95(adaptive_errors) if adaptive_errors else None}
-    return {"epochs": epochs, "evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s,
+    if decisions:
+        verdict = "recalibration_confirmed"
+    elif not scored:
+        verdict = "insufficient_evidence"
+    elif any(w["p95_ms"] > budget_ms for w in scored):
+        verdict = "budget_exceeded_unconfirmed"
+    else:
+        verdict = "within_budget_on_scored_windows"
+    return {"verdict": verdict, "epochs": epochs, "evaluation": comparison, "budget_ms": budget_ms, "window_s": window_s,
             "windows": windows, "decisions": decisions, "scored_windows": len(scored),
             "over_budget_windows": sum(w["p95_ms"] > budget_ms for w in scored)}
 
@@ -105,6 +113,8 @@ def assess_epoch(pairs, budget_ms, width):
                 model = trial
                 item["action"] = "recalibrate"
                 decisions.append({"candidate_start_s": previous[0][0] / 1e9,
+                                  "eligible_after_px4_ns": str(pairs[0][0] + events[-1][0]),
+                                  "eligible_after_ros_ns": str(pairs[0][1] + events[-1][0] + events[-1][1]),
                                   "decision_s": item["end_s"], "future_pairs": 0, "old_p95_ms": residual,
                                   "candidate_p95_ms": trial_error, "rate_ppm": trial[1] * 1e6})
                 candidate = None

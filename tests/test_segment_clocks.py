@@ -22,6 +22,9 @@ class SegmentTests(unittest.TestCase):
         decision, = report["decisions"]
         self.assertEqual(decision["candidate_start_s"], 20)
         self.assertEqual(decision["decision_s"], 39.9)
+        self.assertEqual(report["verdict"], "recalibration_confirmed")
+        self.assertEqual(decision["eligible_after_px4_ns"], str(events(400)[-1][0]))
+        self.assertEqual(assess(events(99))["verdict"], "insufficient_evidence")
         self.assertEqual(report["windows"][4]["p95_ms"], 0)
         prefix = assess(events(300, lambda t: 2_000_000 if t >= 20 else 0))
         self.assertEqual(prefix["decisions"], [])

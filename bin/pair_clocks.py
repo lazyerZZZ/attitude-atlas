@@ -147,15 +147,26 @@ def main():
     parser.add_argument("bag", help="ROS 2 .mcap or .db3 recording")
     parser.add_argument("--topic", default="/fmu/out/vehicle_attitude")
     parser.add_argument("--sync-topic", default="/fmu/out/timesync_status")
+    parser.add_argument("--segment-budget-ms", type=float, help="Evaluate forward-only sample-clock recalibration")
+    parser.add_argument("--window-s", type=float, help="Segmentation window in PX4 seconds (default 10)")
     parser.add_argument("--events-out", metavar="NEW.csv", help="Export exact event timestamps with units")
     args = parser.parse_args()
+    if args.window_s is not None and args.segment_budget_ms is None:
+        parser.error("--window-s requires --segment-budget-ms")
     ros, sync = read_bag(args.bag, args.topic, args.sync_topic)
     px, platform, states = read_flight(args.ulog)
     anchors, report = join(px, ros)
     report["platform"] = platform
     report["matched_land_states"] = matched_land_states(anchors, states)
     report["timesync"] = sync_report(sync, anchors)
-    report.update(timing_report(anchors))
+    if args.segment_budget_ms is not None:
+        from segment_clocks import assess
+        report["segmentation"] = assess([(a.px4_us * 1000, a.ros_us * 1000) for a in anchors],
+                                        args.segment_budget_ms, 10 if args.window_s is None else args.window_s)
+    if any(b.px4_us <= a.px4_us for a, b in zip(anchors, anchors[1:])) and args.segment_budget_ms is not None:
+        report["clock_fit_diagnostic"] = "PX4 time reversed or repeated. Inspect per-epoch segmentation."
+    else:
+        report.update(timing_report(anchors))
     if args.events_out and anchors:
         write_events(args.events_out, anchors)
     print(json.dumps(report, indent=2))
