@@ -7,6 +7,8 @@ import math
 import struct
 import sys
 
+from clock_model import clock_report
+
 
 @dataclass(frozen=True)
 class Anchor:
@@ -62,6 +64,7 @@ def main():
     parser.add_argument("--topic", default="/fmu/out/vehicle_attitude")
     args = parser.parse_args()
     anchors, report = join(read_ulog(args.ulog), read_bag(args.mcap, args.topic))
+    report["sample_clock"] = clock_report([(a.px4_us * 1000, a.ros_us * 1000) for a in anchors])
     print(json.dumps(report, indent=2))
     return 0 if anchors else 1
 
