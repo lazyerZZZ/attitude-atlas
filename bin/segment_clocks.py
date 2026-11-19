@@ -121,12 +121,17 @@ def assess_epoch(pairs, budget_ms, width):
                 decision_s = (next_px - pairs[0][0]) / 1e9
                 item["confirmed_s"] = decision_s
                 model = trial
+                last_x = previous[-1][0]
+                ref_px = pairs[0][0] + last_x
+                ref_ros = pairs[0][1] + last_x + round(trial[0] + trial[1] * last_x)
                 item["action"] = "recalibrate"
                 decisions.append({"candidate_start_s": previous[0][0] / 1e9,
                                   "eligible_after_px4_ns": str(next_px),
                                   "eligible_after_ros_ns": str(next_ros),
                                   "decision_s": decision_s, "future_pairs": 0, "old_p95_ms": residual,
-                                  "candidate_p95_ms": trial_error, "rate_ppm": trial[1] * 1e6})
+                                  "candidate_p95_ms": trial_error, "rate_ppm": trial[1] * 1e6,
+                                  "model_reference_px4_ns": str(ref_px), "model_reference_ros_ns": str(ref_ros),
+                                  "training_pairs": len(previous), "validation_pairs": len(events)})
                 candidate = None
                 continue
         candidate = (index, events, fit(events))

@@ -46,6 +46,15 @@ class SegmentTests(unittest.TestCase):
         self.assertEqual(result["scored_windows"], 3)
         self.assertEqual(result["decisions"], [])
 
+    def test_exported_model_predicts_ros_epoch_from_px4_time(self):
+        data = events(550, lambda t: int(2_000_000 + t * 35000) if t >= 20 else 0)
+        d, = assess(data)["decisions"]
+        px_ns, ros_ns = data[501]
+        elapsed = px_ns - int(d["model_reference_px4_ns"])
+        predicted = int(d["model_reference_ros_ns"]) + elapsed + round(elapsed * d["rate_ppm"] / 1e6)
+        self.assertLessEqual(abs(predicted - ros_ns), 2)
+        self.assertEqual((d["training_pairs"], d["validation_pairs"]), (100, 100))
+
     def test_trailing_partial_window_cannot_confirm_a_switch(self):
         shifted = lambda t: 2_000_000 if t >= 20 else 0
         for stop in (379, 399, 400):
