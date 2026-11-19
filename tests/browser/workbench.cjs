@@ -160,6 +160,12 @@ async function main() {
     await page.locator("#worst").click();
     await page.locator("#result").waitFor();
     assert.equal(await page.locator("#offset").innerText(), "Unavailable");
+    await page.goto(new URL("clock-study.html", page.url()).href);
+    await page.getByRole("heading", { name: "Clock drift in two PX4 flights" }).waitFor();
+    assert.ok(await page.locator("figure img").evaluate(async img => {
+      await img.decode();
+      return img.naturalWidth === 1120;
+    }));
     assert.deepEqual(errors, []);
     console.log("Browser checks passed for all three workbenches.");
   } finally {
