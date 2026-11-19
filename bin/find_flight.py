@@ -1,6 +1,7 @@
 """Rank candidate PX4 ULogs by shared, unique attitude payloads in a ROS 2 bag."""
 import argparse
 import json
+import sqlite3
 from pathlib import Path
 import sys
 
@@ -36,5 +37,5 @@ def main():
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except (OSError, ValueError, KeyError, IndexError, ImportError) as error:
+    except (OSError, sqlite3.Error, ValueError, KeyError, IndexError, ImportError) as error:
         sys.exit(f"Flight search: {error}")

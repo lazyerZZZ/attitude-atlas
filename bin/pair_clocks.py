@@ -134,11 +134,15 @@ def timing_report(anchors):
     return report
 
 
-def write_events(path, anchors):
+def write_events(path, anchors, sqlite_source=False):
     with open(path, "x", newline="", encoding="utf-8") as out:
         writer = csv.writer(out)
-        writer.writerow(["px4_sample_us", "ros_sample_us", "mcap_publish_ns", "mcap_log_ns"])
-        writer.writerows((a.px4_us, a.ros_us, a.publish_ns, a.receive_ns) for a in anchors)
+        if sqlite_source:
+            writer.writerow(["px4_sample_us", "ros_sample_us", "rosbag_receive_ns"])
+            writer.writerows((a.px4_us, a.ros_us, a.receive_ns) for a in anchors)
+        else:
+            writer.writerow(["px4_sample_us", "ros_sample_us", "mcap_publish_ns", "mcap_log_ns"])
+            writer.writerows((a.px4_us, a.ros_us, a.publish_ns, a.receive_ns) for a in anchors)
 
 
 def main():
@@ -168,7 +172,7 @@ def main():
     else:
         report.update(timing_report(anchors))
     if args.events_out and anchors:
-        write_events(args.events_out, anchors)
+        write_events(args.events_out, anchors, sqlite_source=Path(args.bag).suffix.lower() == ".db3")
     print(json.dumps(report, indent=2))
     return 0 if anchors else 1
 

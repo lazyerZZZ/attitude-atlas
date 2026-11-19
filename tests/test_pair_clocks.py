@@ -47,6 +47,14 @@ class EventTests(unittest.TestCase):
         self.assertEqual(matched_land_states(anchors, [(2, True), (4, False)]),
                          {"unknown": 1, "landed": 1, "airborne": 2})
 
+    def test_sqlite_export_carries_only_recorded_clocks(self):
+        with TemporaryDirectory() as folder:
+            path = Path(folder) / "events.csv"
+            write_events(path, [Anchor(3, 4, 0, 6001)], sqlite_source=True)
+            with path.open() as stream:
+                row = next(csv.DictReader(stream))
+            self.assertEqual(row, {"px4_sample_us": "3", "ros_sample_us": "4", "rosbag_receive_ns": "6001"})
+
     def test_only_finite_nonzero_payloads(self):
         self.assertIsNone(signature([0] * 4))
         self.assertIsNone(signature([float("nan"), 0, 0, 0]))

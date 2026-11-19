@@ -12,8 +12,9 @@ def draw(path, axis, title):
         rows = list(csv.DictReader(stream))
     px = [int(r["px4_sample_us"]) * 1000 for r in rows]
     elapsed = [(x - px[0]) / 1e9 for x in px]
+    receive = "rosbag_receive_ns" if "rosbag_receive_ns" in rows[0] else "mcap_log_ns"
     for field, scale, color, label in (
-        ("mcap_log_ns", 1, "#798e9a", "MCAP receive"),
+        (receive, 1, "#798e9a", "Bag receive"),
         ("ros_sample_us", 1000, "#00659a", "ROS sample"),
     ):
         offsets = [int(row[field]) * scale - x for row, x in zip(rows, px)]
