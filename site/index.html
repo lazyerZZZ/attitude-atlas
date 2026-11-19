@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#e7f1f5" />
+    <meta
+      name="description"
+      content="Inspect the same aircraft attitude in PX4 and ROS 2. Rotate a 3D airframe, convert quaternions, replay a flight-log excerpt and share a pose."
+    />
+    <title>Attitude Atlas · PX4 and ROS 2 frame explorer</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2318304a'/%3E%3Cpath d='M32 8L53 49 32 40 11 49Z' fill='%23ff965b'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="app.mjs"></script>
+  </head>
+  <body>
+    <header>
+      <div class="bar">
+        <a class="brand" href="./"
+          ><span class="mark" aria-hidden="true">◢</span> Attitude Atlas</a
+        >
+        <nav>
+          <a href="#reference">Frame guide</a
+          ><a href="https://github.com/lazyerZZZ/attitude-atlas">GitHub ↗</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="intro">
+        <div>
+          <h1>Attitude Atlas</h1>
+          <p>See the same aircraft attitude in PX4 and ROS 2.</p>
+        </div>
+        <button id="share">Copy pose link</button>
+      </section>
+      <div class="workspace">
+        <section class="viewer" aria-label="Aircraft attitude viewer">
+          <div class="viewbar">
+            <b>Airframe view</b
+            ><label
+              ><input id="axes" type="checkbox" checked /> Body axes</label
+            >
+          </div>
+          <canvas
+            id="aircraft"
+            tabindex="0"
+            aria-label="3D aircraft, orange nose faces forward. Drag or use arrow keys to orbit the camera."
+          ></canvas>
+          <div class="viewfoot">
+            <span
+              >Drag to orbit
+              <span class="wide">· arrow keys when focused</span></span
+            ><button id="reset-view">Reset view</button>
+          </div>
+        </section>
+        <section class="controls">
+          <h2>Set the attitude</h2>
+          <div class="modes" aria-label="Input mode">
+            <button aria-pressed="true" data-mode="angles">Angles</button
+            ><button aria-pressed="false" data-mode="paste">Quaternion</button
+            ><button aria-pressed="false" data-mode="track">Replay</button>
+          </div>
+          <div id="angles" class="pane">
+            <label for="preset">Example pose</label
+            ><select id="preset">
+              <option value="bank">Banked turn</option>
+              <option value="north">Level, facing north</option>
+              <option value="east">Level, facing east</option>
+              <option value="vertical">Vertical nose-up</option>
+              <option value="custom" disabled>Custom pose</option>
+            </select>
+            <div id="sliders"></div>
+            <p class="hint">
+              PX4 angles in degrees. Positive roll lowers the right wing.
+            </p>
+          </div>
+          <div id="paste" class="pane" hidden>
+            <label for="format">Input convention</label
+            ><select id="format">
+              <option value="px4">PX4 · w, x, y, z</option>
+              <option value="ros">ROS 2 · x, y, z, w</option>
+            </select>
+            <label for="input">Quaternion components</label
+            ><textarea id="input" rows="2" spellcheck="false">
+[1, 0, 0, 0]</textarea
+            >
+            <button id="apply" class="primary">Apply quaternion</button>
+            <p class="hint">
+              Accepts comma- or space-separated numbers. Input is normalized to
+              unit length.
+            </p>
+          </div>
+          <div id="track" class="pane" hidden>
+            <p class="track-name" id="track-name">PX4 sample log</p>
+            <div class="track-actions">
+              <button id="play" class="primary">Play sample</button
+              ><button id="open-file">Open CSV</button
+              ><input type="file" id="file" accept=".csv,text/csv" hidden />
+            </div>
+            <label for="timeline"
+              >Replay time <output id="clock">0.00 s</output></label
+            ><input
+              type="range"
+              id="timeline"
+              min="0"
+              max="1"
+              step="0.001"
+              value="0"
+            />
+            <p class="hint">
+              Import a PX4 <code>vehicle_attitude</code> CSV from
+              <code>ulog2csv</code>. Files are read in this browser.
+            </p>
+            <a href="sample.csv" download>Download sample CSV ↓</a>
+          </div>
+          <p role="status" id="error" class="error"></p>
+        </section>
+      </div>
+      <div class="read-head">
+        <h2>Quaternion readout</h2>
+        <button id="export">Export test case ↓</button>
+      </div>
+      <section class="readouts" aria-label="Equivalent orientations">
+        <article>
+          <div class="read-label">
+            <h3>PX4</h3>
+            <span>FRD → NED</span
+            ><button data-copy="px4" aria-label="Copy PX4 quaternion">
+              Copy
+            </button>
+          </div>
+          <dl id="px4-values"></dl>
+        </article>
+        <article>
+          <div class="read-label">
+            <h3>ROS 2</h3>
+            <span>FLU → ENU</span
+            ><button data-copy="ros" aria-label="Copy ROS quaternion">
+              Copy
+            </button>
+          </div>
+          <dl id="ros-values"></dl>
+        </article>
+      </section>
+      <details id="reference">
+        <summary>Frame guide &amp; conversion math</summary>
+        <p>
+          PX4 uses forward, right, down for the body and north, east, down for
+          the world. ROS uses forward, left, up for the body and east, north, up
+          for a geographic local world frame. Both rows describe how to express
+          a body vector in world coordinates.
+        </p>
+        <p>
+          In matrix form, <code>R_ros = A · R_px4 · B</code>, where
+          <code>A(n,e,d) = (e,n,−d)</code> changes the world basis and
+          <code>B(f,l,u) = (f,−l,−u)</code> changes the body basis. Quaternion
+          component order also changes. A quaternion and its negative describe
+          the same attitude.
+        </p>
+        <p>
+          Try “Level, facing north”. PX4 reads [1, 0, 0, 0] and ROS reads [0, 0,
+          0.707107, 0.707107]. The aircraft points north in both frames. At
+          vertical pitch, multiple roll/yaw pairs describe the same attitude.
+        </p>
+        <a
+          href="https://github.com/PX4/px4_ros_com/blob/main/include/px4_ros_com/frame_transforms.h"
+          >PX4 frame transforms ↗</a
+        >
+        · <a href="https://www.ros.org/reps/rep-0103.html">ROS REP 103 ↗</a>
+      </details>
+      <footer>
+        <span>Attitude Atlas</span
+        ><a href="https://github.com/lazyerZZZ/attitude-atlas#sample-data"
+          >Sample data &amp; source ↗</a
+        >
+      </footer>
+    </main>
+    <div id="notice" role="status"></div>
+  </body>
+</html>
