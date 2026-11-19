@@ -1,0 +1,2489 @@
+{
+  "paired": {
+    "sep_D0012": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 2463,
+      "bag_samples": 8143,
+      "unique_event_pairs": 897,
+      "bag_exchange_replay": [],
+      "bag_span_s": 134.9448772,
+      "matched_span_s": 113.99779,
+      "rate_ppm": -1.0533300828240477,
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 11,
+        "longest_run_s": 20.796919,
+        "supported_s": 45.867577
+      },
+      "land_states": {
+        "landed": 0,
+        "airborne": 897,
+        "unknown": 0
+      },
+      "comparison": {
+        "budget_ms": 0.25,
+        "window_s": 10.0,
+        "scored_event_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "policies": {
+          "confirmed": {
+            "evaluation": {
+              "pairs": 0,
+              "fixed_p95_ms": null,
+              "adaptive_p95_ms": null
+            },
+            "scored_windows": 0,
+            "over_budget_pairs": 0,
+            "over_budget_windows": 0,
+            "switches": [],
+            "persistent_breaches": []
+          },
+          "headroom": {
+            "evaluation": {
+              "pairs": 0,
+              "fixed_p95_ms": null,
+              "adaptive_p95_ms": null
+            },
+            "scored_windows": 0,
+            "over_budget_pairs": 0,
+            "over_budget_windows": 0,
+            "switches": [],
+            "persistent_breaches": []
+          }
+        }
+      },
+      "controls": [
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        }
+      ]
+    },
+    "sep_D0013": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 1887,
+      "bag_samples": 16517,
+      "unique_event_pairs": 1845,
+      "bag_exchange_replay": [],
+      "bag_span_s": 95.133076537,
+      "matched_span_s": 93.650058,
+      "rate_ppm": 4.737870196535157,
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 93.650058,
+        "supported_s": 93.650058
+      },
+      "land_states": {
+        "landed": 16,
+        "airborne": 1829,
+        "unknown": 0
+      },
+      "comparison": {
+        "budget_ms": 0.25,
+        "window_s": 10.0,
+        "scored_event_sha256": "fe8feb166aa21692348e7cd375f91e946ed8251d429cef1f080c1c1764b8b6cd",
+        "policies": {
+          "confirmed": {
+            "evaluation": {
+              "pairs": 1376,
+              "fixed_p95_ms": 0.8833884024741995,
+              "adaptive_p95_ms": 0.3221223482194074
+            },
+            "scored_windows": 7,
+            "over_budget_pairs": 293,
+            "over_budget_windows": 3,
+            "switches": [
+              {
+                "epoch": 1,
+                "at_s": 50.051697,
+                "followup": "prevented_breach"
+              }
+            ],
+            "persistent_breaches": [
+              {
+                "epoch": 1,
+                "start_s": 30.000693,
+                "last_s": 49.997959,
+                "windows": 2,
+                "outcome": "timely"
+              }
+            ]
+          },
+          "headroom": {
+            "evaluation": {
+              "pairs": 1376,
+              "fixed_p95_ms": 0.8833884024741995,
+              "adaptive_p95_ms": 0.23739911188999097
+            },
+            "scored_windows": 7,
+            "over_budget_pairs": 54,
+            "over_budget_windows": 2,
+            "switches": [
+              {
+                "epoch": 1,
+                "at_s": 40.050581,
+                "followup": "prevented_breach"
+              },
+              {
+                "epoch": 1,
+                "at_s": 60.001464,
+                "followup": "prevented_breach"
+              }
+            ],
+            "persistent_breaches": []
+          }
+        }
+      },
+      "controls": [
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.051697
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001464
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001464
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001464
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001464
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001464
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001464
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001464
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            70.042826
+          ],
+          "pre_onset_alarms": 0
+        }
+      ]
+    },
+    "sep_D0014": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 1806,
+      "bag_samples": 15308,
+      "unique_event_pairs": 1741,
+      "bag_exchange_replay": [],
+      "bag_span_s": 89.193002085,
+      "matched_span_s": 87.607013,
+      "rate_ppm": 3.6982634166707014,
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 87.607013,
+        "supported_s": 87.607013
+      },
+      "land_states": {
+        "landed": 15,
+        "airborne": 1726,
+        "unknown": 0
+      },
+      "comparison": {
+        "budget_ms": 0.25,
+        "window_s": 10.0,
+        "scored_event_sha256": "b0fb983b40ccf54f2da18ddadf730d591df71e5904549765c60545b3ac46681b",
+        "policies": {
+          "confirmed": {
+            "evaluation": {
+              "pairs": 1343,
+              "fixed_p95_ms": 1.1957050917697196,
+              "adaptive_p95_ms": 0.524392589143907
+            },
+            "scored_windows": 7,
+            "over_budget_pairs": 575,
+            "over_budget_windows": 4,
+            "switches": [
+              {
+                "epoch": 1,
+                "at_s": 60.00399,
+                "followup": "breach_remained"
+              },
+              {
+                "epoch": 1,
+                "at_s": 80.050097,
+                "followup": "insufficient_followup"
+              }
+            ],
+            "persistent_breaches": [
+              {
+                "epoch": 1,
+                "start_s": 40.001832,
+                "last_s": 59.957599,
+                "windows": 2,
+                "outcome": "timely"
+              },
+              {
+                "epoch": 1,
+                "start_s": 60.00399,
+                "last_s": 79.998764,
+                "windows": 2,
+                "outcome": "timely"
+              }
+            ]
+          },
+          "headroom": {
+            "evaluation": {
+              "pairs": 1343,
+              "fixed_p95_ms": 1.1957050917697196,
+              "adaptive_p95_ms": 0.35850053229789763
+            },
+            "scored_windows": 7,
+            "over_budget_pairs": 291,
+            "over_budget_windows": 2,
+            "switches": [
+              {
+                "epoch": 1,
+                "at_s": 50.004116,
+                "followup": "prevented_breach"
+              },
+              {
+                "epoch": 1,
+                "at_s": 70.007461,
+                "followup": "prevented_breach"
+              }
+            ],
+            "persistent_breaches": []
+          }
+        }
+      },
+      "controls": [
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004116
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00399
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00399
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00399
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00399
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00399
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00399
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00399
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            70.007461
+          ],
+          "pre_onset_alarms": 0
+        }
+      ]
+    },
+    "sep_D0015": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 1052,
+      "bag_samples": 10097,
+      "unique_event_pairs": 1014,
+      "bag_exchange_replay": [],
+      "bag_span_s": 52.940691105,
+      "matched_span_s": 50.895313,
+      "rate_ppm": 6.084267223355651,
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 50.895313,
+        "supported_s": 50.895313
+      },
+      "land_states": {
+        "landed": 16,
+        "airborne": 998,
+        "unknown": 0
+      },
+      "comparison": {
+        "budget_ms": 0.25,
+        "window_s": 10.0,
+        "scored_event_sha256": "b54b4d17c61ddcb83f8e8994ed79aac516b27d0911c1046a38720c35f32cdd5e",
+        "policies": {
+          "confirmed": {
+            "evaluation": {
+              "pairs": 596,
+              "fixed_p95_ms": 0.2514431223355254,
+              "adaptive_p95_ms": 0.2514431223355254
+            },
+            "scored_windows": 3,
+            "over_budget_pairs": 36,
+            "over_budget_windows": 1,
+            "switches": [],
+            "persistent_breaches": []
+          },
+          "headroom": {
+            "evaluation": {
+              "pairs": 596,
+              "fixed_p95_ms": 0.2514431223355254,
+              "adaptive_p95_ms": 0.2514431223355254
+            },
+            "scored_windows": 3,
+            "over_budget_pairs": 36,
+            "over_budget_windows": 1,
+            "switches": [],
+            "persistent_breaches": []
+          }
+        }
+      },
+      "controls": [
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [
+            50.049261
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "censored",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        }
+      ]
+    },
+    "115317_D0015": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 1970,
+      "bag_samples": 61101,
+      "unique_event_pairs": 1964,
+      "bag_exchange_replay": [
+        {
+          "source_protocol": 0,
+          "exchanges": 3285,
+          "span_s": 328.4505045,
+          "bracketed": 984,
+          "bracket_median_ms": 0.0025,
+          "bracket_p95_abs_ms": 0.0035,
+          "comparison": {
+            "budget_ms": 0.25,
+            "window_s": 10.0,
+            "scored_event_sha256": "7d8e578f95409f43056f14d27097c51267aefb4126608965dc0e04aa769acde7",
+            "policies": {
+              "confirmed": {
+                "evaluation": {
+                  "pairs": 3084,
+                  "fixed_p95_ms": 14.651401736871675,
+                  "adaptive_p95_ms": 0.6321867115567872
+                },
+                "scored_windows": 31,
+                "over_budget_pairs": 1086,
+                "over_budget_windows": 14,
+                "switches": [
+                  {
+                    "epoch": 1,
+                    "at_s": 40.000899,
+                    "followup": "breach_remained"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 60.0000735,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 90.0009435,
+                    "followup": "breach_remained"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 110.0504555,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 150.0505445,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 230.0508385,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 290.0509885,
+                    "followup": "prevented_breach"
+                  }
+                ],
+                "persistent_breaches": [
+                  {
+                    "epoch": 1,
+                    "start_s": 20.1003305,
+                    "last_s": 39.8994845,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 1,
+                    "start_s": 40.000899,
+                    "last_s": 59.90019,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 1,
+                    "start_s": 70.0001835,
+                    "last_s": 89.9002175,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 1,
+                    "start_s": 90.0009435,
+                    "last_s": 109.9508325,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 1,
+                    "start_s": 130.0509935,
+                    "last_s": 149.950197,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 1,
+                    "start_s": 210.050918,
+                    "last_s": 229.9509795,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 1,
+                    "start_s": 270.05033,
+                    "last_s": 289.951196,
+                    "windows": 2,
+                    "outcome": "timely"
+                  }
+                ]
+              },
+              "headroom": {
+                "evaluation": {
+                  "pairs": 3084,
+                  "fixed_p95_ms": 14.651401736871675,
+                  "adaptive_p95_ms": 1.1294660625932085
+                },
+                "scored_windows": 31,
+                "over_budget_pairs": 538,
+                "over_budget_windows": 6,
+                "switches": [
+                  {
+                    "epoch": 1,
+                    "at_s": 50.000339,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 100.1007595,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 130.0509935,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 280.051431,
+                    "followup": "old_fit_within_budget"
+                  },
+                  {
+                    "epoch": 1,
+                    "at_s": 310.050848,
+                    "followup": "old_fit_within_budget"
+                  }
+                ],
+                "persistent_breaches": [
+                  {
+                    "epoch": 1,
+                    "start_s": 20.1003305,
+                    "last_s": 49.901546,
+                    "windows": 3,
+                    "outcome": "late"
+                  },
+                  {
+                    "epoch": 1,
+                    "start_s": 80.0004535,
+                    "last_s": 99.9999185,
+                    "windows": 2,
+                    "outcome": "timely"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "bag_span_s": 328.777388063,
+      "matched_span_s": 98.400487,
+      "rate_ppm": 2.362997971727867,
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 98.400487,
+        "supported_s": 98.400487
+      },
+      "land_states": {
+        "landed": 88,
+        "airborne": 1876,
+        "unknown": 0
+      },
+      "comparison": {
+        "budget_ms": 0.25,
+        "window_s": 10.0,
+        "scored_event_sha256": "7798c6a33fa8f2ec459d9ba2e425123840acd535cf02bd7ff54cfa322dd04500",
+        "policies": {
+          "confirmed": {
+            "evaluation": {
+              "pairs": 1565,
+              "fixed_p95_ms": 0.2930702408148097,
+              "adaptive_p95_ms": 0.2930702408148097
+            },
+            "scored_windows": 8,
+            "over_budget_pairs": 198,
+            "over_budget_windows": 2,
+            "switches": [],
+            "persistent_breaches": [
+              {
+                "epoch": 1,
+                "start_s": 80.007478,
+                "last_s": 98.400487,
+                "windows": 2,
+                "outcome": "awaiting_closure"
+              }
+            ]
+          },
+          "headroom": {
+            "evaluation": {
+              "pairs": 1565,
+              "fixed_p95_ms": 0.2930702408148097,
+              "adaptive_p95_ms": 0.15973314967415517
+            },
+            "scored_windows": 8,
+            "over_budget_pairs": 0,
+            "over_budget_windows": 0,
+            "switches": [
+              {
+                "epoch": 1,
+                "at_s": 70.003814,
+                "followup": "prevented_breach"
+              }
+            ],
+            "persistent_breaches": []
+          }
+        }
+      },
+      "controls": [
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.005438
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001519
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001519
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001519
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001519
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001519
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001519
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.001519
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            70.003814
+          ],
+          "pre_onset_alarms": 0
+        }
+      ]
+    },
+    "122204_D0015": {
+      "board": "MODALAI_VOXL2",
+      "sys_hitl": 0,
+      "ulog_samples": 1609,
+      "bag_samples": 110941,
+      "unique_event_pairs": 1577,
+      "bag_exchange_replay": [
+        {
+          "source_protocol": 0,
+          "exchanges": 5930,
+          "span_s": 602.8020115,
+          "bracketed": 790,
+          "bracket_median_ms": 0.0025,
+          "bracket_p95_abs_ms": 0.0035,
+          "comparison": {
+            "budget_ms": 0.25,
+            "window_s": 10.0,
+            "scored_event_sha256": "51e4369361b0a749b746ac0b7db331885c13eb407e6d22817560dc245b6ec605",
+            "policies": {
+              "confirmed": {
+                "evaluation": {
+                  "pairs": 5675,
+                  "fixed_p95_ms": 1.0520364609857202,
+                  "adaptive_p95_ms": 0.2604321280368042
+                },
+                "scored_windows": 57,
+                "over_budget_pairs": 492,
+                "over_budget_windows": 6,
+                "switches": [
+                  {
+                    "epoch": 2,
+                    "at_s": 230.000152,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 2,
+                    "at_s": 310.0992055,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 2,
+                    "at_s": 550.000047,
+                    "followup": "prevented_breach"
+                  }
+                ],
+                "persistent_breaches": [
+                  {
+                    "epoch": 2,
+                    "start_s": 210.000396,
+                    "last_s": 229.899992,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 2,
+                    "start_s": 290.0999615,
+                    "last_s": 309.999501,
+                    "windows": 2,
+                    "outcome": "timely"
+                  },
+                  {
+                    "epoch": 2,
+                    "start_s": 530.0990465,
+                    "last_s": 549.899933,
+                    "windows": 2,
+                    "outcome": "timely"
+                  }
+                ]
+              },
+              "headroom": {
+                "evaluation": {
+                  "pairs": 5675,
+                  "fixed_p95_ms": 1.0520364609857202,
+                  "adaptive_p95_ms": 0.15567428540879674
+                },
+                "scored_windows": 57,
+                "over_budget_pairs": 0,
+                "over_budget_windows": 0,
+                "switches": [
+                  {
+                    "epoch": 2,
+                    "at_s": 160.000088,
+                    "followup": "old_fit_within_budget"
+                  },
+                  {
+                    "epoch": 2,
+                    "at_s": 190.0001055,
+                    "followup": "prevented_breach"
+                  },
+                  {
+                    "epoch": 2,
+                    "at_s": 340.0000165,
+                    "followup": "old_fit_within_budget"
+                  },
+                  {
+                    "epoch": 2,
+                    "at_s": 430.100526,
+                    "followup": "old_fit_within_budget"
+                  }
+                ],
+                "persistent_breaches": []
+              }
+            }
+          }
+        }
+      ],
+      "bag_span_s": 603.17801294,
+      "matched_span_s": 79.053836,
+      "rate_ppm": 0.13285792165252605,
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 79.053836,
+        "supported_s": 79.053836
+      },
+      "land_states": {
+        "landed": 67,
+        "airborne": 1510,
+        "unknown": 0
+      },
+      "comparison": {
+        "budget_ms": 0.25,
+        "window_s": 10.0,
+        "scored_event_sha256": "4c8e498432cae14af5caa68fb3d6dfb6ab661a3df9d6b7177717345da0f24382",
+        "policies": {
+          "confirmed": {
+            "evaluation": {
+              "pairs": 1179,
+              "fixed_p95_ms": 0.005349396321187235,
+              "adaptive_p95_ms": 0.005349396321187235
+            },
+            "scored_windows": 6,
+            "over_budget_pairs": 0,
+            "over_budget_windows": 0,
+            "switches": [],
+            "persistent_breaches": []
+          },
+          "headroom": {
+            "evaluation": {
+              "pairs": 1179,
+              "fixed_p95_ms": 0.005349396321187235,
+              "adaptive_p95_ms": 0.005349396321187235
+            },
+            "scored_windows": 6,
+            "over_budget_pairs": 0,
+            "over_budget_windows": 0,
+            "switches": [],
+            "persistent_breaches": []
+          }
+        }
+      },
+      "controls": [
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            50.004107
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 30,
+          "deadline_s": 70,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00276
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "stable",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "one_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "two_window_pulse",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00276
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "positive_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00276
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00276
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "negative_step",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00276
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00276
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            60.00276
+          ],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "confirmed",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "FN",
+          "alarm_times_s": [],
+          "pre_onset_alarms": 0
+        },
+        {
+          "policy": "headroom",
+          "scenario": "slow_rate_change",
+          "onset_s": 35.0,
+          "deadline_s": 75.0,
+          "outcome": "TP",
+          "alarm_times_s": [
+            70.002614
+          ],
+          "pre_onset_alarms": 0
+        }
+      ]
+    }
+  },
+  "cross_pair_controls": 30,
+  "dds": {
+    "evidence": "onboard_dds_exchange",
+    "board": "PX4_FMU_V6C",
+    "sys_hitl": 0,
+    "exchanges": 818,
+    "airborne_exchanges": 43,
+    "unknown_land_state": 0,
+    "span_s": 815.719824,
+    "median_rtt_us": 6802.5,
+    "p95_rtt_us": 23544,
+    "resolution": {
+      "half_rtt_exceeds_budget": 818,
+      "max_adjacent_offset_change_ms": 19.5,
+      "adjacent_changes_beyond_rtt_and_budget": 0
+    },
+    "comparison": {
+      "budget_ms": 0.25,
+      "window_s": 10.0,
+      "scored_event_sha256": "c7538382d04922955517103134da737be1747e8d7003a2592a003fae8dafe448",
+      "policies": {
+        "confirmed": {
+          "evaluation": {
+            "pairs": 790,
+            "fixed_p95_ms": 499.7453574629953,
+            "adaptive_p95_ms": 499.7453574629953
+          },
+          "scored_windows": 79,
+          "over_budget_pairs": 789,
+          "over_budget_windows": 79,
+          "switches": [],
+          "persistent_breaches": [
+            {
+              "epoch": 1,
+              "start_s": 20.450981,
+              "last_s": 809.642938,
+              "windows": 79,
+              "outcome": "unresolved"
+            }
+          ]
+        },
+        "headroom": {
+          "evaluation": {
+            "pairs": 790,
+            "fixed_p95_ms": 499.7453574629953,
+            "adaptive_p95_ms": 499.7453574629953
+          },
+          "scored_windows": 79,
+          "over_budget_pairs": 789,
+          "over_budget_windows": 79,
+          "switches": [],
+          "persistent_breaches": [
+            {
+              "epoch": 1,
+              "start_s": 20.450981,
+              "last_s": 809.642938,
+              "windows": 79,
+              "outcome": "unresolved"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "ground_effect": {
+    "budget_ms": 0.25,
+    "window_s": 10.0,
+    "scored_event_sha256": "f5cd227284b5132a02a9b6093fc5a00fe217257a5f4271e7611e67efef6994b1",
+    "policies": {
+      "confirmed": {
+        "evaluation": {
+          "pairs": 2795,
+          "fixed_p95_ms": 2.154391041146868,
+          "adaptive_p95_ms": 0.2986770812783956
+        },
+        "scored_windows": 23,
+        "over_budget_pairs": 338,
+        "over_budget_windows": 5,
+        "switches": [
+          {
+            "epoch": 1,
+            "at_s": 100.044453,
+            "followup": "prevented_breach"
+          },
+          {
+            "epoch": 1,
+            "at_s": 170.044883,
+            "followup": "prevented_breach"
+          }
+        ],
+        "persistent_breaches": [
+          {
+            "epoch": 1,
+            "start_s": 80.094757,
+            "last_s": 99.945102,
+            "windows": 2,
+            "outcome": "timely"
+          },
+          {
+            "epoch": 1,
+            "start_s": 150.09428,
+            "last_s": 169.848113,
+            "windows": 2,
+            "outcome": "timely"
+          }
+        ]
+      },
+      "headroom": {
+        "evaluation": {
+          "pairs": 2795,
+          "fixed_p95_ms": 2.154391041146868,
+          "adaptive_p95_ms": 0.18533909549502994
+        },
+        "scored_windows": 23,
+        "over_budget_pairs": 0,
+        "over_budget_windows": 0,
+        "switches": [
+          {
+            "epoch": 1,
+            "at_s": 80.094757,
+            "followup": "prevented_breach"
+          },
+          {
+            "epoch": 1,
+            "at_s": 130.000314,
+            "followup": "prevented_breach"
+          },
+          {
+            "epoch": 1,
+            "at_s": 190.047982,
+            "followup": "prevented_breach"
+          },
+          {
+            "epoch": 1,
+            "at_s": 250.097478,
+            "followup": "insufficient_followup"
+          }
+        ],
+        "persistent_breaches": []
+      }
+    }
+  },
+  "labeled_counts": {
+    "confirmed": {
+      "censored": 28,
+      "TN": 20,
+      "FP": 4,
+      "TP": 24,
+      "FN": 8
+    },
+    "headroom": {
+      "censored": 28,
+      "TN": 20,
+      "FP": 4,
+      "TP": 32
+    }
+  }
+}

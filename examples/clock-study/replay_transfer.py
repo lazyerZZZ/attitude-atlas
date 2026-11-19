@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import sqlite3
 
-from reproduce import HERE, verified_file
+from reproduce import HERE, equivalent, verified_file
 from alarm_controls import challenge
 from check_dds_clock import audit
 from exchange_replay import bag_exchange_replay
@@ -72,5 +72,19 @@ if __name__ == "__main__":
     for name in ("original", "halo", "dds"):
         parser.add_argument(name, type=Path)
     parser.add_argument("--case", help="Reproduce one named recording")
+    parser.add_argument("--check", action="store_true", help="Compare with published measurements")
     args = parser.parse_args()
-    print(json.dumps(replay(args.original, args.halo, args.dds, args.case), indent=2))
+    result = replay(args.original, args.halo, args.dds, args.case)
+    if args.check:
+        reference = json.loads((HERE / "transfer-results.json").read_text())
+        if args.case in reference["paired"]:
+            actual, expected = result["paired"][args.case], reference["paired"][args.case]
+        elif args.case:
+            actual, expected = result[args.case], reference[args.case]
+        else:
+            actual, expected = result, reference
+        if not equivalent(actual, expected):
+            raise SystemExit("Transfer study differs from the published measurements")
+        print("Verified " + (args.case or "all held-out results and the ground-effect comparison"))
+    else:
+        print(json.dumps(result, indent=2))
