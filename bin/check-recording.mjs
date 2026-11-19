@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFile, writeFile } from "node:fs/promises";
+import { readPx4Input } from "./px4-input.mjs";
 import { parseArgs } from "node:util";
 import {
   readPx4Recording,
@@ -10,7 +11,7 @@ import {
   sampleCase,
 } from "../site/recordings.mjs";
 const usage =
-  "Usage: node bin/check-recording.mjs PX4.csv ROS.yaml --shared-clock [--max-skew-ms 20] [--case-out NEW.json] [--rows-out NEW.csv] [--max-error-deg N] [--min-coverage-pct N]";
+  "Usage: node bin/check-recording.mjs PX4.csv|flight.ulg ROS.yaml --shared-clock [--max-skew-ms 20] [--case-out NEW.json] [--rows-out NEW.csv] [--max-error-deg N] [--min-coverage-pct N]";
 async function main() {
   const { values, positionals } = parseArgs({
     allowPositionals: true,
@@ -29,7 +30,7 @@ async function main() {
     return;
   }
   if (positionals.length !== 2 || !values["shared-clock"]) throw Error(usage);
-  const csv = await readFile(positionals[0], "utf8"),
+  const csv = await readPx4Input(positionals[0]),
     yaml = await readFile(positionals[1], "utf8");
   const px4 = readPx4Recording(csv),
     ros = readRosRecording(yaml);
