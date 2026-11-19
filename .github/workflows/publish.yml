@@ -9,6 +9,8 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      pages_artifact: ${{ steps.bundle.outputs.name }}
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/setup-node@v7.1.0
@@ -23,6 +25,15 @@ jobs:
           trap 'kill "$!" 2>/dev/null || true' EXIT
           curl --silent --fail --retry 10 --retry-connrefused http://127.0.0.1:8000/ > /dev/null
           NODE_PATH="$RUNNER_TEMP/atlas-browser/node_modules" CHROME_BIN="$(command -v google-chrome)" node tests/browser/workbench.cjs
+      - name: Name the tested Pages bundle
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        id: bundle
+        run: echo "name=pages-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-pages-artifact@v5.0.0
+        if: steps.bundle.outcome == 'success'
+        with:
+          name: ${{ steps.bundle.outputs.name }}
+          path: site
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: test
@@ -40,11 +51,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: actions/configure-pages@v6.0.0
-      - uses: actions/upload-pages-artifact@v5.0.0
-        with:
-          path: site
       - id: deployment
         uses: actions/deploy-pages@v5.0.1
+        with:
+          artifact_name: ${{ needs.test.outputs.pages_artifact }}
       - name: Verify public site assets
         env:
           SITE_URL: ${{ steps.deployment.outputs.page_url }}
