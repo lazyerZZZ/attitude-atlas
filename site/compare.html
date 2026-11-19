@@ -1,0 +1,30 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Compare a PX4 attitude and a ROS 2 message. See the full rotation error, nose-direction error and timing of a frame conversion."><title>Bridge check · Attitude Atlas</title>
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="compare.css"><script type="module" src="compare.mjs"></script>
+</head><body>
+<header><div class="bar"><a class="brand" href="./"><span class="mark" aria-hidden="true">◢</span> Attitude Atlas</a><nav><a href="./">Pose explorer</a><a href="https://github.com/lazyerZZZ/attitude-atlas">GitHub ↗</a></nav></div></header>
+<main>
+<section class="intro"><div><h1>Bridge check</h1><p>Compare the attitude PX4 predicts in ROS coordinates with the one your node reports.</p></div></section>
+<div class="casebar"><label for="example">Example</label><select id="example">
+<option value="roll">Same heading, 90° of roll</option><option value="match">Matching attitudes</option><option value="opposite">Equivalent quaternion signs</option><option value="time">Samples taken 20 ms apart</option><option value="custom" disabled>Custom inputs</option></select></div>
+<form id="pair-form">
+<div class="pair-inputs"><div><label for="px4">PX4 message <small>FRD → NED · w, x, y, z</small></label><textarea id="px4" spellcheck="false" rows="4" required></textarea></div>
+<div><label for="ros">ROS message <small>FLU → geographic ENU · x, y, z, w</small></label><textarea id="ros" spellcheck="false" rows="4" required></textarea></div></div>
+<div class="runbar"><button class="primary" type="submit">Compare attitudes</button><label><input id="shared" type="checkbox"> Timestamps use the same clock and epoch</label></div>
+<p class="hint">Paste four numbers or one YAML / JSON message per side. Align local map and sensor frames to the conventions above before comparing.</p>
+<p id="feedback" role="status"></p></form>
+<section id="result" hidden aria-label="Comparison result">
+<div class="metrics"><div><h2>Full rotation error</h2><output id="angle"></output></div><div><h2>Nose direction error</h2><output id="nose"></output></div><div><h2>Time offset <small>ROS − PX4</small></h2><output id="offset"></output></div></div>
+<div class="paired-views">
+<figure><figcaption>Expected from PX4</figcaption><canvas tabindex="0" id="expected" aria-label="Expected aircraft orientation, drag or use arrow keys to orbit both views."></canvas><p id="expected-q"></p></figure>
+<figure><figcaption>Observed in ROS</figcaption><canvas tabindex="0" id="actual" aria-label="Observed aircraft orientation, drag or use arrow keys to orbit both views."></canvas><p id="actual-q"></p></figure>
+</div>
+<p class="hint">Both readouts use ROS x, y, z, w. Drag either aircraft to orbit both views together.</p>
+<div id="diagnostics"></div>
+<div class="runbar"><button id="reset-camera">Reset view</button></div>
+
+</section>
+<details><summary>How the comparison works</summary><p>Both rotations are expressed in geographic ENU with a forward-left-up body. The full rotation error is the smallest angle aligning them, from 0° to 180°. Nose direction compares only their forward axes. The clock offset uses PX4 timestamp_sample when available, falling back to timestamp, and ROS header.stamp. A zero stamp is treated as unavailable. A time offset or an unaligned map can explain an angular difference.</p></details>
+<footer><a href="./">Open pose explorer</a><a href="https://github.com/lazyerZZZ/attitude-atlas">Source on GitHub ↗</a></footer>
+</main><div id="notice" role="status"></div></body></html>
