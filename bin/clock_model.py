@@ -37,6 +37,23 @@ def holdout(relative):
     return result
 
 
+def time_windows(relative, count=4):
+    """Use equal-duration windows so higher recording rates get no extra windows."""
+    span = relative[-1][0]
+    groups = [[] for _ in range(count)]
+    for x, e in relative:
+        groups[min(count - 1, x * count // span)].append((x, e))
+    windows = []
+    for group in groups:
+        if len(group) < 2:
+            windows.append({"pairs": len(group), "rate_ppm": None})
+            continue
+        _, rate = fit(group)
+        windows.append({"pairs": len(group), "start_s": group[0][0] / 1e9,
+                        "end_s": group[-1][0] / 1e9, "rate_ppm": rate * 1e6})
+    return windows
+
+
 def clock_report(pairs):
     if len(pairs) < 2:
         return None
@@ -47,4 +64,5 @@ def clock_report(pairs):
     return {"span_s": relative[-1][0] / 1e9,
             "rate_ppm": rate * 1e6,
             "offset_change_ms": relative[-1][1] / 1e6,
+            "windows": time_windows(relative),
             "holdout": holdout(relative)}

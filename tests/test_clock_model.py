@@ -21,6 +21,13 @@ class RateTests(unittest.TestCase):
         self.assertEqual(result["constant"]["median_abs_ms"], 10)
         self.assertIsNone(clock_report(pairs[:5])["holdout"])
 
+    def test_windows_expose_rate_changes_and_sparse_coverage(self):
+        pairs = [(x, x + max(0, x - 500_000) // 10) for x in (0, 100, 700_000, 800_000, 1000_000)]
+        windows = clock_report(pairs)["windows"]
+        self.assertEqual([w["pairs"] for w in windows], [2, 0, 1, 2])
+        self.assertIsNone(windows[2]["rate_ppm"])
+        self.assertAlmostEqual(windows[-1]["rate_ppm"], 100000)
+
     def test_discontinuity_is_not_silently_sorted(self):
         with self.assertRaisesRegex(ValueError, "split"):
             clock_report([(100, 123), (50, 234)])
