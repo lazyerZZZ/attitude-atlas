@@ -3,7 +3,7 @@ import argparse
 from collections import Counter, defaultdict
 import json
 from pathlib import Path
-import zlib
+from fetch_delft import matches_entry
 
 from replay_adaptive import HERE, POLICIES, summary
 from alarm_controls import challenge
@@ -13,13 +13,7 @@ from clock_model import clock_report
 
 def member(root, entry):
     path = root / entry["path"]
-    if path.stat().st_size != entry["bytes"]:
-        raise ValueError(f"Incorrect file size: {path.name}")
-    crc = 0
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            crc = zlib.crc32(block, crc)
-    if f"{crc:08x}" != entry["crc32"]:
+    if not matches_entry(path, entry):
         raise ValueError(f"Unexpected file contents: {path.name}")
     return path
 

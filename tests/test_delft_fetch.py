@@ -25,6 +25,8 @@ class RangeFetchTests(unittest.TestCase):
             fetch(root, source, entry)
             target = root / "sample.ulg"
             self.assertEqual(target.read_bytes(), b"test")
+            with patch("fetch_delft.read_range", side_effect=AssertionError("downloaded a verified member")):
+                fetch(root, source, entry)
             target.write_bytes(b"existing")
             with self.assertRaisesRegex(ValueError, "CRC"):
                 fetch(root, source, dict(entry, crc32="00000000"))

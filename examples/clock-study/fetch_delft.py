@@ -1,5 +1,8 @@
 """Fetch selected stored ZIP members from the versioned 4TU dataset via HTTP ranges."""
 import argparse
+from concurrent.futures import ThreadPoolExecutor
+import hashlib
+from http.client import IncompleteRead
 import json
 from pathlib import Path
 import struct
@@ -28,14 +31,28 @@ def read_range(url, total, start, count):
                 if len(data) == count:
                     return data
                 raise OSError("Incomplete archive range")
-        except (OSError, URLError) as error:
+        except (OSError, URLError, IncompleteRead):
             if attempt == 3:
                 raise
             sleep(2 ** attempt)
 
 
+def matches_entry(path, entry):
+    if not path.is_file() or path.stat().st_size != entry["bytes"]:
+        return False
+    crc = 0
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            crc = zlib.crc32(block, crc)
+            digest.update(block)
+    return f"{crc:08x}" == entry["crc32"] and ("sha256" not in entry or digest.hexdigest() == entry["sha256"])
+
+
 def fetch(root, source, entry):
     path = root / entry["path"]
+    if matches_entry(path, entry):
+        return
     path.parent.mkdir(parents=True, exist_ok=True)
     header = entry["local_header"]
     def read(start, count):
@@ -47,17 +64,15 @@ def fetch(root, source, entry):
     if read(header + 30, name_size).decode("utf-8") != entry["path"]:
         raise ValueError("Archive member name mismatch")
     start = header + 30 + name_size + extra_size
-    crc = 0
     with NamedTemporaryFile(dir=path.parent, delete=False) as out:
         partial = Path(out.name)
     try:
         with partial.open("wb") as out:
             for offset in range(0, entry["bytes"], CHUNK):
                 data = read(start + offset, min(CHUNK, entry["bytes"] - offset))
-                crc = zlib.crc32(data, crc)
                 out.write(data)
-        if f"{crc:08x}" != entry["crc32"]:
-            raise ValueError("Archive member CRC mismatch")
+        if not matches_entry(partial, entry):
+            raise ValueError("Archive member CRC or digest mismatch")
         partial.replace(path)
     finally:
         partial.unlink(missing_ok=True)
@@ -69,7 +84,9 @@ if __name__ == "__main__":
     parser.add_argument("directory", type=Path)
     parser.add_argument("--case", choices=manifest["captures"])
     args = parser.parse_args()
-    for code, files in manifest["captures"].items():
-        if args.case is None or code == args.case:
-            for entry in files.values():
-                fetch(args.directory, manifest, entry)
+    entries = [entry for code, files in manifest["captures"].items()
+               if args.case is None or code == args.case for entry in files.values()]
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        tasks = [pool.submit(fetch, args.directory, manifest, entry) for entry in entries]
+        for task in tasks:
+            task.result()
