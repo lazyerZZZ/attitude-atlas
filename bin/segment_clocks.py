@@ -52,11 +52,13 @@ def persistent_breaches(windows, budget):
     return episodes
 
 
-def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed"):
+def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed", *, candidate_limit_ms=None):
     if policy not in ("confirmed", "headroom"):
         raise ValueError("Unknown clock policy")
     if not all(math.isfinite(x) and x > 0 for x in (budget_ms, window_s)) or round(window_s * 1e9) < 1:
         raise ValueError("Use a finite positive budget and window")
+    if candidate_limit_ms is not None and not (math.isfinite(candidate_limit_ms) and candidate_limit_ms > 0):
+        raise ValueError("Candidate validation limit must be finite and positive")
     width = round(window_s * 1e9)
     boundaries = [(0, "start")] if pairs else []
     for i, ((x0, y0), (x1, y1)) in enumerate(zip(pairs, pairs[1:]), start=1):
@@ -68,7 +70,7 @@ def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed"):
     fixed_errors, adaptive_errors = [], []
     for serial, (start, reason) in enumerate(boundaries):
         stop = boundaries[serial + 1][0] if serial + 1 < len(boundaries) else len(pairs)
-        block, changes, fixed, adaptive = assess_epoch(pairs[start:stop], budget_ms, width, policy)
+        block, changes, fixed, adaptive = assess_epoch(pairs[start:stop], budget_ms, width, policy, candidate_limit_ms)
         epoch = serial + 1
         epochs.append({"epoch": epoch, "first_pair": start + 1, "pairs": stop - start, "reason": reason})
         windows.extend(dict(w, epoch=epoch, first_pair=start + w["first_pair"]) for w in block)
@@ -110,8 +112,9 @@ def audit_switch(decision, old, events, index, budget, new_p95):
             audit["outcome"] = "breach_remained"
 
 
-def assess_epoch(pairs, budget_ms, width, policy):
+def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
     trigger = budget_ms / 2 if policy == "headroom" else budget_ms
+    limit = trigger if candidate_limit_ms is None else candidate_limit_ms
     windows = []
     history = []
     model = None
@@ -158,7 +161,7 @@ def assess_epoch(pairs, budget_ms, width, policy):
             _, previous, trial = candidate
             trial_error = percentile95(errors_ms(trial, events))
             item["candidate_p95_ms"] = trial_error
-            if trial_error <= trigger and trial_error <= residual / 2:
+            if trial_error <= limit and trial_error <= residual / 2:
                 if consumed == len(pairs):
                     item["action"] = "await_next_window"
                     continue
