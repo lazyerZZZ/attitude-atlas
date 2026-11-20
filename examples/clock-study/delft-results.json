@@ -17,6 +17,24 @@
         "longest_run_s": 154.548491,
         "supported_s": 154.548491
       },
+      "continuity": {
+        "max_gap_s": 1.0,
+        "largest_adjacent_change": {
+          "ending_pair": 2365,
+          "at_px4_s": 153.792778,
+          "px4_interval_us": 95164,
+          "ros_interval_us": 95100,
+          "offset_change_us": -64
+        },
+        "runs": [
+          {
+            "first_pair": 1,
+            "pairs": 2372,
+            "px4_span_s": 154.548491,
+            "offset_change_ms": -7.525
+          }
+        ]
+      },
       "rate_ppm": -48.91899166723693,
       "endpoint_offset_change_ms": -7.525,
       "comparison": {
@@ -152,6 +170,24 @@
         "runs": 1,
         "longest_run_s": 314.349096,
         "supported_s": 314.349096
+      },
+      "continuity": {
+        "max_gap_s": 1.0,
+        "largest_adjacent_change": {
+          "ending_pair": 4834,
+          "at_px4_s": 312.247962,
+          "px4_interval_us": 49761,
+          "ros_interval_us": 49737,
+          "offset_change_us": -24
+        },
+        "runs": [
+          {
+            "first_pair": 1,
+            "pairs": 4867,
+            "px4_span_s": 314.349096,
+            "offset_change_ms": -3.197
+          }
+        ]
       },
       "rate_ppm": -10.639553078899,
       "endpoint_offset_change_ms": -3.197,
@@ -289,6 +325,30 @@
         "longest_run_s": 327.451814,
         "supported_s": 327.451814
       },
+      "continuity": {
+        "max_gap_s": 1.0,
+        "largest_adjacent_change": {
+          "ending_pair": 459,
+          "at_px4_s": 30.749988,
+          "px4_interval_us": 51007,
+          "ros_interval_us": 2703810,
+          "offset_change_us": 2652803
+        },
+        "runs": [
+          {
+            "first_pair": 1,
+            "pairs": 458,
+            "px4_span_s": 30.698981,
+            "offset_change_ms": -0.038
+          },
+          {
+            "first_pair": 459,
+            "pairs": 4421,
+            "px4_span_s": 296.701826,
+            "offset_change_ms": 6.433
+          }
+        ]
+      },
       "rate_ppm": 4166.202736895106,
       "endpoint_offset_change_ms": 2659.198,
       "comparison": {
@@ -424,6 +484,24 @@
         "runs": 1,
         "longest_run_s": 159.750638,
         "supported_s": 159.750638
+      },
+      "continuity": {
+        "max_gap_s": 1.0,
+        "largest_adjacent_change": {
+          "ending_pair": 2568,
+          "at_px4_s": 157.849127,
+          "px4_interval_us": 99523,
+          "ros_interval_us": 99636,
+          "offset_change_us": 113
+        },
+        "runs": [
+          {
+            "first_pair": 1,
+            "pairs": 2603,
+            "px4_span_s": 159.750638,
+            "offset_change_ms": 11.773
+          }
+        ]
       },
       "rate_ppm": 80.54534724914406,
       "endpoint_offset_change_ms": 11.773,

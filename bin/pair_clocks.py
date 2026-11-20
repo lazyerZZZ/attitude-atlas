@@ -84,6 +84,30 @@ def overlap_report(anchors, max_gap_us=1_000_000):
             "supported_s": sum(spans) / 1e6}
 
 
+def clock_continuity(anchors, max_gap_us=1_000_000):
+    """Inspect both clocks between consecutive shared events before interpreting drift."""
+    if max_gap_us <= 0:
+        raise ValueError("Clock continuity requires a positive maximum gap")
+    largest = None
+    boundaries = [0] if anchors else []
+    for i in range(1, len(anchors)):
+        a, b = anchors[i - 1], anchors[i]
+        dx, dy = b.px4_us - a.px4_us, b.ros_us - a.ros_us
+        change = dy - dx
+        if largest is None or abs(change) > abs(largest["offset_change_us"]):
+            largest = {"ending_pair": i + 1, "at_px4_s": (b.px4_us - anchors[0].px4_us) / 1e6,
+                       "px4_interval_us": dx, "ros_interval_us": dy, "offset_change_us": change}
+        if not (0 < dx <= max_gap_us and 0 < dy <= max_gap_us):
+            boundaries.append(i)
+    runs = []
+    for start, end in zip(boundaries, boundaries[1:] + [len(anchors)]):
+        a, b = anchors[start], anchors[end - 1]
+        elapsed = b.px4_us - a.px4_us
+        runs.append({"first_pair": start + 1, "pairs": end - start, "px4_span_s": elapsed / 1e6,
+                     "offset_change_ms": (b.ros_us - a.ros_us - elapsed) / 1000})
+    return {"max_gap_s": max_gap_us / 1e6, "largest_adjacent_change": largest, "runs": runs}
+
+
 def matched_land_states(anchors, states):
     stamps = [t for t, _ in states]
     if any(b < a for a, b in zip(stamps, stamps[1:])):
@@ -185,6 +209,7 @@ def main():
     anchors, report = join(px, ros)
     report["platform"] = platform
     report["matched_overlap"] = overlap_report(anchors)
+    report["clock_continuity"] = clock_continuity(anchors)
     report["matched_land_states"] = matched_land_states(anchors, states)
     report["timesync"] = sync_report(sync, anchors)
     if args.segment_budget_ms is not None:

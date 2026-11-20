@@ -9,7 +9,7 @@ from reproduce import HERE, equivalent
 from replay_adaptive import summary
 from segment_clocks import POLICIES
 from alarm_controls import challenge
-from pair_clocks import join, matched_land_states, overlap_report, read_bag, read_flight
+from pair_clocks import clock_continuity, join, matched_land_states, overlap_report, read_bag, read_flight
 from clock_model import clock_report
 
 
@@ -42,7 +42,7 @@ def replay(root, cases):
         pairs = [(a.px4_us * 1000, a.ros_us * 1000) for a in anchors]
         drift = clock_report(pairs)
         flights[name] = {**board, **counts, "land_states": matched_land_states(anchors, states),
-                         "overlap": overlap_report(anchors), "rate_ppm": drift["rate_ppm"],
+                         "overlap": overlap_report(anchors), "continuity": clock_continuity(anchors), "rate_ppm": drift["rate_ppm"],
                          "endpoint_offset_change_ms": drift.get("offset_change_ms"),
                          "comparison": summary(pairs), "injected_controls": control_counts(pairs)}
         logs[name], bags[name] = px, ros
