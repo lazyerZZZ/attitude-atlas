@@ -1,0 +1,70 @@
+{
+  "doi": "10.4121/8244b196-373e-4211-9e05-994e37656490.v1",
+  "authors": [
+    "S. Stroobants",
+    "J. J. A. Hagenaars",
+    "S. M. Bohté",
+    "G. C. H. E. de Croon"
+  ],
+  "license": "CC BY-NC 4.0",
+  "archive_url": "https://data.4tu.nl/file/8244b196-373e-4211-9e05-994e37656490/2d205def-8788-4c6f-87b4-0ac58747397a",
+  "archive_bytes": 64798417411,
+  "captures": {
+    "vb_001": {
+      "ulg": {
+        "path": "vb_001/00000-2025-01-17_14-26-27.ulg",
+        "local_header": 47833630057,
+        "bytes": 4295388,
+        "crc32": "e9ff2dc4"
+      },
+      "mcap": {
+        "path": "vb_001/rosbag2_2025-01-17-14-26-10/rosbag2_2025-01-17-14-26-10_0.mcap",
+        "local_header": 47837930076,
+        "bytes": 167386689,
+        "crc32": "52fdea73"
+      }
+    },
+    "vb_002": {
+      "ulg": {
+        "path": "vb_002/00001-2025-01-17_14-35-10.ulg",
+        "local_header": 48005316989,
+        "bytes": 8807634,
+        "crc32": "2dea9ea0"
+      },
+      "mcap": {
+        "path": "vb_002/rosbag2_2025-01-17-14-34-55/rosbag2_2025-01-17-14-34-55_0.mcap",
+        "local_header": 48014129240,
+        "bytes": 304962196,
+        "crc32": "19c55a98"
+      }
+    },
+    "vb_003": {
+      "ulg": {
+        "path": "vb_003/00002-2025-01-17_14-48-43.ulg",
+        "local_header": 47517135706,
+        "bytes": 8431613,
+        "crc32": "47f84a61"
+      },
+      "mcap": {
+        "path": "vb_003/rosbag2_2025-01-17-14-48-33/rosbag2_2025-01-17-14-48-33_0.mcap",
+        "local_header": 47525571950,
+        "bytes": 308057883,
+        "crc32": "ceac568a"
+      }
+    },
+    "vb_004": {
+      "ulg": {
+        "path": "vb_004/00003-2025-01-17_14-59-15.ulg",
+        "local_header": 47347071673,
+        "bytes": 4560909,
+        "crc32": "ed67efa4"
+      },
+      "mcap": {
+        "path": "vb_004/rosbag2_2025-01-17-14-58-59/rosbag2_2025-01-17-14-58-59_0.mcap",
+        "local_header": 47351637236,
+        "bytes": 165498246,
+        "crc32": "88355d20"
+      }
+    }
+  }
+}
