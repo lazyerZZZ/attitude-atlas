@@ -1,0 +1,161 @@
+{
+  "ground_native": {
+    "scored_event_sha256": "f5cd227284b5132a02a9b6093fc5a00fe217257a5f4271e7611e67efef6994b1",
+    "policies": {
+      "confirmed": {
+        "pairs": 2795,
+        "p95_ms": 0.29867708127839493,
+        "over_budget_pairs": 338,
+        "switches": 2
+      },
+      "headroom": {
+        "pairs": 2795,
+        "p95_ms": 0.18533909549502936,
+        "over_budget_pairs": 0,
+        "switches": 4
+      },
+      "adaptive": {
+        "pairs": 2795,
+        "p95_ms": 0.18533909549502936,
+        "over_budget_pairs": 0,
+        "switches": 4
+      }
+    }
+  },
+  "voxl_native": {
+    "scored_event_sha256": "7798c6a33fa8f2ec459d9ba2e425123840acd535cf02bd7ff54cfa322dd04500",
+    "policies": {
+      "confirmed": {
+        "pairs": 1565,
+        "p95_ms": 0.29307024081481003,
+        "over_budget_pairs": 198,
+        "switches": 0
+      },
+      "headroom": {
+        "pairs": 1565,
+        "p95_ms": 0.1597331496741554,
+        "over_budget_pairs": 0,
+        "switches": 1
+      },
+      "adaptive": {
+        "pairs": 1565,
+        "p95_ms": 0.1597331496741554,
+        "over_budget_pairs": 0,
+        "switches": 1
+      }
+    }
+  },
+  "voxl_exchange": {
+    "scored_event_sha256": "7d8e578f95409f43056f14d27097c51267aefb4126608965dc0e04aa769acde7",
+    "policies": {
+      "confirmed": {
+        "pairs": 3084,
+        "p95_ms": 0.6321867115567872,
+        "over_budget_pairs": 1086,
+        "switches": 7
+      },
+      "headroom": {
+        "pairs": 3084,
+        "p95_ms": 1.129466062593208,
+        "over_budget_pairs": 538,
+        "switches": 5
+      },
+      "adaptive": {
+        "pairs": 3084,
+        "p95_ms": 0.6362752910808213,
+        "over_budget_pairs": 622,
+        "switches": 6
+      }
+    }
+  },
+  "factorial": [
+    {
+      "nomination_ms": 0.25,
+      "acceptance_ms": 0.25,
+      "pairs": 3084,
+      "fixed_p95_ms": 14.65140173687167,
+      "adaptive_p95_ms": 0.6321867115567872,
+      "switch_s": [
+        40.000899,
+        60.0000735,
+        90.0009435,
+        110.0504555,
+        150.0505445,
+        230.0508385,
+        290.0509885
+      ]
+    },
+    {
+      "nomination_ms": 0.25,
+      "acceptance_ms": 0.125,
+      "pairs": 3084,
+      "fixed_p95_ms": 14.65140173687167,
+      "adaptive_p95_ms": 1.129466062593208,
+      "switch_s": [
+        50.000339,
+        100.1007595,
+        140.050297,
+        280.051431
+      ]
+    },
+    {
+      "nomination_ms": 0.125,
+      "acceptance_ms": 0.25,
+      "pairs": 3084,
+      "fixed_p95_ms": 14.65140173687167,
+      "adaptive_p95_ms": 0.6362752910808213,
+      "switch_s": [
+        40.000899,
+        60.0000735,
+        80.0004535,
+        100.1007595,
+        130.0509935,
+        280.051431,
+        310.050848
+      ]
+    },
+    {
+      "nomination_ms": 0.125,
+      "acceptance_ms": 0.125,
+      "pairs": 3084,
+      "fixed_p95_ms": 14.65140173687167,
+      "adaptive_p95_ms": 1.129466062593208,
+      "switch_s": [
+        50.000339,
+        100.1007595,
+        130.0509935,
+        280.051431,
+        310.050848
+      ]
+    }
+  ],
+  "rejected_only_by_tight_limit": [
+    {
+      "window": 3,
+      "old_p95_ms": 1.5329258812848297,
+      "candidate_p95_ms": 0.13674321891151217
+    },
+    {
+      "window": 8,
+      "old_p95_ms": 0.4733480043859077,
+      "candidate_p95_ms": 0.13085353056863183
+    }
+  ],
+  "native_schedule_controls": {
+    "confirmed": {
+      "TN": 17,
+      "FP": 1,
+      "TP": 18,
+      "FN": 6
+    },
+    "headroom": {
+      "TN": 17,
+      "FP": 1,
+      "TP": 24
+    },
+    "adaptive": {
+      "TN": 18,
+      "TP": 24
+    }
+  }
+}
