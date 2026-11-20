@@ -1,10 +1,12 @@
 """Validate clock calibration on native attitude events in the TU Delft flight records."""
 import argparse
+from collections import Counter, defaultdict
 import json
 from pathlib import Path
 import zlib
 
-from replay_adaptive import HERE, summary
+from replay_adaptive import HERE, POLICIES, summary
+from alarm_controls import challenge
 from pair_clocks import join, matched_land_states, overlap_report, read_bag, read_flight
 from clock_model import clock_report
 
@@ -22,6 +24,17 @@ def member(root, entry):
     return path
 
 
+def control_counts(pairs):
+    counts = {p: defaultdict(Counter) for p in POLICIES}
+    delays = {p: [] for p in POLICIES}
+    for trial in challenge(pairs, policies=POLICIES, phases=(0, .125, .25, .5, .75, .875), negative_pulses=True):
+        policy = trial["policy"]
+        counts[policy][trial["scenario"]][trial["outcome"]] += 1
+        if trial["outcome"] == "TP":
+            delays[policy].append(min(t for t in trial["alarm_times_s"] if t >= trial["onset_s"]) - trial["onset_s"])
+    return {p: {"outcomes": counts[p], "max_detected_delay_s": max(delays[p], default=None)} for p in POLICIES}
+
+
 def replay(root, cases):
     flights, logs, bags = {}, {}, {}
     for name, entries in cases.items():
@@ -35,7 +48,7 @@ def replay(root, cases):
         flights[name] = {**board, **counts, "land_states": matched_land_states(anchors, states),
                          "overlap": overlap_report(anchors), "rate_ppm": drift["rate_ppm"],
                          "endpoint_offset_change_ms": drift.get("offset_change_ms"),
-                         "comparison": summary(pairs)}
+                         "comparison": summary(pairs), "injected_controls": control_counts(pairs)}
         logs[name], bags[name] = px, ros
     negatives = {}
     for name, px in logs.items():

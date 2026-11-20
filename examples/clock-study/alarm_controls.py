@@ -2,7 +2,11 @@
 from segment_clocks import LEGACY_POLICIES, assess
 
 
-def challenge(pairs, budget_ms=0.25, window_s=10, *, policies=LEGACY_POLICIES, phases=(0, 0.5)):
+SCENARIOS = ("stable", "one_window_pulse", "two_window_pulse", "positive_step", "negative_step",
+             "rate_change", "slow_rate_change")
+
+
+def challenge(pairs, budget_ms=0.25, window_s=10, *, policies=LEGACY_POLICIES, phases=(0, 0.5), negative_pulses=False):
     """Synthetic ROS times only. Use a complete local evaluation horizon for each trial."""
     if not pairs:
         return []
@@ -18,7 +22,8 @@ def challenge(pairs, budget_ms=0.25, window_s=10, *, policies=LEGACY_POLICIES, p
             raise ValueError("Onset phase must be in [0, 1)")
         onset = (3 + phase) * window_s
         deadline = onset + 4 * window_s
-        for kind in ("stable", "one_window_pulse", "two_window_pulse", "positive_step", "negative_step", "rate_change", "slow_rate_change"):
+        scenarios = (*SCENARIOS, "negative_two_window_pulse") if negative_pulses else SCENARIOS
+        for kind in scenarios:
             def change(t):
                 after = t / 1e9 - onset
                 if after < 0 or kind == "stable":
@@ -28,7 +33,8 @@ def challenge(pairs, budget_ms=0.25, window_s=10, *, policies=LEGACY_POLICIES, p
                     return round(after * ppm * 1000)
                 if kind.endswith("pulse"):
                     length = window_s if kind == "one_window_pulse" else 2 * window_s
-                    return 600000 if after < length else 0
+                    amplitude = -600000 if kind.startswith("negative_") else 600000
+                    return amplitude if after < length else 0
                 return -600000 if kind == "negative_step" else 600000
 
             trial = [(x, y + change(t)) for (x, _), y, t in zip(pairs, nominal, elapsed)]
