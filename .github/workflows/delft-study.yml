@@ -1,0 +1,22 @@
+name: Replay four TU Delft flights
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r examples/clock-study/requirements.txt
+      - name: Fetch the eight original archive members
+        run: python examples/clock-study/fetch_delft.py "$RUNNER_TEMP/delft"
+      - name: Verify shared events, clock errors, and signed pulse controls
+        run: python examples/clock-study/replay_delft.py "$RUNNER_TEMP/delft" --check > delft-results.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: delft-results
+          path: delft-results.json

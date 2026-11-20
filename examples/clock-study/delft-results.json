@@ -1,0 +1,562 @@
+{
+  "flights": {
+    "vb_001": {
+      "board": "HOLYBRO_KAKUTEH7MINI",
+      "sys_hitl": 0,
+      "ulog_samples": 2386,
+      "bag_samples": 71070,
+      "unique_event_pairs": 2372,
+      "land_states": {
+        "landed": 0,
+        "airborne": 2366,
+        "unknown": 6
+      },
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 154.548491,
+        "supported_s": 154.548491
+      },
+      "rate_ppm": -48.91899166723693,
+      "endpoint_offset_change_ms": -7.525,
+      "comparison": {
+        "scored_event_sha256": "3d79a2b34db3bd6e4244008e0835a387ddd78874648a0a92a3d3cb1aa8d007e9",
+        "policies": {
+          "confirmed": {
+            "pairs": 1992,
+            "p95_ms": 0.3938016437221728,
+            "over_budget_pairs": 496,
+            "switches": 2
+          },
+          "headroom": {
+            "pairs": 1992,
+            "p95_ms": 0.25729562525544736,
+            "over_budget_pairs": 130,
+            "switches": 3
+          },
+          "adaptive": {
+            "pairs": 1992,
+            "p95_ms": 0.25729562525544736,
+            "over_budget_pairs": 130,
+            "switches": 3
+          }
+        }
+      },
+      "injected_controls": {
+        "confirmed": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "FN": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 28.798848999999997
+        },
+        "headroom": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 35.043564
+        },
+        "adaptive": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "TN": 6
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "TN": 6
+            }
+          },
+          "max_detected_delay_s": 35.043564
+        }
+      }
+    },
+    "vb_002": {
+      "board": "HOLYBRO_KAKUTEH7MINI",
+      "sys_hitl": 0,
+      "ulog_samples": 4909,
+      "bag_samples": 132965,
+      "unique_event_pairs": 4867,
+      "land_states": {
+        "landed": 14,
+        "airborne": 4848,
+        "unknown": 5
+      },
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 314.349096,
+        "supported_s": 314.349096
+      },
+      "rate_ppm": -10.639553078899,
+      "endpoint_offset_change_ms": -3.197,
+      "comparison": {
+        "scored_event_sha256": "ea64b3768cd5f09591fd3226604ebe23c5d0d583da2c1f7e3bf09e3316319329",
+        "policies": {
+          "confirmed": {
+            "pairs": 4467,
+            "p95_ms": 0.3362927434554312,
+            "over_budget_pairs": 775,
+            "switches": 3
+          },
+          "headroom": {
+            "pairs": 4467,
+            "p95_ms": 0.2030212122529645,
+            "over_budget_pairs": 24,
+            "switches": 5
+          },
+          "adaptive": {
+            "pairs": 4467,
+            "p95_ms": 0.2030212122529645,
+            "over_budget_pairs": 24,
+            "switches": 5
+          }
+        }
+      },
+      "injected_controls": {
+        "confirmed": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "FN": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 28.752761999999997
+        },
+        "headroom": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 35.04949499999999
+        },
+        "adaptive": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "TN": 6
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "TN": 6
+            }
+          },
+          "max_detected_delay_s": 35.04949499999999
+        }
+      }
+    },
+    "vb_003": {
+      "board": "HOLYBRO_KAKUTEH7MINI",
+      "sys_hitl": 0,
+      "ulog_samples": 4922,
+      "bag_samples": 136801,
+      "unique_event_pairs": 4879,
+      "land_states": {
+        "landed": 29,
+        "airborne": 4842,
+        "unknown": 8
+      },
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 327.451814,
+        "supported_s": 327.451814
+      },
+      "rate_ppm": 4166.202736895106,
+      "endpoint_offset_change_ms": 2659.198,
+      "comparison": {
+        "scored_event_sha256": "c19af1902d38c42320768bacb0a4c02468725c4822a197d6097c8c27f59d1337",
+        "policies": {
+          "confirmed": {
+            "pairs": 4583,
+            "p95_ms": 2652.6628302564377,
+            "over_budget_pairs": 1070,
+            "switches": 4
+          },
+          "headroom": {
+            "pairs": 4583,
+            "p95_ms": 2652.6628302564377,
+            "over_budget_pairs": 907,
+            "switches": 8
+          },
+          "adaptive": {
+            "pairs": 4583,
+            "p95_ms": 2652.6628302564377,
+            "over_budget_pairs": 907,
+            "switches": 8
+          }
+        }
+      },
+      "injected_controls": {
+        "confirmed": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "FN": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 28.797657
+        },
+        "headroom": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 35.097741
+        },
+        "adaptive": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "TN": 6
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "TN": 6
+            }
+          },
+          "max_detected_delay_s": 35.097741
+        }
+      }
+    },
+    "vb_004": {
+      "board": "HOLYBRO_KAKUTEH7MINI",
+      "sys_hitl": 0,
+      "ulog_samples": 2610,
+      "bag_samples": 71511,
+      "unique_event_pairs": 2603,
+      "land_states": {
+        "landed": 14,
+        "airborne": 2558,
+        "unknown": 31
+      },
+      "overlap": {
+        "max_gap_s": 1.0,
+        "runs": 1,
+        "longest_run_s": 159.750638,
+        "supported_s": 159.750638
+      },
+      "rate_ppm": 80.54534724914406,
+      "endpoint_offset_change_ms": 11.773,
+      "comparison": {
+        "scored_event_sha256": "bd45b91166be871743e964f591050f9ea53d7ad6a36e0b8e2522023c79184c5c",
+        "policies": {
+          "confirmed": {
+            "pairs": 2279,
+            "p95_ms": 0.7701222621514094,
+            "over_budget_pairs": 1236,
+            "switches": 5
+          },
+          "headroom": {
+            "pairs": 2279,
+            "p95_ms": 2.5898314229430883,
+            "over_budget_pairs": 928,
+            "switches": 4
+          },
+          "adaptive": {
+            "pairs": 2279,
+            "p95_ms": 0.7701222621514094,
+            "over_budget_pairs": 892,
+            "switches": 6
+          }
+        }
+      },
+      "injected_controls": {
+        "confirmed": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "FN": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 28.799764000000003
+        },
+        "headroom": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "FP": 1,
+              "TN": 5
+            }
+          },
+          "max_detected_delay_s": 35.100652999999994
+        },
+        "adaptive": {
+          "outcomes": {
+            "stable": {
+              "TN": 6
+            },
+            "one_window_pulse": {
+              "TN": 6
+            },
+            "two_window_pulse": {
+              "TN": 6
+            },
+            "positive_step": {
+              "TP": 6
+            },
+            "negative_step": {
+              "TP": 6
+            },
+            "rate_change": {
+              "TP": 6
+            },
+            "slow_rate_change": {
+              "TP": 6
+            },
+            "negative_two_window_pulse": {
+              "TN": 6
+            }
+          },
+          "max_detected_delay_s": 35.100652999999994
+        }
+      }
+    }
+  },
+  "wrong_flight_matches": {
+    "vb_001/vb_002": 0,
+    "vb_001/vb_003": 0,
+    "vb_001/vb_004": 0,
+    "vb_002/vb_001": 0,
+    "vb_002/vb_003": 0,
+    "vb_002/vb_004": 0,
+    "vb_003/vb_001": 0,
+    "vb_003/vb_002": 0,
+    "vb_003/vb_004": 0,
+    "vb_004/vb_001": 0,
+    "vb_004/vb_002": 0,
+    "vb_004/vb_003": 0
+  }
+}

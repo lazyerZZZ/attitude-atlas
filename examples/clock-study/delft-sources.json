@@ -15,13 +15,15 @@
         "path": "vb_001/00000-2025-01-17_14-26-27.ulg",
         "local_header": 47833630057,
         "bytes": 4295388,
-        "crc32": "e9ff2dc4"
+        "crc32": "e9ff2dc4",
+        "sha256": "cc40b201ae5dca5ff3c0e724ef20128594fdb11e018c8d6b2cfe0ee5c7dcad08"
       },
       "mcap": {
         "path": "vb_001/rosbag2_2025-01-17-14-26-10/rosbag2_2025-01-17-14-26-10_0.mcap",
         "local_header": 47837930076,
         "bytes": 167386689,
-        "crc32": "52fdea73"
+        "crc32": "52fdea73",
+        "sha256": "2eedb43a44d694fd9c59fb59e502d5656d069141be04299a0895ce2affa0614b"
       }
     },
     "vb_002": {
@@ -29,13 +31,15 @@
         "path": "vb_002/00001-2025-01-17_14-35-10.ulg",
         "local_header": 48005316989,
         "bytes": 8807634,
-        "crc32": "2dea9ea0"
+        "crc32": "2dea9ea0",
+        "sha256": "704586c2621c1490506817824d7d18b7fbefc23fc76668ee5ec3605b312239b4"
       },
       "mcap": {
         "path": "vb_002/rosbag2_2025-01-17-14-34-55/rosbag2_2025-01-17-14-34-55_0.mcap",
         "local_header": 48014129240,
         "bytes": 304962196,
-        "crc32": "19c55a98"
+        "crc32": "19c55a98",
+        "sha256": "59e29883620d2dd644fd9901e5b4b5791289533ee4a27e760654b9e97d2d14f4"
       }
     },
     "vb_003": {
@@ -43,13 +47,15 @@
         "path": "vb_003/00002-2025-01-17_14-48-43.ulg",
         "local_header": 47517135706,
         "bytes": 8431613,
-        "crc32": "47f84a61"
+        "crc32": "47f84a61",
+        "sha256": "10d632d9513284c1fcf53d5bc77f2607f31a506749411fb93533654265c8b0ed"
       },
       "mcap": {
         "path": "vb_003/rosbag2_2025-01-17-14-48-33/rosbag2_2025-01-17-14-48-33_0.mcap",
         "local_header": 47525571950,
         "bytes": 308057883,
-        "crc32": "ceac568a"
+        "crc32": "ceac568a",
+        "sha256": "7977c0ed369ff293d57c266db6d024280dfef2d703d6f0838c6cd5ebc75bd2b4"
       }
     },
     "vb_004": {
@@ -57,13 +63,15 @@
         "path": "vb_004/00003-2025-01-17_14-59-15.ulg",
         "local_header": 47347071673,
         "bytes": 4560909,
-        "crc32": "ed67efa4"
+        "crc32": "ed67efa4",
+        "sha256": "a9e830fa65a90f4d0c28b53ffd512957c1a307bd8a4c5377c1a7fed0dc2dcc66"
       },
       "mcap": {
         "path": "vb_004/rosbag2_2025-01-17-14-58-59/rosbag2_2025-01-17-14-58-59_0.mcap",
         "local_header": 47351637236,
         "bytes": 165498246,
-        "crc32": "88355d20"
+        "crc32": "88355d20",
+        "sha256": "9d4b97806cec49d932cc8d9d02f5c17746dbb5a1969845e92ea4566877cef6fd"
       }
     }
   }
