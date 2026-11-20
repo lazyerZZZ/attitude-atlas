@@ -170,7 +170,7 @@ def main():
     parser.add_argument("--topic", default="/fmu/out/vehicle_attitude")
     parser.add_argument("--sync-topic", default="/fmu/out/timesync_status")
     parser.add_argument("--segment-budget-ms", type=float, help="Evaluate forward-only sample-clock recalibration")
-    parser.add_argument("--segment-policy", choices=["confirmed", "headroom", "both"], help="Select a recalibration policy")
+    parser.add_argument("--segment-policy", choices=["confirmed", "headroom", "adaptive", "both", "all"], help="Select a recalibration policy")
     parser.add_argument("--window-s", type=float, help="Segmentation window in PX4 seconds (default 10)")
     parser.add_argument("--exchange-replay", action="store_true",
                         help="Compare both policies across SQLite TimesyncStatus and check the ULog overlap")
@@ -188,17 +188,19 @@ def main():
     report["matched_land_states"] = matched_land_states(anchors, states)
     report["timesync"] = sync_report(sync, anchors)
     if args.segment_budget_ms is not None:
-        from segment_clocks import assess, compare_policies
+        from segment_clocks import LEGACY_POLICIES, POLICIES, assess, compare_policies
         pairs = [(a.px4_us * 1000, a.ros_us * 1000) for a in anchors]
         width = 10 if args.window_s is None else args.window_s
-        if args.segment_policy == "both":
-            report["policy_comparison"] = compare_policies(pairs, args.segment_budget_ms, width)
+        policies = POLICIES if args.segment_policy == "all" else LEGACY_POLICIES
+        if args.segment_policy in ("both", "all"):
+            report["policy_comparison"] = compare_policies(pairs, args.segment_budget_ms, width, policies)
         else:
             report["segmentation"] = assess(pairs, args.segment_budget_ms, width, args.segment_policy or "confirmed")
         if args.exchange_replay:
             from exchange_replay import bag_exchange_replay
             report["bag_exchange_replay"] = bag_exchange_replay(
-                Path(args.bag), anchors, args.sync_topic, args.segment_budget_ms, width)
+                Path(args.bag), anchors, args.sync_topic, args.segment_budget_ms, width,
+                ("adaptive",) if args.segment_policy == "adaptive" else policies)
     if any(b.px4_us <= a.px4_us for a, b in zip(anchors, anchors[1:])) and args.segment_budget_ms is not None:
         report["clock_fit_diagnostic"] = "PX4 time reversed or repeated. Inspect per-epoch segmentation."
     else:

@@ -6,7 +6,7 @@ import sqlite3
 from statistics import median
 
 from clock_model import percentile95
-from segment_clocks import compare_policies
+from segment_clocks import LEGACY_POLICIES, compare_policies
 from sqlite_bag import decode_timesync
 
 
@@ -43,7 +43,8 @@ def read_exchange_pairs(path, topic="/fmu/out/timesync_status"):
     return dict(groups)
 
 
-def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status", budget_ms=0.25, window_s=10.0):
+def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status", budget_ms=0.25, window_s=10.0,
+                        policies=LEGACY_POLICIES):
     groups = read_exchange_pairs(path, topic)
     reports = []
     for protocol, pairs in sorted(groups.items()):
@@ -52,5 +53,5 @@ def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status", budget_
                         "span_s": (pairs[-1][0] - pairs[0][0]) / 1e9,
                         "bracketed": len(errors), "bracket_median_ms": median(errors) if errors else None,
                         "bracket_p95_abs_ms": percentile95(list(map(abs, errors))) if errors else None,
-                        "comparison": compare_policies(pairs, budget_ms, window_s)})
+                        "comparison": compare_policies(pairs, budget_ms, window_s, policies)})
     return reports

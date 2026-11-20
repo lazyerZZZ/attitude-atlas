@@ -215,10 +215,14 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
     return windows, decisions, fixed_errors, adaptive_errors
 
 
-def compare_policies(pairs, budget_ms=0.25, window_s=10.0):
+LEGACY_POLICIES = ("confirmed", "headroom")
+POLICIES = (*LEGACY_POLICIES, "adaptive")
+
+
+def compare_policies(pairs, budget_ms=0.25, window_s=10.0, policies=LEGACY_POLICIES):
     reports = {}
     shared = None
-    for policy in ("confirmed", "headroom"):
+    for policy in policies:
         report = assess(pairs, budget_ms, window_s, policy)
         digest = hashlib.sha256()
         scored = [w for w in report["windows"] if "p95_ms" in w]
@@ -245,11 +249,13 @@ def main():
     parser.add_argument("events")
     parser.add_argument("--budget-ms", type=float, default=0.25)
     parser.add_argument("--window-s", type=float, default=10)
-    parser.add_argument("--policy", choices=["confirmed", "headroom"], default="confirmed")
+    parser.add_argument("--policy", choices=POLICIES, default="confirmed")
     parser.add_argument("--compare-policies", action="store_true", help="Score both policies on identical events")
+    parser.add_argument("--compare-all", action="store_true", help="Include the adaptive policy in matched-event comparison")
     args = parser.parse_args()
     pairs = read_events(args.events)
-    result = (compare_policies(pairs, args.budget_ms, args.window_s) if args.compare_policies else
+    result = (compare_policies(pairs, args.budget_ms, args.window_s, POLICIES if args.compare_all else LEGACY_POLICIES)
+              if args.compare_policies or args.compare_all else
               assess(pairs, args.budget_ms, args.window_s, args.policy))
     print(json.dumps(result, indent=2))
 
