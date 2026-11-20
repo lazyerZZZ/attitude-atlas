@@ -1,0 +1,224 @@
+{
+  "cases": {
+    "sep_D0012": {
+      "native": {
+        "scored_event_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "policies": {
+          "confirmed": {
+            "pairs": 0,
+            "p95_ms": null,
+            "over_budget_pairs": 0,
+            "switches": 0
+          },
+          "headroom": {
+            "pairs": 0,
+            "p95_ms": null,
+            "over_budget_pairs": 0,
+            "switches": 0
+          },
+          "adaptive": {
+            "pairs": 0,
+            "p95_ms": null,
+            "over_budget_pairs": 0,
+            "switches": 0
+          }
+        }
+      }
+    },
+    "sep_D0013": {
+      "native": {
+        "scored_event_sha256": "fe8feb166aa21692348e7cd375f91e946ed8251d429cef1f080c1c1764b8b6cd",
+        "policies": {
+          "confirmed": {
+            "pairs": 1376,
+            "p95_ms": 0.3221223482194074,
+            "over_budget_pairs": 293,
+            "switches": 1
+          },
+          "headroom": {
+            "pairs": 1376,
+            "p95_ms": 0.23739911188999097,
+            "over_budget_pairs": 54,
+            "switches": 2
+          },
+          "adaptive": {
+            "pairs": 1376,
+            "p95_ms": 0.3655150356545264,
+            "over_budget_pairs": 241,
+            "switches": 2
+          }
+        }
+      }
+    },
+    "sep_D0014": {
+      "native": {
+        "scored_event_sha256": "b0fb983b40ccf54f2da18ddadf730d591df71e5904549765c60545b3ac46681b",
+        "policies": {
+          "confirmed": {
+            "pairs": 1343,
+            "p95_ms": 0.524392589143907,
+            "over_budget_pairs": 575,
+            "switches": 2
+          },
+          "headroom": {
+            "pairs": 1343,
+            "p95_ms": 0.35850053229789763,
+            "over_budget_pairs": 291,
+            "switches": 2
+          },
+          "adaptive": {
+            "pairs": 1343,
+            "p95_ms": 0.35850053229789763,
+            "over_budget_pairs": 291,
+            "switches": 2
+          }
+        }
+      }
+    },
+    "sep_D0015": {
+      "native": {
+        "scored_event_sha256": "b54b4d17c61ddcb83f8e8994ed79aac516b27d0911c1046a38720c35f32cdd5e",
+        "policies": {
+          "confirmed": {
+            "pairs": 596,
+            "p95_ms": 0.2514431223355254,
+            "over_budget_pairs": 36,
+            "switches": 0
+          },
+          "headroom": {
+            "pairs": 596,
+            "p95_ms": 0.2514431223355254,
+            "over_budget_pairs": 36,
+            "switches": 0
+          },
+          "adaptive": {
+            "pairs": 596,
+            "p95_ms": 0.2514431223355254,
+            "over_budget_pairs": 36,
+            "switches": 0
+          }
+        }
+      }
+    },
+    "115317_D0015": {
+      "native": {
+        "scored_event_sha256": "7798c6a33fa8f2ec459d9ba2e425123840acd535cf02bd7ff54cfa322dd04500",
+        "policies": {
+          "confirmed": {
+            "pairs": 1565,
+            "p95_ms": 0.2930702408148097,
+            "over_budget_pairs": 198,
+            "switches": 0
+          },
+          "headroom": {
+            "pairs": 1565,
+            "p95_ms": 0.15973314967415517,
+            "over_budget_pairs": 0,
+            "switches": 1
+          },
+          "adaptive": {
+            "pairs": 1565,
+            "p95_ms": 0.15973314967415517,
+            "over_budget_pairs": 0,
+            "switches": 1
+          }
+        }
+      },
+      "long_exchanges": {
+        "0": {
+          "scored_event_sha256": "7d8e578f95409f43056f14d27097c51267aefb4126608965dc0e04aa769acde7",
+          "policies": {
+            "confirmed": {
+              "pairs": 3084,
+              "p95_ms": 0.6321867115567872,
+              "over_budget_pairs": 1086,
+              "switches": 7
+            },
+            "headroom": {
+              "pairs": 3084,
+              "p95_ms": 1.1294660625932085,
+              "over_budget_pairs": 538,
+              "switches": 5
+            },
+            "adaptive": {
+              "pairs": 3084,
+              "p95_ms": 0.6362752910808213,
+              "over_budget_pairs": 622,
+              "switches": 6
+            }
+          }
+        }
+      }
+    },
+    "122204_D0015": {
+      "native": {
+        "scored_event_sha256": "4c8e498432cae14af5caa68fb3d6dfb6ab661a3df9d6b7177717345da0f24382",
+        "policies": {
+          "confirmed": {
+            "pairs": 1179,
+            "p95_ms": 0.005349396321187235,
+            "over_budget_pairs": 0,
+            "switches": 0
+          },
+          "headroom": {
+            "pairs": 1179,
+            "p95_ms": 0.005349396321187235,
+            "over_budget_pairs": 0,
+            "switches": 0
+          },
+          "adaptive": {
+            "pairs": 1179,
+            "p95_ms": 0.005349396321187235,
+            "over_budget_pairs": 0,
+            "switches": 0
+          }
+        }
+      },
+      "long_exchanges": {
+        "0": {
+          "scored_event_sha256": "51e4369361b0a749b746ac0b7db331885c13eb407e6d22817560dc245b6ec605",
+          "policies": {
+            "confirmed": {
+              "pairs": 5675,
+              "p95_ms": 0.2604321280368042,
+              "over_budget_pairs": 492,
+              "switches": 3
+            },
+            "headroom": {
+              "pairs": 5675,
+              "p95_ms": 0.15567428540879674,
+              "over_budget_pairs": 0,
+              "switches": 4
+            },
+            "adaptive": {
+              "pairs": 5675,
+              "p95_ms": 0.25954120161255084,
+              "over_budget_pairs": 430,
+              "switches": 5
+            }
+          }
+        }
+      }
+    }
+  },
+  "controls": {
+    "confirmed": {
+      "censored": 28,
+      "TN": 20,
+      "FP": 4,
+      "TP": 24,
+      "FN": 8
+    },
+    "headroom": {
+      "censored": 28,
+      "TN": 20,
+      "FP": 4,
+      "TP": 32
+    },
+    "adaptive": {
+      "censored": 28,
+      "TN": 24,
+      "TP": 32
+    }
+  }
+}

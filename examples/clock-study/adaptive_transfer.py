@@ -4,7 +4,11 @@ from collections import Counter
 import json
 from pathlib import Path
 
-from replay_adaptive import HERE, POLICIES, challenge, native_pairs, read_exchange_pairs, summary
+from reproduce import HERE, equivalent
+from alarm_controls import challenge
+from exchange_replay import read_exchange_pairs
+from replay_adaptive import native_pairs, summary
+from segment_clocks import POLICIES
 
 
 def replay(root, selected=None):
@@ -30,5 +34,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("halo", type=Path)
     parser.add_argument("--case")
+    parser.add_argument("--check", action="store_true", help="Verify recorded results and pooled controls")
     args = parser.parse_args()
-    print(json.dumps(replay(args.halo, args.case), indent=2))
+    result = replay(args.halo, args.case)
+    if args.check:
+        expected = json.loads((HERE / "adaptive-transfer.json").read_text())
+        if args.case:
+            actual = result["cases"][args.case]
+            expected = expected["cases"][args.case]
+        else:
+            actual = result
+        if not equivalent(actual, expected):
+            raise SystemExit("Adaptive hardware transfer results differ")
+    print(json.dumps(result, indent=2))
