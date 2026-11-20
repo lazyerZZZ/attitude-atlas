@@ -7,6 +7,16 @@ from alarm_controls import challenge
 
 
 class Controls(unittest.TestCase):
+    def test_adaptive_phase_sweep_includes_off_grid_pulses(self):
+        points = [(10**12 + i*100000000, 1) for i in range(1000)]
+        trials = challenge(points, policies=("adaptive",), phases=(0, .125, .25, .5, .75, .875))
+        pulses = [t for t in trials if t["scenario"].endswith("pulse")]
+        self.assertEqual(len(pulses), 12)
+        self.assertTrue(all(t["outcome"] == "TN" for t in pulses))
+        for t in trials:
+            if t["scenario"].endswith("rate_change"):
+                self.assertEqual(t["outcome"], "TP")
+
     def test_labels_cover_misses_and_false_switches_without_counting_short_runs(self):
         points = [(10**12 + i*100000000, 1) for i in range(900)]
         trials = challenge(points)
