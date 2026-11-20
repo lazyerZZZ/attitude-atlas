@@ -20,6 +20,8 @@ Across two hardware captures, the ROS payload clock gained **3.014 ms in 77 s** 
 python bin/pair_clocks.py flight.ulg capture.db3 --segment-budget-ms 0.25 --window-s 10
 ```
 
+**When should a clock fit switch early?** Compare confirmed, headroom and adaptive policies with `--segment-budget-ms 0.25 --segment-policy all`. On the 328-second VOXL 2 trace, a 0.125 ms acceptance threshold rejected a 0.137 ms candidate while the active model reached 1.533 ms. The adaptive rule restored the trace P95 to 0.636 ms and held ground effect at 0.185 ms. Four independent Kakute H7 Mini flights include a 314-second native pair at 0.203 ms and a 2.653-second forward clock jump. [Independent flight results](https://lazyerzzz.github.io/attitude-atlas/adaptive.html) · [Commands and source data](examples/clock-study/ADAPTIVE.md)
+
 **Earlier recalibration is now testable.** On the ground-effect recording, the optional headroom policy reduced P95 from 0.299 to 0.185 ms on the same 2,795 later events. Across five- and ten-minute VOXL 2 synchronization traces it regressed on one and improved on the other. Compare the policies on your own pair with `--segment-budget-ms 0.25 --segment-policy both`. [Held-out measurements](https://lazyerzzz.github.io/attitude-atlas/transfer.html) · [Reproduction and alarm definitions](examples/clock-study/TRANSFER.md).
 
 ## Compare two recordings

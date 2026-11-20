@@ -16,7 +16,7 @@ class SegmentTests(unittest.TestCase):
         r = assess(data, candidate_limit_ms=0.001)
         window = next(w for w in r["windows"] if "candidate_checks" in w)
         self.assertFalse(window["candidate_checks"]["within_limit"])
-        self.assertEqual(window["active_from_window"], 0)
+        self.assertEqual(window["active_from_window"], 2)
 
     def test_adaptive_distinguishes_level_pulse_and_persistent_step(self):
         for sign in (-1, 1):
@@ -48,6 +48,7 @@ class SegmentTests(unittest.TestCase):
         self.assertEqual(decision["eligible_after_px4_ns"], str(events(401)[-1][0]))
         self.assertEqual(assess(events(99))["verdict"], "insufficient_evidence")
         self.assertEqual(report["windows"][4]["p95_ms"], 0)
+        self.assertEqual(report["windows"][4]["active_from_window"], 4)
         prefix = assess(events(300, lambda t: 2_000_000 if t >= 20 else 0))
         self.assertEqual(prefix["decisions"], [])
 

@@ -133,7 +133,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
     fixed_errors, adaptive_errors = [], []
     decisions = []
     retired = None
-    active_window = 0
+    active_window = None
     relative = relative_times(pairs) if pairs else []
     consumed = 0
     for index, group in groupby(relative, key=lambda p: p[0] // width):
@@ -154,6 +154,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
             item["action"] = "training"
             if len(history) == 2:
                 model = baseline = fit(history[0] + history[1])
+                active_window = index + 1
             continue
         fixed = errors_ms(baseline, events)
         fixed_errors.extend(fixed)
@@ -181,7 +182,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
                                         "halves_error": trial_error <= residual / 2}
             if policy == "adaptive":
                 _, prior_change = residual_shape(model, previous)
-                # Both completed windows must move away from zero in the same direction.
+                # Require sustained change in the direction of the current signed level.
                 sign = 1 if level > 0 else -1
                 trending = min(sign * prior_change, sign * change) > budget_ms / 16
                 item["switch_evidence"] = ("persistent_rate" if trending else
