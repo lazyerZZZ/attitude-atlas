@@ -45,6 +45,17 @@ def replay(root, cases):
                          "overlap": overlap_report(anchors), "continuity": clock_continuity(anchors), "rate_ppm": drift["rate_ppm"],
                          "endpoint_offset_change_ms": drift.get("offset_change_ms"),
                          "comparison": summary(pairs), "injected_controls": control_counts(pairs)}
+        runs = flights[name]["continuity"]["runs"]
+        if len(runs) > 1:
+            diagnostic = []
+            for run in runs:
+                first = run["first_pair"] - 1
+                sequence = pairs[first:first + run["pairs"]]
+                measured = summary(sequence)
+                scored = measured["policies"]["adaptive"]["pairs"]
+                diagnostic.append({"first_pair": first + 1, "pairs": len(sequence),
+                                   "unscored_pairs": len(sequence) - scored, "comparison": measured})
+            flights[name]["separate_run_diagnostic"] = diagnostic
         logs[name], bags[name] = px, ros
     negatives = {}
     for name, px in logs.items():

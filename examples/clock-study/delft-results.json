@@ -466,7 +466,65 @@
           },
           "max_detected_delay_s": 35.097741
         }
-      }
+      },
+      "separate_run_diagnostic": [
+        {
+          "first_pair": 1,
+          "pairs": 458,
+          "unscored_pairs": 309,
+          "comparison": {
+            "scored_event_sha256": "2689948c472512d301623de45e401f08eb758bd710ecef6ddd1bebad184f0899",
+            "policies": {
+              "confirmed": {
+                "pairs": 149,
+                "p95_ms": 0.010427761900147648,
+                "over_budget_pairs": 0,
+                "switches": 0
+              },
+              "headroom": {
+                "pairs": 149,
+                "p95_ms": 0.010427761900147648,
+                "over_budget_pairs": 0,
+                "switches": 0
+              },
+              "adaptive": {
+                "pairs": 149,
+                "p95_ms": 0.010427761900147648,
+                "over_budget_pairs": 0,
+                "switches": 0
+              }
+            }
+          }
+        },
+        {
+          "first_pair": 459,
+          "pairs": 4421,
+          "unscored_pairs": 385,
+          "comparison": {
+            "scored_event_sha256": "eeef37d6d49771f4fce203a54e9790c48c01d92efea3c0309e0e5ebed567d6cb",
+            "policies": {
+              "confirmed": {
+                "pairs": 4036,
+                "p95_ms": 0.556395518513014,
+                "over_budget_pairs": 929,
+                "switches": 3
+              },
+              "headroom": {
+                "pairs": 4036,
+                "p95_ms": 0.3734995645360793,
+                "over_budget_pairs": 560,
+                "switches": 7
+              },
+              "adaptive": {
+                "pairs": 4036,
+                "p95_ms": 0.3615013313933382,
+                "over_budget_pairs": 442,
+                "switches": 6
+              }
+            }
+          }
+        }
+      ]
     },
     "vb_004": {
       "board": "HOLYBRO_KAKUTEH7MINI",
