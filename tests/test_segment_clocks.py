@@ -11,6 +11,13 @@ def events(count, offset=lambda t: 0):
 
 
 class SegmentTests(unittest.TestCase):
+    def test_rejected_candidate_explains_which_gate_failed(self):
+        data = events(610, lambda t: round(max(0, t - 20) ** 2 * 1400))
+        r = assess(data, candidate_limit_ms=0.001)
+        window = next(w for w in r["windows"] if "candidate_checks" in w)
+        self.assertFalse(window["candidate_checks"]["within_limit"])
+        self.assertEqual(window["active_from_window"], 0)
+
     def test_known_rate_scores_only_future_blocks(self):
         report = assess(events(510, lambda s: int(s * 40000)))
         self.assertEqual(report["scored_windows"], 3)

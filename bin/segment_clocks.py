@@ -123,6 +123,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
     fixed_errors, adaptive_errors = [], []
     decisions = []
     retired = None
+    active_window = 0
     relative = relative_times(pairs) if pairs else []
     consumed = 0
     for index, group in groupby(relative, key=lambda p: p[0] // width):
@@ -152,7 +153,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
         if decisions:
             decisions[-1]["future_pairs"] += len(events)
             audit_switch(decisions[-1], retired, events, index, budget_ms, residual)
-        item.update(p95_ms=residual, over_budget_pairs=sum(e > budget_ms for e in errors), action="within_budget")
+        item.update(active_from_window=active_window, p95_ms=residual, over_budget_pairs=sum(e > budget_ms for e in errors), action="within_budget")
         if residual <= trigger:
             candidate = None
             continue
@@ -161,7 +162,9 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
             _, previous, trial = candidate
             trial_error = percentile95(errors_ms(trial, events))
             item["candidate_p95_ms"] = trial_error
-            if trial_error <= limit and trial_error <= residual / 2:
+            item["candidate_checks"] = {"within_limit": trial_error <= limit,
+                                        "halves_error": trial_error <= residual / 2}
+            if all(item["candidate_checks"].values()):
                 if consumed == len(pairs):
                     item["action"] = "await_next_window"
                     continue
@@ -169,6 +172,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
                 decision_s = (next_px - pairs[0][0]) / 1e9
                 item["confirmed_s"] = decision_s
                 retired, model = model, trial
+                active_window = index + 1
                 last_x = previous[-1][0]
                 ref_px = pairs[0][0] + last_x
                 ref_ros = pairs[0][1] + last_x + round(trial[0] + trial[1] * last_x)
