@@ -41,6 +41,7 @@ def render(data):
 <h1>Calibration on unseen recordings</h1>
 <p>Should the clock checker act before the error budget is spent? Both policies score the same events.
 Confirmed starts testing a replacement at 0.25 ms. Headroom starts at 0.125 ms. Both wait for evidence in a later window.</p>
+<p><a href="adaptive.html">See the adaptive policy, the VOXL regression and four TU Delft flights.</a></p>
 <h2>Ground-effect target</h2>
 <p>On the original development recording, P95 fell from <strong>{g['confirmed']['evaluation']['adaptive_p95_ms']:.3f} to
 {g['headroom']['evaluation']['adaptive_p95_ms']:.3f} ms</strong> over {g['headroom']['evaluation']['pairs']:,} scored

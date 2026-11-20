@@ -1,0 +1,72 @@
+"""Render the measured clock-policy comparison for the public site."""
+from collections import Counter
+from html import escape
+import json
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+SITE = HERE.parents[1] / "site"
+
+
+def read(name):
+    return json.loads((HERE / name).read_text())
+
+
+def render():
+    dev = read("adaptive-results.json")
+    old = read("adaptive-transfer.json")
+    delft = read("delft-results.json")["flights"]
+    rows = []
+    def row(label, comparison):
+        policies = comparison["policies"]
+        cells = "".join(f"<td>{policies[p]['p95_ms']:,.3f}</td>" for p in ("confirmed", "headroom", "adaptive"))
+        rows.append(f"<tr><th scope='row'>{escape(label)}</th><td>{policies['adaptive']['pairs']:,}</td>{cells}</tr>")
+    row("Ground effect · native", dev["ground_native"])
+    for case, duration in (("115317_D0015", 328), ("122204_D0015", 603)):
+        row(f"VOXL 2 · {duration} s exchanges", old["cases"][case]["long_exchanges"]["0"])
+    controls = {p: Counter() for p in ("confirmed", "headroom", "adaptive")}
+    for case, result in delft.items():
+        row(f"Kakute H7 Mini · {case}", result["comparison"])
+        for p, c in controls.items():
+            for counts in result["injected_controls"][p]["outcomes"].values():
+                c.update(counts)
+    pulserows = "".join(f"<tr><th scope='row'>{p}</th><td>{c['FP']} / {c['TN']+c['FP']}</td>"
+                        f"<td>{c['FN']} / {c['TP']+c['FN']}</td></tr>" for p, c in controls.items())
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>When to switch clock calibration · Attitude Atlas</title><link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="segments.css"><style>.scroll{{overflow-x:auto}} .scroll table th:first-child{{text-align:left}}</style></head>
+<body><header><div class="bar"><a class="brand" href="./">Attitude Atlas</a><nav><a href="segments.html">Window replay</a></nav></div></header>
+<main class="replay"><h1>When to switch clock calibration</h1>
+<p>At 30–40 seconds on a VOXL 2 recording, the active fit had a 1.533 ms P95 error.
+Its replacement reached 0.137 ms. The early policy rejected that fit because it required 0.125 ms.
+Over the next ten seconds the old fit reached 2.365 ms.</p>
+<h2>What changed</h2><p>The adaptive policy can nominate a new fit at half the budget.
+Two successive windows of growing signed error can confirm a rate change. A flat displacement needs
+three consecutive same-sign median errors over budget. A replacement must meet the full budget and
+halve P95 on a later window. The switch takes effect on subsequent events.</p>
+<h2>Measured P95 in milliseconds</h2>
+<p>Each row compares identical events, with a 0.25 ms budget and 10-second windows.
+The VOXL exchange streams have 98.40 and 79.05 seconds of native overlap respectively.
+The ground-effect and Delft rows use shared, unique attitude samples from both original files.</p>
+<div class="scroll"><table><thead><tr><th>Recording</th><th>Scored</th><th>Confirmed</th><th>Headroom</th><th>Adaptive</th></tr></thead>
+<tbody>{''.join(rows)}</tbody></table></div>
+<h2>One real forward jump</h2><p>On Delft flight vb_003, adjacent matched events advanced 51.007 ms on PX4
+and 2,703.810 ms on ROS. The table includes this jump. The following 296.70 seconds form a continuous
+run on both clocks. A separate adaptive fit on that run scored 4,036 events at 0.362 ms P95
+and left 385 events unscored during training or incomplete coverage.</p>
+<h2>False switches and missed changes</h2><p>We injected known changes into the four Delft sampling schedules,
+at six onset phases. Negative trials include a stable clock and temporary offsets. Positive trials include
+persistent steps and rate changes. Detection had a 40-second deadline.</p>
+<div class="scroll"><table><thead><tr><th>Policy</th><th>False switches / negatives</th><th>Misses / positives</th></tr></thead>
+<tbody>{pulserows}</tbody></table></div>
+<p>Measured flights have no independent labels for when recalibration was necessary.
+The frozen policy stayed under budget on one of four complete Delft recordings.</p>
+<p><a href="https://doi.org/10.4121/8244b196-373e-4211-9e05-994e37656490.v1">Original TU Delft recordings</a> ·
+<a href="https://github.com/lazyerZZZ/attitude-atlas/blob/main/examples/clock-study/ADAPTIVE.md">Reproduce the study</a></p>
+</main></body></html>
+"""
+
+
+if __name__ == "__main__":
+    print(render(), end="")
