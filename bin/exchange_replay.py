@@ -26,7 +26,8 @@ def bracket_errors(pairs, anchors):
     return residuals
 
 
-def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status", budget_ms=0.25, window_s=10.0):
+def read_exchange_pairs(path, topic="/fmu/out/timesync_status"):
+    """Read reconstructed clock pairs in recording order, separated by sync protocol."""
     groups = defaultdict(list)
     query = """SELECT type, serialization_format, data FROM messages m JOIN topics t ON m.topic_id=t.id
                WHERE t.name=? ORDER BY m.id"""
@@ -39,6 +40,11 @@ def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status", budget_
             local = (remote + observed) * 1000 + rtt * 500
             if remote > 0 and stamp > 0 and local > 0:
                 groups[protocol].append((local, stamp * 1000))
+    return dict(groups)
+
+
+def bag_exchange_replay(path, anchors, topic="/fmu/out/timesync_status", budget_ms=0.25, window_s=10.0):
+    groups = read_exchange_pairs(path, topic)
     reports = []
     for protocol, pairs in sorted(groups.items()):
         errors = bracket_errors(pairs, anchors)
