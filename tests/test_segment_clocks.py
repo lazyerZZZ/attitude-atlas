@@ -18,6 +18,21 @@ class SegmentTests(unittest.TestCase):
         self.assertFalse(window["candidate_checks"]["within_limit"])
         self.assertEqual(window["active_from_window"], 0)
 
+    def test_adaptive_distinguishes_level_pulse_and_persistent_step(self):
+        for sign in (-1, 1):
+            transient = events(800, lambda t: sign * 600000 if 30 <= t < 50 else 0)
+            self.assertEqual(assess(transient, policy="adaptive")["decisions"], [])
+            permanent = events(800, lambda t: sign * 600000 if 30 <= t else 0)
+            decision, = assess(permanent, policy="adaptive")["decisions"]
+            self.assertEqual(decision["decision_s"], 60)
+
+    def test_adaptive_switches_early_on_growing_signed_residual(self):
+        data = events(1000, lambda t: max(0, round((t-30)*8000)))
+        result = assess(data, policy="adaptive")
+        w = next(w for w in result["windows"] if w["action"] == "recalibrate")
+        self.assertEqual(w["switch_evidence"], "persistent_rate")
+        self.assertLess(w["p95_ms"], .25)
+
     def test_known_rate_scores_only_future_blocks(self):
         report = assess(events(510, lambda s: int(s * 40000)))
         self.assertEqual(report["scored_windows"], 3)

@@ -6,6 +6,7 @@ from itertools import groupby
 import json
 import math
 from pathlib import Path
+from statistics import median
 import sys
 
 from clock_model import fit, percentile95, relative_times
@@ -31,6 +32,14 @@ def errors_ms(model, events):
     return [abs(y - (origin + slope * x)) / 1e6 for x, y in events]
 
 
+def residual_shape(model, events):
+    """Signed median level and half-window change, in milliseconds."""
+    origin, slope = model
+    signed = [(y - origin - slope * x) / 1e6 for x, y in events]
+    middle = len(signed) // 2
+    return median(signed), median(signed[middle:]) - median(signed[:middle])
+
+
 def persistent_breaches(windows, budget):
     """Group consecutive over-budget windows in one epoch, stopping at each switch."""
     episodes = []
@@ -53,7 +62,7 @@ def persistent_breaches(windows, budget):
 
 
 def assess(pairs, budget_ms=0.25, window_s=10.0, policy="confirmed", *, candidate_limit_ms=None):
-    if policy not in ("confirmed", "headroom"):
+    if policy not in ("confirmed", "headroom", "adaptive"):
         raise ValueError("Unknown clock policy")
     if not all(math.isfinite(x) and x > 0 for x in (budget_ms, window_s)) or round(window_s * 1e9) < 1:
         raise ValueError("Use a finite positive budget and window")
@@ -113,8 +122,9 @@ def audit_switch(decision, old, events, index, budget, new_p95):
 
 
 def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
-    trigger = budget_ms / 2 if policy == "headroom" else budget_ms
-    limit = trigger if candidate_limit_ms is None else candidate_limit_ms
+    trigger = budget_ms / 2 if policy in ("headroom", "adaptive") else budget_ms
+    limit = (budget_ms if policy == "adaptive" else trigger) if candidate_limit_ms is None else candidate_limit_ms
+    level_run = 0
     windows = []
     history = []
     model = None
@@ -134,6 +144,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
         windows.append(item)
         if len(events) < 8 or events[-1][0] - events[0][0] < width * 0.7:
             candidate = None
+            level_run = 0
             if model is None:
                 history.clear()
             item["action"] = "insufficient_coverage"
@@ -154,6 +165,10 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
             decisions[-1]["future_pairs"] += len(events)
             audit_switch(decisions[-1], retired, events, index, budget_ms, residual)
         item.update(active_from_window=active_window, p95_ms=residual, over_budget_pairs=sum(e > budget_ms for e in errors), action="within_budget")
+        if policy == "adaptive":
+            level, change = residual_shape(model, events)
+            direction = 1 if level > budget_ms else -1 if level < -budget_ms else 0
+            level_run = level_run + direction if level_run * direction > 0 else direction
         if residual <= trigger:
             candidate = None
             continue
@@ -164,6 +179,14 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
             item["candidate_p95_ms"] = trial_error
             item["candidate_checks"] = {"within_limit": trial_error <= limit,
                                         "halves_error": trial_error <= residual / 2}
+            if policy == "adaptive":
+                _, prior_change = residual_shape(model, previous)
+                # Both completed windows must move away from zero in the same direction.
+                sign = 1 if level > 0 else -1
+                trending = min(sign * prior_change, sign * change) > budget_ms / 16
+                item["switch_evidence"] = ("persistent_rate" if trending else
+                                           "persistent_level" if abs(level_run) >= 3 else "await_persistence")
+                item["candidate_checks"]["persistent"] = trending or abs(level_run) >= 3
             if all(item["candidate_checks"].values()):
                 if consumed == len(pairs):
                     item["action"] = "await_next_window"
@@ -173,6 +196,7 @@ def assess_epoch(pairs, budget_ms, width, policy, candidate_limit_ms):
                 item["confirmed_s"] = decision_s
                 retired, model = model, trial
                 active_window = index + 1
+                level_run = 0
                 last_x = previous[-1][0]
                 ref_px = pairs[0][0] + last_x
                 ref_ros = pairs[0][1] + last_x + round(trial[0] + trial[1] * last_x)
