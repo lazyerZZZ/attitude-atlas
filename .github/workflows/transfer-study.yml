@@ -29,7 +29,14 @@ jobs:
           if not equivalent(measured, expected):
               raise SystemExit("Measured transfer results differ from the release")
           PY
+      - name: Check adaptive thresholds and replay all six hardware sessions
+        run: |
+          root="$RUNNER_TEMP/study"
+          python examples/clock-study/replay_adaptive.py "$root/original" "$root/halo" --check
+          python examples/clock-study/adaptive_transfer.py "$root/halo" > adaptive-transfer.json
       - uses: actions/upload-artifact@v4
         with:
           name: transfer-results
-          path: transfer-results.json
+          path: |
+            transfer-results.json
+            adaptive-transfer.json
